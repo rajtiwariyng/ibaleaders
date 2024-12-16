@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Role;
 
-//test jj
-
 // Redirect to home if the user is logged in, otherwise show login form
 /*Route::get('/', [FrontendLoginController::class, 'showLoginForm'])
     ->name('front.login')
@@ -72,34 +70,13 @@ Route::middleware(['user_auth:user'])->group(function () {
 	Route::get('/testimonials', [UserProfileController::class, 'testimonials'])->name('user.testimonials');
 	Route::get('/groups-join', [UserProfileController::class, 'groupsjoined'])->name('user.groupsjoined');
 
-	
+
 	//connections
 	Route::get('/connections', [ConnectionController::class, 'showConnections'])->name('user.connections');
 	Route::post('/connections/send', [ConnectionController::class, 'sendConnectionRequest'])->name('user.sendConnection');
     Route::post('/connections/approve', [ConnectionController::class, 'approveConnectionRequest'])->name('user.approveConnection');
     Route::post('/connections/reject', [ConnectionController::class, 'rejectConnectionRequest'])->name('user.rejectConnection');
-	
-	Route::get('/create-post', [UserProfileController::class, 'createPost'])->name('user.createpost');
 
-	// Route::post('/create-event-post', [ConnectionController::class, 'createEventPost'])->name('user.createeventpost');
-
-	Route::post('/create-post', [UserProfileController::class, 'createPostPost'])->name('user.createpostpost');
-	Route::get('/create-event', [UserProfileController::class, 'createEvent'])->name('user.createevent');
-
-	// Route::post('/create-event-post', [ConnectionController::class, 'createEventPost'])->name('user.createeventpost');
-
-	Route::post('/create-event', [UserProfileController::class, 'createEventPost'])->name('user.createeventpost');
-
-	Route::get('/create-testimonial', [UserProfileController::class, 'createTestimonial'])->name('user.createtestimonial');
-
-	// Route::post('/create-event-post', [ConnectionController::class, 'createEventPost'])->name('user.createeventpost');
-
-	Route::post('/create-testimonial', [UserProfileController::class, 'createTestimonialPost'])->name('user.createtestimonialpost');
-
-	// user connection
-	Route::get('/connection/userprofile/{id}', [ConnectionController::class, 'userConnectionProfile'])->name('user.connection.userprofile');
-
-	
 });
 
 
