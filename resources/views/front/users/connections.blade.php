@@ -85,7 +85,7 @@
                     </div>
                     <div class="note-content">
                         <p class="mb-0 fs-7">
-                            <a href="#" class="grey">
+                            <a href='{{ URL::route("user.connection.userprofile", [base64_encode($suggestion->id)]) }}' class="grey">
                                 <strong>{{ $suggestion->name }}</strong>
                             </a>
                         </p>

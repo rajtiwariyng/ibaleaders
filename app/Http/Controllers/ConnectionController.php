@@ -8,6 +8,7 @@ use App\Models\Connection;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Post;
 
 class ConnectionController extends Controller
 {
@@ -97,7 +98,13 @@ class ConnectionController extends Controller
         return redirect()->back()->with('success', 'Connection Declined successfully!');
     }
 
-
+    public function userConnectionProfile()
+    {
+        $user = Auth::user();
+        $posts = Post::where('receiver_id', auth()->id())->get();
+       
+        return view('front.users.userprofile', compact('user','posts'));
+    }
 
 
 }
