@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Role;
 
+//test
+
 // Redirect to home if the user is logged in, otherwise show login form
 /*Route::get('/', [FrontendLoginController::class, 'showLoginForm'])
     ->name('front.login')
