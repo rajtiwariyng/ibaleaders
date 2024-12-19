@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Connection;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Post;
 
 class FrontendLoginController extends Controller
 {
@@ -66,19 +68,25 @@ class FrontendLoginController extends Controller
     } 
 
     public function dashboard(){
-
-      return view('front.dashboard');  
+        $user = auth()->user();
+        // Fetch approved connections
+        $connections = $user->connections;
+        return view('front.dashboard', compact('connections'));  
     }
      
     public function home(){
-
-      return view('front.home');  
+        $user = Auth::user();
+        
+        $posts = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('posts.created_at', 'desc')->get();
+       
+      return view('front.home', compact('user','posts'));  
     }
     public function alliance()
     {
-        $upcomingEvents = Event::where('start_date', '>=', Carbon::now())
-        ->orderBy('start_date', 'asc')
-        ->get();
+        // $upcomingEvents = Event::where('start_date', '>=', Carbon::now())
+        // ->orderBy('start_date', 'asc')
+        // ->get();
+        $upcomingEvents = Event::get();
         return view('front.pages.alliance', compact('upcomingEvents'));
     }
 
@@ -138,7 +146,30 @@ class FrontendLoginController extends Controller
 
         return response()->json($users);
     }
-
+    public function resetPasswordPost(Request $request)
+    {
+         
+        $request->validate([
+            'current_password' => 'required|string',
+            'newpassword' => 'required|string|max:15',
+            'renewpassword' => 'required|string|max:15|same:newpassword',
+        ]);
+        $current_password = Auth::User()->password;
+        if(!Hash::check($request->current_password, $current_password))
+        {
+            return response()->json(['errors' =>['current_password_match'=>__('Current Password did not matched.')]], 404);
+        }
+        $user_id = Auth::User()->id;
+        $obj_user = User::find(Auth::User()->id);
+        $obj_user->password = Hash::make($request->new_password);
+        $obj_user->save();
+        return response()->json([
+            'success' => false,
+            'message' => __('Password updated successfully.'),
+        ]);
+       
+        
+    }
     
 }   
 

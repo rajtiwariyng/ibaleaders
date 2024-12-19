@@ -17,7 +17,7 @@ class UserProfileController extends Controller
     public function profile()
     {   
         $user = Auth::user();
-        $posts = Post::all();
+        $posts = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('posts.created_at', 'desc')->get();
        
         return view('front.users.profile', compact('user','posts'));
     }
@@ -137,18 +137,74 @@ class UserProfileController extends Controller
     public function events()
     {
         // return view('front.users.events');
-        $events = Event::all();
-        return view('front.users.events', compact('events'));
+        // $events = Event::latest()->all();
+        $events = Event::orderBy('events.created_at', 'desc')->get();
+        $user = auth()->user();
+        $suggestions = User::where('id', '!=', $user->id)
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user')
+                  ->where('guard_name', 'web');
+        })
+        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+            $query->where('sender_id', $user->id);
+        })
+        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+            $query->where('receiver_id', $user->id);
+        })
+        ->take(10)
+        ->get();
+        return view('front.users.events', compact('events','suggestions'));
     }
 
     public function testimonials()
     {
-        return view('front.users.testimonials');
+        $testimonials = Testimonial::join('users', 'users.id', '=', 'testimonials.user_id')->orderBy('testimonials.created_at', 'desc')->get();
+        // $testimonials = Testimonial::whereHas('user', function ($query) use ($user) {
+        //     $query->where('id', $user->id);
+        // })->get();
+
+        $user = auth()->user();
+
+        
+
+        // Fetch suggestions (e.g., users not already connected or pending approval)
+        $suggestions = User::where('id', '!=', $user->id)
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user')
+                  ->where('guard_name', 'web');
+        })
+        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+            $query->where('sender_id', $user->id);
+        })
+        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+            $query->where('receiver_id', $user->id);
+        })
+        ->take(10)
+        ->get();
+        return view('front.users.testimonials', compact('testimonials','suggestions'));
     }
 
     public function groupsjoined()
     {
-        return view('front.users.groups-joined');
+        $user = auth()->user();
+
+        
+
+        // Fetch suggestions (e.g., users not already connected or pending approval)
+        $suggestions = User::where('id', '!=', $user->id)
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user')
+                  ->where('guard_name', 'web');
+        })
+        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+            $query->where('sender_id', $user->id);
+        })
+        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+            $query->where('receiver_id', $user->id);
+        })
+        ->take(10)
+        ->get();
+        return view('front.users.groups-joined', compact('suggestions'));
     }
 
     public function createEvent()
@@ -184,14 +240,14 @@ class UserProfileController extends Controller
         }
         Event::create([
             'user_id' => auth()->id(), // Logged-in user's ID
-            'name' => $request->eventtitle,
+            'title' => $request->eventtitle,
             'author' => $request->eventauthor,
             'type' => $request->eventtype,
             'description' => $request->eventdescription,
             'image'=>$path
         ]);
 
-        return response()->json(['success' => false, 'message' => 'Event added successfully!']);
+        return response()->json(['success' => true, 'message' => 'Event added successfully!']);
         
     }
     public function createPost()
@@ -229,12 +285,13 @@ class UserProfileController extends Controller
             'description' => $request->postdescription,
             'image'=>$path
         ]);
-        return response()->json(['success' => false, 'message' => 'Post added successfully!']);
+        return response()->json(['success' => true, 'message' => 'Post added successfully!']);
         
     }
-    public function createTestimonial()
+    public function createTestimonial(Request $request)
     {
-        return view('front.users.create-testimonial');
+        $customer=$request->id;
+        return view('front.users.create-testimonial',compact('customer'));
         // $events = Event::user();
         // print_r($events);
         // return view('front.users.create-event', compact('events'));
@@ -255,9 +312,13 @@ class UserProfileController extends Controller
             'title' => $request->testimonialtitle,
             'author' => $request->testimonialauthor,
             'type' => $request->testimonialtype,
-            'description' => $request->testimonialdescription
+            'description' => $request->testimonialdescription,
+            'received_to'=>base64_decode($request->customer_id)
         ]);
-        return response()->json(['success' => false, 'message' => 'Testimonial added successfully!']);
+        return response()->json(['success' => true, 'message' => 'Testimonial added successfully!']);
         
+    }
+    public function createEventapi(){
+        return response()->json(['success' => true, 'message' => 'Testimonial added successfully!']);
     }
 }

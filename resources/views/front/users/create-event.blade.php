@@ -143,8 +143,11 @@
             success: function(response) {
                 
 
-                $('#successMsgEvent').text(response.success).show();
+                $('#successMsgEvent').text(response.message).show();
                 $('#eventFormProfile')[0].reset();
+                setTimeout(function () {
+                      window.location.href = "{{ route('user.events') }}"
+			              }, 1000);
                 
                 setTimeout(() => {
                     $('#successMsgEvent').fadeOut();
@@ -162,6 +165,7 @@
                     }
                 } else {
                     $('#successMsgEvent').text("An error occurred. Please try again.").css('color', 'red').show();
+                   
                 }
             }
         });

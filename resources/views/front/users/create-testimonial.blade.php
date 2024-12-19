@@ -33,6 +33,7 @@
                       <textarea name="testimonialdescription" id="testimonialdescription" class="form-control" rows="3"></textarea>
                       <div id="error-testimonialdescription" class="text-danger"></div>
                   </div>
+                  <input type="hidden" name="customer_id" value="{{$customer}}">
                   <div id="successMsgTestimonial" class="text-success mt-3" style="display: none;"></div>
                   <button type="button" onclick="testimonialSubmitForm()"  class="btn btn-primary">Add</button>
               </form>
@@ -137,6 +138,9 @@
 
                 $('#successMsgTestimonial').text(response.message).show();
                 $('#testimonialFormProfile')[0].reset();
+                setTimeout(function () {
+                      window.location.href = "{{ route('user.testimonials') }}"
+			              }, 1000);
                 
                 setTimeout(() => {
                     $('#successMsgTestimonial').fadeOut();

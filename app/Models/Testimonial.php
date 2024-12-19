@@ -21,6 +21,7 @@ class Testimonial extends Model
         'description',
         'user_id',
         'status',
+        'received_to'
     ];
 
     // Relation to User

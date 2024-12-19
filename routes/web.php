@@ -34,6 +34,7 @@ Route::get('/logout', [FrontendLoginController::class, 'logout'])->name('front.l
 
 // Password Reset Routes
 Route::get('/reset-password', [FrontendLoginController::class, 'resetpassword'])->name('front.resetpassword');
+Route::post('/reset-password-post', [FrontendLoginController::class, 'resetPasswordPost'])->name('front.resetpasswordpost');
 Route::get('/forget-password', [FrontendLoginController::class, 'forgetpassword'])->name('front.forgetpassword');
 
 // Group routes for authenticated frontend users
@@ -88,7 +89,7 @@ Route::middleware(['user_auth:user'])->group(function () {
 
 	Route::post('/create-event', [UserProfileController::class, 'createEventPost'])->name('user.createeventpost');
 
-	Route::get('/create-testimonial', [UserProfileController::class, 'createTestimonial'])->name('user.createtestimonial');
+	Route::get('/send-testimonial/{id}', [UserProfileController::class, 'createTestimonial'])->name('user.createtestimonial');
 
 	// Route::post('/create-event-post', [ConnectionController::class, 'createEventPost'])->name('user.createeventpost');
 
@@ -104,5 +105,6 @@ Route::middleware(['user_auth:user'])->group(function () {
 
 // Include admin routes file
 require __DIR__.'/admin.php';
+///require __DIR__.'/api.php';
 
 

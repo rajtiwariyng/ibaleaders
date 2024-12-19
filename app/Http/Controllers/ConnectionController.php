@@ -98,12 +98,15 @@ class ConnectionController extends Controller
         return redirect()->back()->with('success', 'Connection Declined successfully!');
     }
 
-    public function userConnectionProfile()
+    public function userConnectionProfile(Request $request)
     {
+        // echo $request->id;
+        // exit;
         $user = Auth::user();
-        $posts = Post::where('receiver_id', auth()->id())->get();
+        $posts = Post::where('user_id', $request->id)->get();
+        $customer=$request->id;
        
-        return view('front.users.userprofile', compact('user','posts'));
+        return view('front.users.userprofile', compact('user','posts','customer'));
     }
 
 

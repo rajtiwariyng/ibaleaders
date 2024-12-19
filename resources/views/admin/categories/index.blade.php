@@ -24,6 +24,7 @@
 							<tbody>
 								@forelse($categories as $category)
 					                <tr>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->slug }}</td>
                                     <td>{{ $category->status ? 'Enabled' : 'Disabled' }}</td>

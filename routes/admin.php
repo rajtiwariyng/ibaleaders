@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminuserController;
 use App\Http\Controllers\Admin\AdminEventController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\VisitorController;
 use Spatie\Permission\Models\Role;
 
 Route::middleware(['admin_guest'])->prefix('/admin/')->name('admin.')->group(function(){

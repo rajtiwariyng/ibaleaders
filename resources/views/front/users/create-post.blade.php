@@ -131,8 +131,12 @@
             success: function(response) {
                 
 
-                $('#successMsgPost').text(response.success).show();
+                $('#successMsgPost').text(response.message).show();
                 $('#postFormProfile')[0].reset();
+                
+                setTimeout(function () {
+                      window.location.href = "{{ route('user.profile') }}"
+			              }, 1000);
                 
                 setTimeout(() => {
                     $('#successMsgPost').fadeOut();
