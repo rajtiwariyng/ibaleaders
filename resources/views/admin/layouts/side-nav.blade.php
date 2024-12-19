@@ -86,6 +86,30 @@
               <p>Create Event</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('admin.blogs.create') }}" class="nav-link {{ Request::is('admin/blogs/create') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Create Blog</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('admin.blogs.index') }}" class="nav-link {{ Request::is('admin/blogs/index') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Blog list</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('admin.categories.create') }}" class="nav-link {{ Request::is('admin/categories/create') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Create Categories</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('admin.categories.index') }}" class="nav-link {{ Request::is('admin/categories/index') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Categories list</p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
