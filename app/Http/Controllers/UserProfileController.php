@@ -8,9 +8,6 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Event;
-use App\Models\Post;
-use App\Models\Testimonial;
 
 class UserProfileController extends Controller
 {

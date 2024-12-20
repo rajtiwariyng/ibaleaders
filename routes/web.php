@@ -71,12 +71,13 @@ Route::middleware(['user_auth:user'])->group(function () {
 	Route::get('/testimonials', [UserProfileController::class, 'testimonials'])->name('user.testimonials');
 	Route::get('/groups-join', [UserProfileController::class, 'groupsjoined'])->name('user.groupsjoined');
 
-	
+
 	//connections
 	Route::get('/connections', [ConnectionController::class, 'showConnections'])->name('user.connections');
 	Route::post('/connections/send', [ConnectionController::class, 'sendConnectionRequest'])->name('user.sendConnection');
     Route::post('/connections/approve', [ConnectionController::class, 'approveConnectionRequest'])->name('user.approveConnection');
     Route::post('/connections/reject', [ConnectionController::class, 'rejectConnectionRequest'])->name('user.rejectConnection');
+
 	
 	Route::get('/create-post', [UserProfileController::class, 'createPost'])->name('user.createpost');
 
