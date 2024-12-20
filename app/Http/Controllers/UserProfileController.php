@@ -8,13 +8,18 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Event;
+use App\Models\Post;
+use App\Models\Testimonial;
 
 class UserProfileController extends Controller
 {
     public function profile()
     {   
         $user = Auth::user();
-        return view('front.users.profile', compact('user'));
+        $posts = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('posts.created_at', 'desc')->get();
+       
+        return view('front.users.profile', compact('user','posts'));
     }
 
     public function profiledetails()
@@ -131,16 +136,189 @@ class UserProfileController extends Controller
 
     public function events()
     {
-        return view('front.users.events');
+        // return view('front.users.events');
+        // $events = Event::latest()->all();
+        $events = Event::orderBy('events.created_at', 'desc')->get();
+        $user = auth()->user();
+        $suggestions = User::where('id', '!=', $user->id)
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user')
+                  ->where('guard_name', 'web');
+        })
+        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+            $query->where('sender_id', $user->id);
+        })
+        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+            $query->where('receiver_id', $user->id);
+        })
+        ->take(10)
+        ->get();
+        return view('front.users.events', compact('events','suggestions'));
     }
 
     public function testimonials()
     {
-        return view('front.users.testimonials');
+        $testimonials = Testimonial::join('users', 'users.id', '=', 'testimonials.user_id')->orderBy('testimonials.created_at', 'desc')->get();
+        // $testimonials = Testimonial::whereHas('user', function ($query) use ($user) {
+        //     $query->where('id', $user->id);
+        // })->get();
+
+        $user = auth()->user();
+
+        
+
+        // Fetch suggestions (e.g., users not already connected or pending approval)
+        $suggestions = User::where('id', '!=', $user->id)
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user')
+                  ->where('guard_name', 'web');
+        })
+        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+            $query->where('sender_id', $user->id);
+        })
+        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+            $query->where('receiver_id', $user->id);
+        })
+        ->take(10)
+        ->get();
+        return view('front.users.testimonials', compact('testimonials','suggestions'));
     }
 
     public function groupsjoined()
     {
-        return view('front.users.groups-joined');
+        $user = auth()->user();
+
+        
+
+        // Fetch suggestions (e.g., users not already connected or pending approval)
+        $suggestions = User::where('id', '!=', $user->id)
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user')
+                  ->where('guard_name', 'web');
+        })
+        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+            $query->where('sender_id', $user->id);
+        })
+        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+            $query->where('receiver_id', $user->id);
+        })
+        ->take(10)
+        ->get();
+        return view('front.users.groups-joined', compact('suggestions'));
+    }
+
+    public function createEvent()
+    {
+        return view('front.users.create-event');
+        // $events = Event::user();
+        // print_r($events);
+        // return view('front.users.create-event', compact('events'));
+    }
+    public function createEventPost(Request $request)
+    {
+        $request->validate([
+            'eventtitle' => 'required|string|max:255',
+            'eventauthor' => 'required|string|max:15',
+            'eventtype' => 'required|string|max:255',            
+            'eventdescription' => 'nullable|string|max:255',
+            'eventimage' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+        $path="";
+        if ($request->hasFile('eventimage')) {
+            $file = $request->file('eventimage');
+            $path = $file->store('event', 'public');  // Store the file in the 'public' disk
+
+            // Save the file path to the user's record or return the file URL
+            // $user = auth()->user();
+            // $user->eventimage = $path;
+            // $user->save();
+
+            // return response()->json([
+            //     'success' => true,
+            //     'profile_image_url' => asset('storage/' . $path),
+            // ]);
+        }
+        Event::create([
+            'user_id' => auth()->id(), // Logged-in user's ID
+            'title' => $request->eventtitle,
+            'author' => $request->eventauthor,
+            'type' => $request->eventtype,
+            'description' => $request->eventdescription,
+            'image'=>$path
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Event added successfully!']);
+        
+    }
+    public function createPost()
+    {
+        return view('front.users.create-post');
+        // $events = Event::user();
+        // print_r($events);
+        // return view('front.users.create-event', compact('events'));
+    }
+    public function createPostPost(Request $request)
+    {
+        $request->validate([
+            'posttitle' => 'required|string|max:255',          
+            'postdescription' => 'nullable|string|max:255',
+            'postimage' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+        $path="";
+        if ($request->hasFile('postimage')) {
+            $file = $request->file('postimage');
+            $path = $file->store('post', 'public');  // Store the file in the 'public' disk
+
+            // Save the file path to the user's record or return the file URL
+            // $user = auth()->user();
+            // $user->eventimage = $path;
+            // $user->save();
+
+            // return response()->json([
+            //     'success' => true,
+            //     'profile_image_url' => asset('storage/' . $path),
+            // ]);
+        }
+        Post::create([
+            'user_id' => auth()->id(), // Logged-in user's ID
+            'title' => $request->posttitle,
+            'description' => $request->postdescription,
+            'image'=>$path
+        ]);
+        return response()->json(['success' => true, 'message' => 'Post added successfully!']);
+        
+    }
+    public function createTestimonial(Request $request)
+    {
+        $customer=$request->id;
+        return view('front.users.create-testimonial',compact('customer'));
+        // $events = Event::user();
+        // print_r($events);
+        // return view('front.users.create-event', compact('events'));
+    }
+    public function createTestimonialPost(Request $request)
+    {
+        
+        $request->validate([
+            'testimonialtitle' => 'required|string|max:255',
+            'testimonialauthor' => 'required|string|max:15',
+            'testimonialtype' => 'required|string|max:255',            
+            'testimonialdescription' => 'nullable|string|max:255'
+        ]);
+        
+       
+        Testimonial::create([
+            'user_id' => auth()->id(), // Logged-in user's ID
+            'title' => $request->testimonialtitle,
+            'author' => $request->testimonialauthor,
+            'type' => $request->testimonialtype,
+            'description' => $request->testimonialdescription,
+            'received_to'=>base64_decode($request->customer_id)
+        ]);
+        return response()->json(['success' => true, 'message' => 'Testimonial added successfully!']);
+        
+    }
+    public function createEventapi(){
+        return response()->json(['success' => true, 'message' => 'Testimonial added successfully!']);
     }
 }

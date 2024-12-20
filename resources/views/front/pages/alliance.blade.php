@@ -260,7 +260,7 @@
                     <thead>
                       <tr>
                         <th>Event Name</th>
-                        <th>Event Start Time</th>
+                        <!-- <th>Event Start Time</th> -->
                         <th>Event Location</th>
 
                       </tr>
@@ -269,7 +269,6 @@
                       @forelse ($upcomingEvents as $event)
                           <tr>
                               <td>{{ $event->name }}</td>
-                              <td>{{ $event->start_date->format('d/m/Y') }}</td>
                               <td>{{ $event->location }}</td>
                           </tr>
                       @empty

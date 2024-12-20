@@ -11,6 +11,12 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Connection;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Post;
+use App\Models\Referrals;
+use App\Models\Tyfcbreferrals;
+use App\Models\Onereferrals;
+
 
 class FrontendLoginController extends Controller
 {
@@ -66,19 +72,39 @@ class FrontendLoginController extends Controller
     } 
 
     public function dashboard(){
-
-      return view('front.dashboard');  
+        $user = auth()->user();
+        // Fetch approved connections
+        $connections = $user->connections;
+        return view('front.dashboard', compact('connections'));  
     }
      
     public function home(){
+        
+        $user = Auth::user();
+        
+        $referralslist=$user->referralslist;
+        $tyfcbreferralslist=$user->tyfcbreferralslist;
+        // $referralslist=Referrals::with('user')->with('received')->get();
+        // echo "<pre>";
+        // // echo $sum = array_sum($tyfcbreferralslist->amount);
+        // print_r($tyfcbreferralslist);
+        // exit;
+        $receivedReferralslist=$user->receivedReferralslist;
+        $onereferralslists=$user->OneReferralslist;
+        $tyfcbreferralstotal=$user->tyfcbreferralstotal;
+       
+        
+        $posts = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('posts.created_at', 'desc')->get();
+        
+      return view('front.home', compact('user','posts','referralslist','tyfcbreferralslist','receivedReferralslist','onereferralslists','tyfcbreferralstotal'));  
 
-      return view('front.home');  
     }
     public function alliance()
     {
-        $upcomingEvents = Event::where('start_date', '>=', Carbon::now())
-        ->orderBy('start_date', 'asc')
-        ->get();
+        // $upcomingEvents = Event::where('start_date', '>=', Carbon::now())
+        // ->orderBy('start_date', 'asc')
+        // ->get();
+        $upcomingEvents = Event::get();
         return view('front.pages.alliance', compact('upcomingEvents'));
     }
 
@@ -138,7 +164,133 @@ class FrontendLoginController extends Controller
 
         return response()->json($users);
     }
+    public function resetPasswordPost(Request $request)
+    {
+         
+        $request->validate([
+            'current_password' => 'required|string',
+            'newpassword' => 'required|string|max:15',
+            'renewpassword' => 'required|string|max:15|same:newpassword',
+        ]);
+        $current_password = Auth::User()->password;
+        if(!Hash::check($request->current_password, $current_password))
+        {
+            return response()->json(['errors' =>['current_password_match'=>__('Current Password did not matched.')]], 404);
+        }
+        $user_id = Auth::User()->id;
+        $obj_user = User::find(Auth::User()->id);
+        $obj_user->password = Hash::make($request->new_password);
+        $obj_user->save();
+        return response()->json([
+            'success' => true,
+            'message' => __('Password updated successfully.'),
+        ]);
+       
+        
+    }
+    public function userListReferralType(Request $request)
+    {
+        $user = auth()->user();
+        $userlist = $user->connections;
 
+        // Fetch suggestions (e.g., users not already connected or pending approval)
+        
+        if($request->type=='outside'){
+            $userlist = User::where('id', '!=', $user->id)
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'user')
+                      ->where('guard_name', 'web');
+            })
+            ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+                $query->where('sender_id', $user->id);
+            })
+            ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+                $query->where('receiver_id', $user->id);
+            })
+            ->take(10)
+            ->get();
+        }
+        return response()->json([
+            'success' => true,
+            'message' => __('successfully'),
+            'userlist'=>$userlist
+        ]);
+    }
+    public function postReferral(Request $request)
+    {
+        
+        $request->validate([
+            'referraltype' => 'required|string|max:255',
+            'referraluser' => 'required|string|max:15',
+            'referralstatus' => 'required|string|max:255',            
+            'referraladdress' => 'required|string|max:255',            
+            'referraltelephone' => 'required|string|min:6|max:15',            
+            'referralemail' => 'required|email|max:255',         
+            'referralcomment' => 'nullable|string|max:255'
+        ]);
+        
+       
+        Referrals::create([
+            'type' => $request->referraltype,
+            'received_to'=>$request->referraluser,
+            'referralstatus' => $request->referralstatus,
+            'address' => $request->referraladdress,
+            'telephone' => $request->referraltelephone,  
+            'email' => $request->referralemail,
+            'comments' => $request->referralcomment,            
+            'user_id' => auth()->id(), // Logged-in user's ID
+            
+        ]);
+        return response()->json(['success' => true, 'message' => 'Referral Added Successfully!']);
+        
+    }
+    public function tyfcdPostReferral(Request $request)
+    {
+        
+        $request->validate([
+            'tyfcbreferraluser' => 'required|string|max:255',
+            'tyfcbreferralamount' => 'required|string|max:15',
+            'tyfcbreferralbusinesstype' => 'required|string|max:255',            
+            'tyfcbreferraltype' => 'required|string|max:255',         
+            'tyfcbreferralcomment' => 'nullable|string|max:255'
+        ]);
+        
+       
+        Tyfcbreferrals::create([           
+            'received_to'=>$request->tyfcbreferraluser,
+            'amount' => $request->tyfcbreferralamount,
+            'businesstype' => $request->tyfcbreferralbusinesstype,
+            'type' => $request->tyfcbreferraltype,
+            'comments' => $request->tyfcbreferralcomment,            
+            'user_id' => auth()->id(), // Logged-in user's ID
+            
+        ]);
+        return response()->json(['success' => true, 'message' => 'TYFCB Referral Added Successfully!']);
+        
+    }
+    public function onePostReferral(Request $request)
+    {
+        
+        $request->validate([
+            'onereferraluser' => 'required|string|max:255',
+            'onereferrallocation' => 'required|string|max:15',
+            'onereferralconversation' => 'required|string|max:255',            
+            'onereferraldate' => 'required|string|max:255'
+        ]);
+        
+       
+        Onereferrals::create([           
+            'received_to'=>$request->onereferraluser,
+            'location' => $request->onereferrallocation,
+            'conversation' => $request->onereferralconversation,
+            'start_date' => $request->onereferraldate,           
+            'user_id' => auth()->id(), // Logged-in user's ID
+            
+        ]);
+        return response()->json(['success' => true, 'message' => 'One To One Referral Added Successfully!']);
+        
+    }
+    
     
 }   
 

@@ -3,38 +3,42 @@
 <div class="container">
         @include('front.users.profile-top')
               <div class="mt-4">
+              @forelse($posts as $post) 
                 <div class="whiteBox bg-white p-4 mt-4">
                   <div class="d-flex mb-3">
                     <div class="d-flex align-items-center">
                       <div class="pe-3">
-                        <img src="{{ asset('front-assets/icons/in.png') }}" alt="" class="linkdinImage">
+                        <img src="{{ $post->profile_image ? asset('storage/' . $post->profile_image) : asset('front-assets/images/profile2.jpg') }}" alt="{{ $post->title }}" class="linkdinImage">
                       </div>
                       <div>
-                        <p class="mb-0"><strong>Linkedin</strong></p>
-                        <p class="mb-0">Promoted</p>
+                        <p class="mb-0"><strong>{{ $post->title }}</strong></p>
+                        <p class="mb-0"><?php echo date("d M Y", strtotime($post->created_at));?></p>
                       </div>
                     </div>
                   </div>
-                  <p>Update you job preferences to help recruiters find you for the right oppurtunities. </p>
+                  <p>{{ $post->description }}</p>
                   <div>
-                    <img src="{{ asset('front-assets/images/linkedin-banner.png') }}" alt="">
+                    <img src="{{ url('storage/'.$post->image) }}" alt="">
                   </div>
                   <div class="reactions d-flex align-items-center justify-content-between pt-3">
                     <a class="d-flex align-items-center text-color">
                       <img src="{{ asset('front-assets/icons/React.png') }}" alt="" class="pe-2">
                       React
                     </a>
-                    <a class="d-flex align-items-center text-color">
+                    <!-- <a class="d-flex align-items-center text-color">
                       <img src="{{ asset('front-assets/icons/Comment.png') }}" alt="" class="pe-2">
                       Comment
                     </a>
                     <a class="d-flex align-items-center text-color">
                       <img src="{{ asset('front-assets/icons/Share.png') }}" alt="" class="pe-2">
                       Share
-                    </a>
+                    </a> -->
                   </div>
                 </div>
-                <div class="whiteBox bg-white p-4 mt-4">
+                @empty
+					                <div>No Events found.</div>
+					            @endforelse
+                <!-- <div class="whiteBox bg-white p-4 mt-4">
                   <div class="d-flex mb-3">
                     <div class="d-flex align-items-center">
                       <div class="pe-3">
@@ -64,7 +68,7 @@
                       Share
                     </a>
                   </div>
-                </div> 
+                </div>  -->
                 
               </div>
             </div>

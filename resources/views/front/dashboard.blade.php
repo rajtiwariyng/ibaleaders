@@ -146,60 +146,20 @@
             <div class="whiteBox bg-white p-4 mt-4 ms-2" >
               <h3 class="blue poppins-bold">Email My Alliance </h3>
               <div class="card-list">
+              @forelse ($connections as $connection)
                 <div class="item-list">
                   <div class="avatar">
-                    <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="..." class="avatar-img rounded-circle">
+                    <img src="{{ $connection->profile_image ?? asset('front-assets/images/default.jpg') }}" alt="{{ $connection->name }}" class="avatar-img rounded-circle">
                   </div>
                   <div class="info-user ms-3">
-                    <div class="username">Jimmy Denis</div>
-                    <div class="status">Graphic Designer</div>
+                    <div class="username">{{ $connection->name }}</div>
+                    <div class="status">{{ $connection->email ?? 'N/A' }}</div>
                   </div>
                 </div>
-                <div class="item-list">
-                  <div class="avatar">
-                    <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="..." class="avatar-img rounded-circle">
-                  </div>
-                  <div class="info-user ms-3">
-                    <div class="username">Jimmy Denis</div>
-                    <div class="status">Graphic Designer</div>
-                  </div>
-                </div>
-                <div class="item-list">
-                  <div class="avatar">
-                    <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="..." class="avatar-img rounded-circle">
-                  </div>
-                  <div class="info-user ms-3">
-                    <div class="username">Jimmy Denis</div>
-                    <div class="status">Graphic Designer</div>
-                  </div>
-                </div>
-                <div class="item-list">
-                  <div class="avatar">
-                    <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="..." class="avatar-img rounded-circle">
-                  </div>
-                  <div class="info-user ms-3">
-                    <div class="username">Jimmy Denis</div>
-                    <div class="status">Graphic Designer</div>
-                  </div>
-                </div>
-                <div class="item-list">
-                  <div class="avatar">
-                    <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="..." class="avatar-img rounded-circle">
-                  </div>
-                  <div class="info-user ms-3">
-                    <div class="username">Jimmy Denis</div>
-                    <div class="status">Graphic Designer</div>
-                  </div>
-                </div>
-                <div class="item-list">
-                  <div class="avatar">
-                    <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="..." class="avatar-img rounded-circle">
-                  </div>
-                  <div class="info-user ms-3">
-                    <div class="username">Jimmy Denis</div>
-                    <div class="status">Graphic Designer</div>
-                  </div>
-                </div>
+                @empty
+                <div>No Events found.</div>
+                @endforelse
+                
               </div>
             </div>
             <!-- <div class="whiteBox bg-white p-4 mt-4 me-2">

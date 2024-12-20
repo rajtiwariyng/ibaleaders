@@ -47,12 +47,14 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-7">
-      @if (request()->routeIs('user.profile'))
+
+      
+       @if(Route::currentRouteName() === 'user.connection.userprofile')
       <!-- Content for Profile Pages -->
       <div class="userStoryBox d-flex flex-column">
         <div class="userStoryBoxHeader">
-          <h6 class="blue poppins-semibold">Daniel Mathew</h6>
-          <p class="mb-0 fs-8">Health &amp; Wellness, Nutritionist</p>
+          <h6 class="blue poppins-semibold">{{ $user->name }}</h6>
+          <p class="mb-0 fs-8">{{ old('industry', $user->industry) }}</p>
           <div class="d-flex align-items-center profile-btns">
             <button class="bg-blue text-white border-0 px-3 py-2 fs-8">Connected</button>
             <button class="blue btn fs-8">Message</button>
@@ -64,6 +66,7 @@
                 <a class="dropdown-item" href="#">Send profile in a message</a>
                 <a class="dropdown-item" href="#">Remove Connection</a>
                 <a class="dropdown-item" href="#">Report/Block</a>
+              <a href='{{ URL::route("user.createtestimonial", [base64_encode($customer)]) }}' class="grey dropdown-item">Testimonial</a>
               </div>
             </div>
           </div>
@@ -73,7 +76,7 @@
       
       <!-- Content for the other Page -->
       <div class="userStoryBox d-flex flex-column">
-        <div class="d-flex">
+        <!-- <div class="d-flex">
           <div class="userStoryImg">
             <a href="{{ route('user.profile') }}"><img src="{{ auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : asset('front-assets/images/profile2.jpg') }}" alt="" class="rounded-circle"></a>
           </div>
@@ -81,17 +84,23 @@
             <input type="text" placeholder="Share Your Success Story" class="bg-white border-0 form-control">
             <button type="button" class="bg-blue text-white share-btn border-0">Share</button>
           </div>
-        </div>
+        </div> -->
         <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-4 mt-4 fs-8">
           <li class="list-inline-item">
-            <i class="fa-regular fa-image"></i> <span class="fw-medium">Photo / Video </span>
+            
+          <a href="{{ route('user.createpost') }}"><i class="fa-regular fa-image"></i> <span class="fw-medium">Photo   </span></a>
           </li>
+          
           <li class="list-inline-item">
             <i class="fa-solid fa-people-group"></i> <span class="fw-medium">Create Group</span>
           </li>
+          
           <li class="list-inline-item">
-            <i class="fa-solid fa-calendar-week"></i> <span class="fw-medium">Create Event</span>
+          <a href="{{ route('user.createevent') }}"><i class="fa-solid fa-calendar-week"></i> <span class="fw-medium">Create Event</span></a>
           </li>
+          
+          
         </ul>
       </div>
       @endif
+      

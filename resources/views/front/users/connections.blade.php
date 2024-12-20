@@ -63,8 +63,11 @@
         </div>
     </div>
     </div>
-    <!-- Suggestions Section -->
     <div class="col-lg-5 mt-4">
+    @include('front.users.suggestions')
+    </div>
+    <!-- Suggestions Section -->
+    <div class="col-lg-5 mt-4 d-none">
         <div class="whiteBox bg-white p-3 mb-3">
             <div class="d-flex justify-content-between mb-4">
                 <h5 class="blue poppins-bold mb-0 fs-6">Suggestions</h5>
@@ -85,7 +88,7 @@
                     </div>
                     <div class="note-content">
                         <p class="mb-0 fs-7">
-                            <a href="#" class="grey">
+                            <a href='{{ URL::route("user.connection.userprofile", [base64_encode($suggestion->id)]) }}' class="grey">
                                 <strong>{{ $suggestion->name }}</strong>
                             </a>
                         </p>
