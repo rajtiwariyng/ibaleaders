@@ -80,20 +80,10 @@ Route::middleware(['user_auth:user'])->group(function () {
 
 	
 	Route::get('/create-post', [UserProfileController::class, 'createPost'])->name('user.createpost');
-
-	// Route::post('/create-event-post', [ConnectionController::class, 'createEventPost'])->name('user.createeventpost');
-
 	Route::post('/create-post', [UserProfileController::class, 'createPostPost'])->name('user.createpostpost');
 	Route::get('/create-event', [UserProfileController::class, 'createEvent'])->name('user.createevent');
-
-	// Route::post('/create-event-post', [ConnectionController::class, 'createEventPost'])->name('user.createeventpost');
-
 	Route::post('/create-event', [UserProfileController::class, 'createEventPost'])->name('user.createeventpost');
-
 	Route::get('/send-testimonial/{id}', [UserProfileController::class, 'createTestimonial'])->name('user.createtestimonial');
-
-	// Route::post('/create-event-post', [ConnectionController::class, 'createEventPost'])->name('user.createeventpost');
-
 	Route::post('/create-testimonial', [UserProfileController::class, 'createTestimonialPost'])->name('user.createtestimonialpost');
 
 	// user connection
@@ -106,6 +96,4 @@ Route::middleware(['user_auth:user'])->group(function () {
 
 // Include admin routes file
 require __DIR__.'/admin.php';
-///require __DIR__.'/api.php';
-
 

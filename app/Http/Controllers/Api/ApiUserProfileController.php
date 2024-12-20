@@ -16,11 +16,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ApiUserProfileController extends Controller
 {
-    /*public function __construct()
-    {
-        $this->middleware('auth:sanctum'); // Adjust middleware as needed
-    }*/
-
     public function profile()
     {
         // Get authenticated user
