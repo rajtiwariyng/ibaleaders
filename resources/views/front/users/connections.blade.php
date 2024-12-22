@@ -31,7 +31,7 @@
                             </div>
                             <div class="note-content">
                                 <p class="mb-0 fs-7">
-                                    <a href="#" class="grey">
+                                    <a href='{{ URL::route("user.connection.userprofile", [base64_encode($connection->id)]) }}' class="grey">
                                         <strong>{{ $connection->name }}</strong>
                                     </a>
                                 </p>

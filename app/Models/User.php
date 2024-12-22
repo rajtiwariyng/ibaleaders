@@ -194,4 +194,13 @@ class User extends Authenticatable
         // ->groupBy('user_id');
 
     }
+    function testmonialRelated(){
+        return $this->belongsToMany(
+            User::class,
+            'Testimonials',
+            'user_id',
+            'received_to'
+        );
+    }
+   
 }
