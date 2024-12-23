@@ -37,6 +37,12 @@ Route::get('/reset-password', [FrontendLoginController::class, 'resetpassword'])
 Route::post('/reset-password-post', [FrontendLoginController::class, 'resetPasswordPost'])->name('front.resetpasswordpost');
 Route::get('/forget-password', [FrontendLoginController::class, 'forgetpassword'])->name('front.forgetpassword');
 
+Route::post('/forget-password-mail', [FrontendLoginController::class, 'forgetPasswordPostMail'])->name('front.reset.password.mail');
+
+Route::get('/change-password/{token}', [FrontendLoginController::class, 'changePassword'])->name('front.changepassword');
+Route::post('/change-password-mail', [FrontendLoginController::class, 'postChangePassword'])->name('front.changepasswordpost');
+
+
 // Group routes for authenticated frontend users
 Route::middleware(['user_auth:user'])->group(function () {
     Route::get('/dashboard', [FrontendLoginController::class, 'dashboard'])->name('front.dashboard');

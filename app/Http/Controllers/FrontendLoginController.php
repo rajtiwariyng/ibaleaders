@@ -16,6 +16,9 @@ use App\Models\Post;
 use App\Models\Referrals;
 use App\Models\Tyfcbreferrals;
 use App\Models\Onereferrals;
+use Illuminate\Support\Str;
+use DB;
+use Illuminate\Support\Facades\Mail;
 
 
 class FrontendLoginController extends Controller
@@ -297,6 +300,74 @@ class FrontendLoginController extends Controller
         ]);
         return response()->json(['success' => true, 'message' => 'One To One Referral Added Successfully!']);
         
+    }
+    public function forgetPasswordPostMail(Request $request){
+        try {
+            $request->validate([
+                'email' => 'required|email|exists:users',
+            ],['email.required' => __('The email field is required.'),'email.exists' => __('You are not registered with us. Please sign up.')]);
+            $token = Str::random(60);
+            DB::table('password_reset_tokens')->insert(['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]);
+            $user=User::where('email',$request->email)->first();
+            $data = [
+                'token' => $token,
+                'mail_from' => 'rajtiwariyng@gmail.com',
+                'email' => $request->email,
+                'client_name' => $user->name,
+                'logo' => asset('front-assets/images/white-logo.png'),
+                'subject' => 'Forgot Password',
+                'token' => $token,
+            ];
+            // dispatch(new \App\Jobs\sendForgotPasswordEmail($data))->onQueue('forgot_password_email');
+            // SendForgotPasswordEmail::dispatch($data);
+            $this->sendForgotPasswordEmail($data);
+            return response()->json(['success' => true, 'message' => 'We have e-mailed your password reset link!']);
+            // return $this->successResponse([],__('We have e-mailed your password reset link!'));
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => 'error']);
+        }
+    }
+
+    function sendForgotPasswordEmail($dataget){
+              
+       
+        $datapush = [
+            'logo' => $dataget['logo'],
+            'token' => $dataget['token'],           
+        ];
+        print_r($dataget);
+
+        Mail::send('email.forgotPaswordMail', ['mailData' => $datapush], function($message) use($dataget){
+            $message->to($dataget['email'])->from('noreply@gmail.com', $dataget['client_name'])->subject($dataget['subject']);            
+           });  
+
+    }
+    function changePassword(Request $request)
+    {
+        $token=$request->token;
+        return view('front.auth.change-password',compact('token'));
+
+    }
+    public function postChangePassword(Request $request, $domain = ''){
+        $request->validate([
+            'token' => 'required',
+            'password_confirmation' => 'required',
+            'password' => 'required|string|min:6|confirmed',
+        ], [
+            'password.required' => __('The password field is required.'), 
+            'password.confirmed' => __('The password confirmation does not match.'),
+            'password_confirmation.required' => __('The password confirmation field is required.')
+        ]);
+        $updatePassword = DB::table('password_reset_tokens')->where(['token' => $request->token])->first();
+        if($updatePassword){
+            $user = User::where('email', $updatePassword->email)->update(['password' => Hash::make($request->password)]);
+            DB::table('password_reset_tokens')->where(['email'=> $updatePassword->email])->delete();
+            return response()->json(['success' => true, 'message' => 'Your password has been changed!']);
+            // return $this->successResponse([],__('Your password has been changed!'));
+        }else{
+            return response()->json(['success' => true, 'message' => 'Invalid Token!']);
+            //  return $this->errorResponse(__('Invalid Token!'), 400);
+        }
     }
     
     
