@@ -107,17 +107,11 @@ class FrontendLoginController extends Controller
     }
     public function alliance()
     {
-        // $upcomingEvents = Event::where('start_date', '>=', Carbon::now())
-        // ->orderBy('start_date', 'asc')
-        // ->get();
         $upcomingEvents = Event::get();
         $user = auth()->user();
         // Fetch approved connections
         $connections = $user->connections;
         $testimonials = $user->testmonialRelated;
-        // echo "<pre>";
-        // print_r($testimonials);
-
 
         return view('front.pages.alliance', compact('upcomingEvents', 'connections', 'testimonials'));
     }

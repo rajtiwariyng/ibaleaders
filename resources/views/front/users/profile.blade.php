@@ -36,44 +36,8 @@
                   </div>
                 </div>
                 @empty
-<<<<<<< HEAD
-                          <div>No Events found.</div>
-                      @endforelse
-=======
-					                <div>No Events found.</div>
-					            @endforelse
->>>>>>> a8445b326f46709240e0003560090eb0de4ee731
-                <!-- <div class="whiteBox bg-white p-4 mt-4">
-                  <div class="d-flex mb-3">
-                    <div class="d-flex align-items-center">
-                      <div class="pe-3">
-                        <img src="{{ asset('front-assets/icons/in.png') }}" alt="" class="linkdinImage">
-                      </div>
-                      <div>
-                        <p class="mb-0"><strong>Linkedin</strong></p>
-                        <p class="mb-0">Promoted</p>
-                      </div>
-                    </div>
-                  </div>
-                  <p>Update you job preferences to help recruiters find you for the right oppurtunities. </p>
-                  <div>
-                    <img src="{{ asset('front-assets/images/linkedin-banner.png') }}" alt="">
-                  </div>
-                  <div class="reactions d-flex align-items-center justify-content-between pt-3">
-                    <a class="d-flex align-items-center text-color">
-                      <img src="{{ asset('front-assets/icons/React.png') }}" alt="" class="pe-2">
-                      React
-                    </a>
-                    <a class="d-flex align-items-center text-color">
-                      <img src="{{ asset('front-assets/icons/Comment.png') }}" alt="" class="pe-2">
-                      Comment
-                    </a>
-                    <a class="d-flex align-items-center text-color">
-                      <img src="{{ asset('front-assets/icons/Share.png') }}" alt="" class="pe-2">
-                      Share
-                    </a>
-                  </div>
-                </div>  -->
+                  <div>No Events found.</div>
+              @endforelse
                 
               </div>
             </div>

@@ -11,9 +11,6 @@ use App\Models\Event;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Event;
-use App\Models\Post;
-use App\Models\Testimonial;
 
 class UserProfileController extends Controller
 {
@@ -262,35 +259,44 @@ class UserProfileController extends Controller
     }
     public function createPostPost(Request $request)
     {
-        $request->validate([
-            'posttitle' => 'required|string|max:255',          
-            'postdescription' => 'nullable|string|max:255',
-            'postimage' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);
-        $path="";
-        if ($request->hasFile('postimage')) {
-            $file = $request->file('postimage');
-            $path = $file->store('post', 'public');  // Store the file in the 'public' disk
+        try {
+            // Validate the request data
+            $request->validate([
+                'posttitle' => 'required|string|max:255',
+                'postdescription' => 'nullable|string|max:255',
+                'postimage' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            ]);
 
-            // Save the file path to the user's record or return the file URL
-            // $user = auth()->user();
-            // $user->eventimage = $path;
-            // $user->save();
+            // Initialize path variable
+            $path = "";
 
-            // return response()->json([
-            //     'success' => true,
-            //     'profile_image_url' => asset('storage/' . $path),
-            // ]);
+            // Handle the file upload if an image is provided
+            if ($request->hasFile('postimage')) {
+                $file = $request->file('postimage');
+                $path = $file->store('post', 'public');
+            }
+
+            // Create the post in the database
+            Post::create([
+                'user_id' => auth()->id(),
+                'title' => $request->posttitle,
+                'description' => $request->postdescription,
+                'image' => $path
+            ]);
+
+            // Return success response
+            return response()->json(['success' => true, 'message' => 'Post added successfully!']);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Return validation error response
+            return response()->json(['success' => false, 'message' => 'Validation failed.', 'errors' => $e->errors()], 422);
+
+        } catch (\Exception $e) {
+            // Return generic error response
+            return response()->json(['success' => false, 'message' => 'An error occurred while adding the post.', 'error' => $e->getMessage()], 500);
         }
-        Post::create([
-            'user_id' => auth()->id(), // Logged-in user's ID
-            'title' => $request->posttitle,
-            'description' => $request->postdescription,
-            'image'=>$path
-        ]);
-        return response()->json(['success' => true, 'message' => 'Post added successfully!']);
-        
     }
+
     public function createTestimonial(Request $request)
     {
         $customer=$request->id;

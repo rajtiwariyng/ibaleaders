@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminuserController;
 use App\Http\Controllers\Admin\AdminEventController;
 use App\Http\Controllers\VisitorController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\CategoryController;
 use Spatie\Permission\Models\Role;
 
 Route::middleware(['admin_guest'])->prefix('/admin/')->name('admin.')->group(function(){
@@ -50,6 +52,18 @@ Route::middleware(['admin_auth:admin,superadmin'])->prefix('/admin/')->name('adm
     Route::post('events/{event}/status', [AdminEventController::class, 'changeStatus'])->name('events.changeStatus');
     Route::delete('events/{event}', [AdminEventController::class, 'destroy'])->name('events.destroy');
     Route::post('events/{event}/restore', [AdminEventController::class, 'restore'])->name('events.restore');
+
+    Route::get('visitors', [VisitorController::class, 'visitors'])->name('visitors.list');
+
+    Route::resource('blogs', BlogController::class);
+    Route::post('blogs/{blog}/status', [BlogController::class, 'changeStatus'])->name('blogs.changeStatus');
+    Route::get('blogs/trashed', [BlogController::class, 'trashed'])->name('blogs.trashed');
+    Route::post('blogs/restore/{id}', [BlogController::class, 'restore'])->name('blogs.restore');
+
+    Route::resource('categories', CategoryController::class);
+    Route::post('categories/{category}/status', [CategoryController::class, 'changeStatus'])->name('categories.changeStatus');
+    Route::get('categories/trashed', [CategoryController::class, 'trashed'])->name('categories.trashed');
+    Route::post('categories/restore/{id}', [CategoryController::class, 'restore'])->name('categories.restore');
 
 });
 

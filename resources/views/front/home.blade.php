@@ -66,12 +66,8 @@
               </div>
             </div>
           </div>
-<<<<<<< HEAD
-          
-=======
           <div class="row">
             <div class="col-md-8">
->>>>>>> a8445b326f46709240e0003560090eb0de4ee731
           @forelse($posts as $post) 
           <div class="whiteBox bg-white p-4 mt-4">
             <div class="d-flex mb-3">
@@ -81,11 +77,7 @@
                 </div>
                 <div>
                   <p class="mb-0"><strong>{{ $post->title }}</strong></p>
-<<<<<<< HEAD
                   <p class="mb-0">{{ \Carbon\Carbon::parse($post->created_at)->format('d M Y') }}</p>
-=======
-                  <p class="mb-0"><?php echo date("d M Y", strtotime($post->created_at));?></p>
->>>>>>> a8445b326f46709240e0003560090eb0de4ee731
                 </div>
               </div>
             </div>
@@ -111,8 +103,6 @@
           @empty
               <div>No Events found.</div>
           @endforelse
-<<<<<<< HEAD
-=======
           </div>
           <div class="col-md-4">
               <div class="whiteBox bg-white p-4 mt-4">
@@ -205,7 +195,6 @@
               </div>
             </div>
           </div>
->>>>>>> a8445b326f46709240e0003560090eb0de4ee731
         </div>
 @endsection
  <!-- Modal -->

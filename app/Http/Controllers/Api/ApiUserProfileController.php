@@ -192,7 +192,7 @@ class ApiUserProfileController extends Controller
             $validator = Validator::make($request->all(), [
                 'posttitle' => 'required|string|max:255',
                 'postdescription' => 'nullable|string|max:255',
-                'postimage' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+                'postimage' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             ]);
 
             if ($validator->fails()) {

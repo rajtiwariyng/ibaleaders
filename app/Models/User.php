@@ -9,10 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
-<<<<<<< HEAD
-=======
 use Illuminate\Support\Facades\DB;
->>>>>>> a8445b326f46709240e0003560090eb0de4ee731
+
 
 class User extends Authenticatable
 {
@@ -124,37 +122,14 @@ class User extends Authenticatable
             'user_id','id'
         )->with('user')->with('received');
     }
-    // public function referralsuser()
-    // {
-    //     return $this->belongsTo(Referrals::class, 'user_id', 'id');
-    // }
-    // public function referralsreceived()
-    // {
-    //     return $this->belongsTo(Referrals::class, 'received_to', 'id');
-    // }
+    
     public function tyfcbreferralslist()
     {
         return $this->hasMany(
             Tyfcbreferrals::class,
             'user_id','id'
-        )->with('user')->with('received')
-        ;
-        // return $this->hasMany(
-        //     Tyfcbreferrals::class,
-        //     'user_id', 'id'
-        // )
-        // ->with(['user', 'received'])
-        // ->addSelect(['subtotal' => Tyfcbreferrals::select(DB::raw('SUM(amount)'))
+        )->with('user')->with('received');
         
-        //      // Assuming 'users' table exists
-        // ]);
-        // return $this->hasMany(
-        //     Tyfcbreferrals::class,
-        //     'user_id', 'id'
-        // )
-        // ->with(['user', 'received'])
-        // ->select('*', DB::raw('SUM(amount) as subtotal'))
-        // ->groupBy('user_id');
 
     }
    
@@ -179,29 +154,13 @@ class User extends Authenticatable
             'user_id','id'
         )->with('user')->with('received')
         ->select(DB::raw('SUM(amount) as subtotal'));
-        // return $this->hasMany(
-        //     Tyfcbreferrals::class,
-        //     'user_id', 'id'
-        // )
-        // ->with(['user', 'received'])
-        // ->addSelect(['subtotal' => Tyfcbreferrals::select(DB::raw('SUM(amount)'))
-        
-        //      // Assuming 'users' table exists
-        // ]);
-        // return $this->hasMany(
-        //     Tyfcbreferrals::class,
-        //     'user_id', 'id'
-        // )
-        // ->with(['user', 'received'])
-        // ->select('*', DB::raw('SUM(amount) as subtotal'))
-        // ->groupBy('user_id');
-
     }
-    function testmonialRelated(){
+    public function testmonialRelated()
+    {
         return $this->belongsToMany(
             User::class,
-            'Testimonials',
-            'user_id',
+            'testimonials', 
+            'user_id',      
             'received_to'
         );
     }

@@ -19,10 +19,7 @@ class Post extends Model
         'description',
         'image',
         'user_id',
-<<<<<<< HEAD
         'post_for',
-=======
->>>>>>> a8445b326f46709240e0003560090eb0de4ee731
         'status',
     ];
 
