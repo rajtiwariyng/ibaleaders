@@ -8,7 +8,7 @@
                 <form id="eventFormProfile" method="POST">
                   @csrf
                  @method('POST')
-                  <div class="mb-3 profile-container">
+                  <!-- <div class="mb-3 profile-container">
                   <img id="eventImage" src="{{ asset('front-assets/images/profile.jpg') }}" 
                            alt="User Profile" class="profile-image-event">
                       <label for="fileUploadevent" class="camera-icon">
@@ -17,7 +17,7 @@
                       <input type="file" name="eventimage" id="fileUploadevent" class="upload-input-event" accept="image/*" onchange="loadFileEvent(event)">
                       <div id="error-eventimage" class="text-danger"></div>
                   
-                  </div>
+                  </div> -->
 
                   <div class="mb-3">
                       <label>Title</label>
@@ -26,9 +26,14 @@
                   </div>
 
                   <div class="mb-3">
-                      <label>Author</label>
-                      <input type="text" name="eventauthor" id="eventauthor" class="form-control" >
-                      <div id="error-eventauthor" class="text-danger"></div>
+                      <label>Location</label>
+                      <input type="text" name="eventlocation" id="eventlocation" class="form-control" >
+                      <div id="error-eventlocation" class="text-danger"></div>
+                  </div>
+                  <div class="mb-3">
+                      <label>Date</label>
+                      <input type="datetime-local" name="eventdate" id="eventdate" class="form-control" >
+                      <div id="error-eventdate" class="text-danger"></div>
                   </div>
 
                   <div class="mb-3">
@@ -48,79 +53,8 @@
               </div>
             </div>
             <div class="col-lg-5 mt-4">
-              <div class="whiteBox bg-white p-3 mb-3">
-                <div class="d-flex justify-content-between mb-4">
-                  <h5 class="blue poppins-bold mb-0 fs-6">Suggestions</h5>
-                  <div class="d-flex align-items-center siderbar-search">
-                    <div class="al-search d-flex justify-content-end w-100">
-                      <button class="border-0 bg-white">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                      </button>
-                      <input type="text" placeholder="Search">
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="notification-wrapper mb-4">
-                  <div class="note-img">
-                    <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="">
-                  </div>
-                  <div class="note-content">
-                    <p class="mb-0 fs-7" ><a href="#" class="grey"><strong>Aashna Sabharwal</strong></a></p>
-                    <p class="mb-0 fs-8" >Health & Wellness, Nutritionist</p>
-                  </div>
-                  <div class="sr-btn">
-                    <button class="bg-blue btn text-white fs-8" type="button">View Group</button>
-                  </div>
-                </div>
-                <div class="notification-wrapper mb-4">
-                  <div class="note-img">
-                    <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="">
-                  </div>
-                  <div class="note-content">
-                    <p class="mb-0 fs-7" ><a href="#" class="grey"><strong>Aashna Sabharwal</strong></a></p>
-                    <p class="mb-0 fs-8" >Health & Wellness, Nutritionist</p>
-                  </div>
-                  <div class="sr-btn">
-                    <button class="bg-blue btn text-white fs-8" type="button">View Group</button>
-                  </div>
-                </div>
-                <div class="notification-wrapper mb-4">
-                  <div class="note-img">
-                    <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="">
-                  </div>
-                  <div class="note-content">
-                    <p class="mb-0 fs-7" ><a href="#" class="grey"><strong>Aashna Sabharwal</strong></a></p>
-                    <p class="mb-0 fs-8" >Health & Wellness, Nutritionist</p>
-                  </div>
-                  <div class="sr-btn">
-                    <button class="bg-blue btn text-white fs-8" type="button">View Group</button>
-                  </div>
-                </div>
-                <div class="notification-wrapper mb-4">
-                  <div class="note-img">
-                    <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="">
-                  </div>
-                  <div class="note-content">
-                    <p class="mb-0 fs-7" ><a href="#" class="grey"><strong>Aashna Sabharwal</strong></a></p>
-                    <p class="mb-0 fs-8" >Health & Wellness, Nutritionist</p>
-                  </div>
-                  <div class="sr-btn">
-                    <button class="bg-blue btn text-white fs-8" type="button">View Group</button>
-                  </div>
-                </div>
-                <div class="notification-wrapper mb-4">
-                  <div class="note-img">
-                    <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="">
-                  </div>
-                  <div class="note-content">
-                    <p class="mb-0 fs-7" ><a href="#" class="grey"><strong>Aashna Sabharwal</strong></a></p>
-                    <p class="mb-0 fs-8" >Health & Wellness, Nutritionist</p>
-                  </div>
-                  <div class="sr-btn">
-                    <button class="bg-blue btn text-white fs-8" type="button">View Group</button>
-                  </div>
-                </div>
+            @include('front.users.suggestions') 
+              
               </div>
             </div>
           </div>
