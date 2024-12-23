@@ -8,6 +8,7 @@ use App\Models\Connection;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class ConnectionController extends Controller
 {

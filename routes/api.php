@@ -18,7 +18,10 @@ Route::prefix('v1/')->group(function () {
     Route::get('/user/profiledetails', [ApiUserProfileController::class, 'profiledetails']);
     Route::post('/user/updateprofile', [ApiUserProfileController::class, 'updateProfile']);
     Route::post('/user/updateprofileimage', [ApiUserProfileController::class, 'updateProfileImage']);
+
     Route::post('/user/createpost', [ApiUserProfileController::class, 'createPost']);
+    Route::get('/user/postlist', [ApiUserProfileController::class, 'postlist']);
+    Route::get('/user/showconnections', [ApiUserProfileController::class, 'showConnections']);
    });
 });
 

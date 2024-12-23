@@ -76,7 +76,7 @@
                 </div>
                 <div>
                   <p class="mb-0"><strong>{{ $post->title }}</strong></p>
-                  <p class="mb-0"><?php echo date("d M Y", strtotime($post->created_at));?></p>
+                  <p class="mb-0">{{ \Carbon\Carbon::parse($post->created_at)->format('d M Y') }}</p>
                 </div>
               </div>
             </div>

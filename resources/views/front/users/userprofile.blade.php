@@ -8,7 +8,7 @@
                   <div class="d-flex mb-3">
                     <div class="d-flex align-items-center">
                       <div class="pe-3">
-                        <img src="{{ $post->profile_image ? asset('storage/' . $post->profile_image) : asset('front-assets/images/profile2.jpg') }}" alt="{{ $post->title }}" class="linkdinImage">
+                        <img src="{{ asset('front-assets/icons/in.png') }}" alt="" class="linkdinImage">
                       </div>
                       <div>
                         <p class="mb-0"><strong>{{ $post->title }}</strong></p>
@@ -25,19 +25,19 @@
                       <img src="{{ asset('front-assets/icons/React.png') }}" alt="" class="pe-2">
                       React
                     </a>
-                    <!-- <a class="d-flex align-items-center text-color">
+                    <a class="d-flex align-items-center text-color">
                       <img src="{{ asset('front-assets/icons/Comment.png') }}" alt="" class="pe-2">
                       Comment
                     </a>
                     <a class="d-flex align-items-center text-color">
                       <img src="{{ asset('front-assets/icons/Share.png') }}" alt="" class="pe-2">
                       Share
-                    </a> -->
+                    </a>
                   </div>
                 </div>
                 @empty
-                          <div>No Events found.</div>
-                      @endforelse
+					                <div>No Events found.</div>
+					            @endforelse
                 <!-- <div class="whiteBox bg-white p-4 mt-4">
                   <div class="d-flex mb-3">
                     <div class="d-flex align-items-center">
