@@ -149,7 +149,11 @@
               @forelse ($connections as $connection)
                 <div class="item-list">
                   <div class="avatar">
+<<<<<<< HEAD
                     <img src="{{ $connection->profile_image ? asset('storage/' . $connection->profile_image) : asset('front-assets/images/default.jpg') }}" alt="{{ $connection->name }}" class="avatar-img rounded-circle">
+=======
+                    <img src="{{ $connection->profile_image ?? asset('front-assets/images/default.jpg') }}" alt="{{ $connection->name }}" class="avatar-img rounded-circle">
+>>>>>>> a8445b326f46709240e0003560090eb0de4ee731
                   </div>
                   <div class="info-user ms-3">
                     <div class="username">{{ $connection->name }}</div>

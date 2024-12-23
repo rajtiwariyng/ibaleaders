@@ -36,8 +36,13 @@
                   </div>
                 </div>
                 @empty
+<<<<<<< HEAD
                           <div>No Events found.</div>
                       @endforelse
+=======
+					                <div>No Events found.</div>
+					            @endforelse
+>>>>>>> a8445b326f46709240e0003560090eb0de4ee731
                 <!-- <div class="whiteBox bg-white p-4 mt-4">
                   <div class="d-flex mb-3">
                     <div class="d-flex align-items-center">

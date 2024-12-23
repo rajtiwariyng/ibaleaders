@@ -37,6 +37,12 @@ Route::get('/reset-password', [FrontendLoginController::class, 'resetpassword'])
 Route::post('/reset-password-post', [FrontendLoginController::class, 'resetPasswordPost'])->name('front.resetpasswordpost');
 Route::get('/forget-password', [FrontendLoginController::class, 'forgetpassword'])->name('front.forgetpassword');
 
+Route::post('/forget-password-mail', [FrontendLoginController::class, 'forgetPasswordPostMail'])->name('front.reset.password.mail');
+
+Route::get('/change-password/{token}', [FrontendLoginController::class, 'changePassword'])->name('front.changepassword');
+Route::post('/change-password-mail', [FrontendLoginController::class, 'postChangePassword'])->name('front.changepasswordpost');
+
+
 // Group routes for authenticated frontend users
 Route::middleware(['user_auth:user'])->group(function () {
     Route::get('/dashboard', [FrontendLoginController::class, 'dashboard'])->name('front.dashboard');
@@ -71,12 +77,38 @@ Route::middleware(['user_auth:user'])->group(function () {
 	Route::get('/testimonials', [UserProfileController::class, 'testimonials'])->name('user.testimonials');
 	Route::get('/groups-join', [UserProfileController::class, 'groupsjoined'])->name('user.groupsjoined');
 
-
+	
 	//connections
 	Route::get('/connections', [ConnectionController::class, 'showConnections'])->name('user.connections');
 	Route::post('/connections/send', [ConnectionController::class, 'sendConnectionRequest'])->name('user.sendConnection');
     Route::post('/connections/approve', [ConnectionController::class, 'approveConnectionRequest'])->name('user.approveConnection');
     Route::post('/connections/reject', [ConnectionController::class, 'rejectConnectionRequest'])->name('user.rejectConnection');
+	
+	Route::get('/create-post', [UserProfileController::class, 'createPost'])->name('user.createpost');
+
+	// Route::post('/create-event-post', [ConnectionController::class, 'createEventPost'])->name('user.createeventpost');
+
+	Route::post('/create-post', [UserProfileController::class, 'createPostPost'])->name('user.createpostpost');
+	Route::get('/create-event', [UserProfileController::class, 'createEvent'])->name('user.createevent');
+
+	// Route::post('/create-event-post', [ConnectionController::class, 'createEventPost'])->name('user.createeventpost');
+
+	Route::post('/create-event', [UserProfileController::class, 'createEventPost'])->name('user.createeventpost');
+
+	Route::get('/send-testimonial/{id}', [UserProfileController::class, 'createTestimonial'])->name('user.createtestimonial');
+
+	// Route::post('/create-event-post', [ConnectionController::class, 'createEventPost'])->name('user.createeventpost');
+
+	Route::post('/create-testimonial', [UserProfileController::class, 'createTestimonialPost'])->name('user.createtestimonialpost');
+
+	// user connection
+	Route::get('/connection/userprofile/{id}', [ConnectionController::class, 'userConnectionProfile'])->name('user.connection.userprofile');
+
+	Route::post('/user-list-referral-type', [FrontendLoginController::class, 'userListReferralType'])->name('user.userListReferralType');
+
+	Route::post('/post-referral', [FrontendLoginController::class, 'postReferral'])->name('user.postReferral');
+	Route::post('/post-tyfcbreferral', [FrontendLoginController::class, 'tyfcdPostReferral'])->name('user.tyfcbpostReferral');
+	Route::post('/post-onereferral', [FrontendLoginController::class, 'onePostReferral'])->name('user.onepostReferral');
 
 	
 	Route::get('/create-post', [UserProfileController::class, 'createPost'])->name('user.createpost');
@@ -96,4 +128,5 @@ Route::middleware(['user_auth:user'])->group(function () {
 
 // Include admin routes file
 require __DIR__.'/admin.php';
+require __DIR__.'/api.php';
 

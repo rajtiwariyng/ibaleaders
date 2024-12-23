@@ -1,10 +1,10 @@
-<?php 
+<?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -20,9 +20,8 @@ class AuthController extends Controller
         // Attempt to log in
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'status' => 'error',
                 'message' => 'Invalid credentials.'
-            ], 400);
+            ], 401);
         }
 
         // Generate token
@@ -31,10 +30,9 @@ class AuthController extends Controller
 
         // Respond with token and user data
         return response()->json([
-            'status' => 'success',
             'message' => 'Login successful.',
             'token' => $token,
-            'user' => $user,  
+            'user' => $user,
         ], 200);
     }
 
@@ -74,10 +72,10 @@ class AuthController extends Controller
     }
 
     public function userslist()
-    {   
+    {
         $users = User::whereHas('roles', function ($query) {
-                    $query->where('name', 'user'); // Filter users with 'user' role
-                })->get();
+            $query->where('name', 'user'); // Filter users with 'user' role
+        })->get();
 
         return response()->json([
             'success' => true,

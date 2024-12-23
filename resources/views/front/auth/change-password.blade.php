@@ -26,16 +26,20 @@
         <form action="" id="reset_password_form" method="POST">
         @csrf
         @method('POST')
+          
+            <input type="hidden" id="token" name="token" placeholder="Email" value="{{$token}}">
+            
           <div class="form-group">
-            <label for="email">Enter Email</label>
-            <input type="email" id="email" name="email" placeholder="Email" class="form-control">
-            <div id="error-email" class="text-danger"></div>
-          </div>
-          <!-- <div class="form-group">
             <label for="email">Enter Password</label>
             <input type="password" id="password" name="password" placeholder="Password"  class="form-control">
+            <div id="error-password" class="text-danger"></div>
           </div> 
-          <div class="text-end">
+          <div class="form-group">
+            <label for="email">Enter Confirm Password</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password"  class="form-control">
+            <div id="error-password_confirmation" class="text-danger"></div>
+          </div> 
+        <!--   <div class="text-end">
             <a href="{{ route('front.forgetpassword') }}" class="blue">Forget Password</a>
           </div>-->
           <div class="text-center sbmtBtn">
@@ -98,7 +102,7 @@
             async: true,
             processData: false,
             contentType: false,
-            url: "{{ route('front.reset.password.mail') }}",
+            url: "{{ route('front.changepasswordpost') }}",
             success: function(res) {
                 if(res.success){
                     $('#email').val('');
@@ -106,7 +110,7 @@
                     $('.alert-success').html(res.message).show();
                 	setTimeout(function(){ 
                 		$('.alert-success').html('').hide();
-                	}, 3000);
+                	}, 4000);
                 }
             },
             error:function(error){

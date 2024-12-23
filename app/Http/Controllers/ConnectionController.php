@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use App\Models\Post;
 
 class ConnectionController extends Controller
 {
@@ -21,18 +22,18 @@ class ConnectionController extends Controller
 
         // Fetch suggestions (e.g., users not already connected or pending approval)
         $suggestions = User::where('id', '!=', $user->id)
-        ->whereHas('roles', function ($query) {
-            $query->where('name', 'user')
-                  ->where('guard_name', 'web');
-        })
-        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
-            $query->where('sender_id', $user->id);
-        })
-        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
-            $query->where('receiver_id', $user->id);
-        })
-        ->take(10)
-        ->get();
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'user')
+                    ->where('guard_name', 'web');
+            })
+            ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+                $query->where('sender_id', $user->id);
+            })
+            ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+                $query->where('receiver_id', $user->id);
+            })
+            ->take(10)
+            ->get();
 
         return view('front.users.connections', compact('connections', 'suggestions'));
     }
@@ -46,10 +47,10 @@ class ConnectionController extends Controller
         // Check if connection already exists
         $existing = Connection::where(function ($query) use ($senderId, $receiverId) {
             $query->where('sender_id', $senderId)
-                  ->where('receiver_id', $receiverId);
+                ->where('receiver_id', $receiverId);
         })->orWhere(function ($query) use ($senderId, $receiverId) {
             $query->where('sender_id', $receiverId)
-                  ->where('receiver_id', $senderId);
+                ->where('receiver_id', $senderId);
         })->first();
 
         if ($existing) {
@@ -104,10 +105,8 @@ class ConnectionController extends Controller
         // exit;
         $user = Auth::user();
         $posts = Post::where('user_id', $request->id)->get();
-        $customer=$request->id;
-       
-        return view('front.users.userprofile', compact('user','posts','customer'));
+        $customer = $request->id;
+
+        return view('front.users.userprofile', compact('user', 'posts', 'customer'));
     }
-
-
 }
