@@ -218,7 +218,7 @@ class UserProfileController extends Controller
     {
         $request->validate([
             'eventtitle' => 'required|string|max:255',
-            'eventauthor' => 'required|string|max:15',
+            //'eventauthor' => 'required|string|max:15',
             'eventtype' => 'required|string|max:255',            
             'eventdescription' => 'nullable|string|max:255',
             'eventimage' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
@@ -238,11 +238,12 @@ class UserProfileController extends Controller
             //     'profile_image_url' => asset('storage/' . $path),
             // ]);
         }
+        //dd($request->eventtitle);
         Event::create([
             'user_id' => auth()->id(), // Logged-in user's ID
-            'title' => $request->eventtitle,
-            'author' => $request->eventauthor,
-            'type' => $request->eventtype,
+            'name' => $request->eventtitle,
+            'start_date' => $request->start_date,
+            'location' => $request->eventtype,
             'description' => $request->eventdescription,
             'image'=>$path
         ]);

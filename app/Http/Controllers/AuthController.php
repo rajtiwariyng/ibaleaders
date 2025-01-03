@@ -7,19 +7,22 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Carbon;
+use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
 {
     try {
-        // Use Validator for validation with custom messages
+        // Validate input
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
 
-        // Check if validation fails
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -28,31 +31,29 @@ class AuthController extends Controller
             ], 422);
         }
 
-        // Attempt to log in
+        // Check credentials
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid credentials.'
+                'message' => 'Invalid credentials.',
             ], 401);
         }
 
-        // Generate token
-        $user = User::where('email', $request->email)->first();
-        if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'User not found.'
-            ], 404);
-        }
+        // Retrieve the user
+        $user = Auth::user();
 
+        // Delete existing tokens for the user (enforce single active token)
+        //$user->tokens()->delete();
+
+        // Generate a new token with expiration time
+        //$token = $user->createToken('API Token', ['*'], Carbon::now()->addHours(2))->plainTextToken;
         $token = $user->createToken('API Token')->plainTextToken;
+        $userData['token'] = $token;
 
-        // Respond with token and user data
         return response()->json([
             'success' => true,
             'message' => 'Login successful.',
-            'token' => $token,
-            'user' => $user,
+            'user' => $userData,
         ], 200);
     } catch (Exception $e) {
         return response()->json([
@@ -63,16 +64,28 @@ class AuthController extends Controller
     }
 }
 
-
-
-    public function logout(Request $request)
-    {
+public function logout(Request $request)
+{
+    try {
+        // Revoke the current token
         $request->user()->currentAccessToken()->delete();
+        Session::flush();
+        Cache::forget('user_' . $request->user()->id);
+        auth()->logout();
 
         return response()->json([
+            'success' => true,
             'message' => 'Logout successful.',
-        ]);
+        ], 200);
+    } catch (Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'An unexpected error occurred during logout.',
+            'error' => $e->getMessage(),
+        ], 500);
     }
+}
+
     public function signup(Request $request)
     {
         // Validate input

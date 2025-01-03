@@ -26,13 +26,13 @@
                   </div>
 
                   <div class="mb-3">
-                      <label>Author</label>
-                      <input type="text" name="eventauthor" id="eventauthor" class="form-control" >
+                      <label>Start Date</label>
+                      <input type="datetime-local" name="start_date" id="start_date" class="form-control" >
                       <div id="error-eventauthor" class="text-danger"></div>
                   </div>
 
                   <div class="mb-3">
-                      <label>Type</label>
+                      <label>location</label>
                       <input type="text" name="eventtype" id="eventtype" class="form-control" >
                       <div id="error-eventtype" class="text-danger"></div>
                   </div>

@@ -237,10 +237,27 @@ class ApiUserProfileController extends Controller
         // Get authenticated user
         $user = Auth::user();
 
-        // Fetch posts of the user, ordered by creation date
+        // Fetch posts with user details
         $posts = Post::where('user_id', $user->id)
-                     ->orderBy('created_at', 'desc')
-                     ->get();
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($post) use ($user) {
+                return [
+                    'id' => $post->id,
+                    'image' => $post->image,
+                    'description' => $post->description,
+                    'post_for' => $post->post_for,
+                    'status' => $post->status,
+                    'created_at' => $post->created_at->toDateTimeString(),
+                    'updated_at' => $post->updated_at->toDateTimeString(),
+                    'user' => [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'industry' => $user->industry,
+                        'profile_image' => $user->profile_image,
+                    ],
+                ];
+            });
 
         return response()->json([
             'success' => true,
@@ -249,55 +266,7 @@ class ApiUserProfileController extends Controller
         ], 200);
     }
 
-    public function showConnections()
-{
-    // Get the authenticated user
-    $user = auth()->user();
 
-    // Validate that the user exists
-    if (!$user) {
-        return response()->json([
-            'success' => false,
-            'message' => 'User not authenticated.',
-        ], 401);
-    }
-
-    // Use caching to store and retrieve connections and suggestions
-    $cacheKeyConnections = "user_{$user->id}_connections";
-    $cacheKeySuggestions = "user_{$user->id}_suggestions";
-
-    // Fetch connections from cache or database
-    $connections = Cache::remember($cacheKeyConnections, 3600, function () use ($user) {
-        return $user->connections; // Assuming `connections` is a relationship
-    });
-
-    // Fetch suggestions from cache or database
-    $suggestions = Cache::remember($cacheKeySuggestions, 3600, function () use ($user) {
-        return User::where('id', '!=', $user->id)
-            ->whereHas('roles', function ($query) {
-                $query->where('name', 'user')
-                      ->where('guard_name', 'web');
-            })
-            ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
-                $query->where('sender_id', $user->id);
-            })
-            ->whereDoesntHave('sentConnections', function ($query) use ($user) {
-                $query->where('receiver_id', $user->id);
-            })
-            ->take(10)
-            ->get();
-    });
-
-    // Return response as JSON
-    return response()->json([
-        'success' => true,
-        'message' => 'Connections and suggestions fetched successfully.',
-        'data' => [
-            'connections' => $connections,
-            'suggestions' => $suggestions,
-        ],
-    ], 200);
-}
 
 
 
