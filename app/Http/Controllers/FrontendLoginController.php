@@ -27,10 +27,10 @@ class FrontendLoginController extends Controller
             'email' => 'required|email',
             'password' => 'required|string|min:6',
         ]);
-
+        
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
-            
+            //echo "<pre>";print_r($user->hasRole('user'));die;  
             if ($user->hasRole('user')) {
  
                 return redirect()->route('front.home');

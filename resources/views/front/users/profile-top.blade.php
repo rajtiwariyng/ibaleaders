@@ -92,8 +92,8 @@
           </li>
           
           <li class="list-inline-item">
-            <i class="fa-solid fa-people-group"></i> <span class="fw-medium">Create Group</span>
-          </li>
+            <a href="{{ route('chatify') }}" target="_blank"><i class="fa-solid fa-people-group"></i> <span class="fw-medium">Create Group</span></a>
+          </li>   
           
           <li class="list-inline-item">
           <a href="{{ route('user.createevent') }}"><i class="fa-solid fa-calendar-week"></i> <span class="fw-medium">Create Event</span></a>

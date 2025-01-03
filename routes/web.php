@@ -12,7 +12,7 @@ use Spatie\Permission\Models\Role;
 /*Route::get('/', [FrontendLoginController::class, 'showLoginForm'])
     ->name('front.login')
     ->middleware('redirectIfAuthenticated');*/
-
+	
 Route::get('/clear-cache', function () {
     Artisan::call('cache:clear');
     Artisan::call('route:clear');
