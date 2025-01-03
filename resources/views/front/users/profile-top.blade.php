@@ -53,8 +53,8 @@
       <!-- Content for Profile Pages -->
       <div class="userStoryBox d-flex flex-column">
         <div class="userStoryBoxHeader">
-          <h6 class="blue poppins-semibold">Daniel Mathew</h6>
-          <p class="mb-0 fs-8">Health &amp; Wellness, Nutritionist</p>
+          <h6 class="blue poppins-semibold">{{ $user->name }}</h6>
+          <p class="mb-0 fs-8">{{ old('industry', $user->industry) }}</p>
           <div class="d-flex align-items-center profile-btns">
             <button class="bg-blue text-white border-0 px-3 py-2 fs-8">Connected</button>
             <button class="blue btn fs-8">Message</button>
@@ -103,4 +103,3 @@
         </ul>
       </div>
       @endif
-      

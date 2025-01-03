@@ -1,43 +1,69 @@
-<?php 
+<?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
-    {
-        // Validate request
-       
-        $request->validate([
+{
+    try {
+        // Use Validator for validation with custom messages
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
 
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
         // Attempt to log in
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'status' => 'error',
+                'success' => false,
                 'message' => 'Invalid credentials.'
-            ], 400);
+            ], 401);
         }
 
         // Generate token
         $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found.'
+            ], 404);
+        }
+
         $token = $user->createToken('API Token')->plainTextToken;
 
         // Respond with token and user data
         return response()->json([
-            'status' => 'success',
+            'success' => true,
             'message' => 'Login successful.',
             'token' => $token,
-            'user' => $user,  
+            'user' => $user,
         ], 200);
+    } catch (Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'An unexpected error occurred.',
+            'error' => $e->getMessage(),
+        ], 500);
     }
+}
+
+
 
     public function logout(Request $request)
     {
@@ -75,10 +101,10 @@ class AuthController extends Controller
     }
 
     public function userslist()
-    {   
+    {
         $users = User::whereHas('roles', function ($query) {
-                    $query->where('name', 'user'); // Filter users with 'user' role
-                })->get();
+            $query->where('name', 'user'); // Filter users with 'user' role
+        })->get();
 
         return response()->json([
             'success' => true,

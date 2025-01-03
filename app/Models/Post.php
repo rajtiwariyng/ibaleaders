@@ -19,6 +19,7 @@ class Post extends Model
         'description',
         'image',
         'user_id',
+        'post_for',
         'status',
     ];
 

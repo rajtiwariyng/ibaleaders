@@ -7,7 +7,7 @@
             <div class="col-md-8 alliance">
               <div class="whiteBox bg-white p-3 mb-3">
                 <div class="d-flex justify-content-between mb-4">
-                  <h6 class="blue poppins-boldfs-6 mb-0 fw-600">Connections (70)</h6>
+                  <h6 class="blue poppins-boldfs-6 mb-0 fw-600">Connections ({{count($connections)}})</h6>
                   <div class="d-flex align-items-center justify-content-end">
                     <div class="al-search d-flex justify-content-end">
                       <button class="border-0 bg-white">
@@ -26,24 +26,25 @@
                     </div>
                   </div>
                 </div>
+                @forelse ($connections as $connection)
                 <div class="mb-4">
                   <div class="notification-wrapper">
-                    <div class="note-img"></div>
+                    <div class="note-img"><img src="{{ $connection->profile_image ?? asset('front-assets/images/default.jpg') }}" alt="{{ $connection->name }}"></div>
                     <div class="note-content">
-                      <p class="mb-0 fs-7" ><strong>Aashna Sabharwal</strong></p>
-                      <p class="mb-0 fs-8" >Health & Wellness, Nutritionist</p>
+                      <p class="mb-0 fs-7" ><strong>{{ $connection->name }}</strong></p>
+                      <p class="mb-0 fs-8" >{{ $connection->industry ?? 'N/A' }}</p>
                     </div>
                     <div class="connection-place">
                       <ul class="d-flex fs-8">
-                        <li>India</li>
+                        <li>{{$connection->state}}</li>
                         <li>></li>
-                        <li>Delhi North</li>
+                        <li>{{$connection->city}}</li>
                       </ul>
                     </div>
-                    <a href="#" class="trans-btn mx-4">
+                    <a href='{{ URL::route("user.connection.userprofile", [base64_encode($connection->id)]) }}' class="trans-btn mx-4">
                       View Details
                     </a>
-                    <div class="dropdown ellipse-action">
+                    <!-- <div class="dropdown ellipse-action">
                       <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-ellipsis-vertical fs-6"></i>
                       </button>
@@ -51,135 +52,27 @@
                         <a class="dropdown-item" href="#">Action</a>
                         <a class="dropdown-item" href="#">Another action</a>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
-                <div class="mb-4">
-                  <div class="notification-wrapper">
-                    <div class="note-img"></div>
-                    <div class="note-content">
-                      <p class="mb-0 fs-7" ><strong>Aashna Sabharwal</strong></p>
-                      <p class="mb-0 fs-8" >Health & Wellness, Nutritionist</p>
-                    </div>
-                    <div class="connection-place">
-                      <ul class="d-flex fs-8">
-                        <li>India</li>
-                        <li>></li>
-                        <li>Delhi North</li>
-                      </ul>
-                    </div>
-                    <a href="#" class="trans-btn mx-4">
-                      View Details
-                    </a>
-                    <div class="dropdown ellipse-action">
-                      <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa-solid fa-ellipsis-vertical fs-6"></i>
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-4">
-                  <div class="notification-wrapper">
-                    <div class="note-img"></div>
-                    <div class="note-content">
-                      <p class="mb-0 fs-7" ><strong>Aashna Sabharwal</strong></p>
-                      <p class="mb-0 fs-8" >Health & Wellness, Nutritionist</p>
-                    </div>
-                    <div class="connection-place">
-                      <ul class="d-flex fs-8">
-                        <li>India</li>
-                        <li>></li>
-                        <li>Delhi North</li>
-                      </ul>
-                    </div>
-                    <a href="#" class="trans-btn mx-4">
-                      View Details
-                    </a>
-                    <div class="dropdown ellipse-action">
-                      <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa-solid fa-ellipsis-vertical fs-6"></i>
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-4">
-                  <div class="notification-wrapper">
-                    <div class="note-img"></div>
-                    <div class="note-content">
-                      <p class="mb-0 fs-7" ><strong>Aashna Sabharwal</strong></p>
-                      <p class="mb-0 fs-8" >Health & Wellness, Nutritionist</p>
-                    </div>
-                    <div class="connection-place">
-                      <ul class="d-flex fs-8">
-                        <li>India</li>
-                        <li>></li>
-                        <li>Delhi North</li>
-                      </ul>
-                    </div>
-                    <a href="#" class="trans-btn mx-4">
-                      View Details
-                    </a>
-                    <div class="dropdown ellipse-action">
-                      <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa-solid fa-ellipsis-vertical fs-6"></i>
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-4">
-                  <div class="notification-wrapper">
-                    <div class="note-img"></div>
-                    <div class="note-content">
-                      <p class="mb-0 fs-7" ><strong>Aashna Sabharwal</strong></p>
-                      <p class="mb-0 fs-8" >Health & Wellness, Nutritionist</p>
-                    </div>
-                    <div class="connection-place">
-                      <ul class="d-flex fs-8">
-                        <li>India</li>
-                        <li>></li>
-                        <li>Delhi North</li>
-                      </ul>
-                    </div>
-                    <a href="#" class="trans-btn mx-4">
-                      View Details
-                    </a>
-                    <div class="dropdown ellipse-action">
-                      <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa-solid fa-ellipsis-vertical fs-6"></i>
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                @empty
+                <div></div>
+                @endforelse
+                
                 <div>
-                  <a href="#" class="trans-btn">
+                  <a href="{{ route('user.connections') }}" class="trans-btn">
                     Manage
                   </a>
-                  <a href="#" class="trans-btn ms-3">
+                  <!-- <a href="" class="trans-btn ms-3">
                     Add Connections
-                  </a>
+                  </a> -->
                 </div>
               </div>
 
               <div class="whiteBox bg-white p-3 mb-3">
             
                 <div class="d-flex justify-content-between mb-4">
-                  <h6 class="blue poppins-boldfs-6 mb-0 fw-600">Testimonials (4)</h6>
+                  <h6 class="blue poppins-boldfs-6 mb-0 fw-600">Testimonials ({{count($testimonials)}})</h6>
                   <div class="d-flex align-items-center">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                       <li class="nav-item" role="presentation">
@@ -194,50 +87,40 @@
                 <div class="tab-content">
                   <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div class="testimonial-wrapper">
+                    @forelse($testimonials as $testimonial) 
+                    @if(auth()->user()->id!=$testimonial->received_to)
                       <div class="item text-center">
                         <div class="user-img pb-2">
-                          <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="" class="rounded-circle m-auto">
+                          <img src="{{ $testimonial->profile_image ? asset('storage/' . $testimonial->profile_image) : asset('front-assets/images/profile2.jpg') }}" alt="" class="rounded-circle m-auto">
                         </div>
-                        <h6 class="blue mb-0">Samuel paul</h6>
-                        <p class="pb-1">Interior Designer | Phillipines</p>
-                        <p class="fs-7 content">BNI is more than just helping you grow your business – it is helping you build your network. You will gain colleagues, business partners, and friends who will become part of your newfound family. This positive and supportive group of people will help you go through any crisis because you can not do this alone.</p>
+                        <h6 class="blue mb-0">{{$testimonial->title}}</h6>
+                        <p class="pb-1">{{$testimonial->type}} | {{$testimonial->name}}</p>
+                        <p class="fs-7 content">{{$testimonial->description}}</p>
                       </div>
-                      <div class="item text-center">
-                        <div class="user-img pb-2">
-                          <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="" class="rounded-circle m-auto">
-                        </div>
-                        <h6 class="blue mb-0">Samuel paul</h6>
-                        <p class="pb-1">Interior Designer | Phillipines</p>
-                        <p class="fs-7 content">BNI is more than just helping you grow your business – it is helping you build your network. You will gain colleagues, business partners, and friends who will become part of your newfound family. This positive and supportive group of people will help you go through any crisis because you can not do this alone.</p>
-                      </div>
+                      @endif
+                      @empty
+					                <div>No Events found.</div>
+					            @endforelse
+                      
                     </div>
                   </div>
                   <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <div class="testimonial-wrapper">
+                    @forelse($testimonials as $testimonial) 
+                    @if(auth()->user()->id==$testimonial->received_to)
                       <div class="item text-center">
                         <div class="user-img pb-2">
-                          <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="" class="rounded-circle m-auto">
+                          <img src="{{ $testimonial->profile_image ? asset('storage/' . $testimonial->profile_image) : asset('front-assets/images/profile2.jpg') }}" alt="" class="rounded-circle m-auto">
                         </div>
-                        <h6 class="blue mb-0">Samuel paul</h6>
-                        <p class="pb-1">Interior Designer | Phillipines</p>
-                        <p class="fs-7 content">BNI is more than just helping you grow your business – it is helping you build your network. You will gain colleagues, business partners, and friends who will become part of your newfound family. This positive and supportive group of people will help you go through any crisis because you can not do this alone.</p>
+                        <h6 class="blue mb-0">{{$testimonial->title}}</h6>
+                        <p class="pb-1">{{$testimonial->type}} | {{$testimonial->name}}</p>
+                        <p class="fs-7 content">{{$testimonial->description}}</p>
                       </div>
-                      <div class="item text-center">
-                        <div class="user-img pb-2">
-                          <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="" class="rounded-circle m-auto">
-                        </div>
-                        <h6 class="blue mb-0">Samuel paul</h6>
-                        <p class="pb-1">Interior Designer | Phillipines</p>
-                        <p class="fs-7 content">BNI is more than just helping you grow your business – it is helping you build your network. You will gain colleagues, business partners, and friends who will become part of your newfound family. This positive and supportive group of people will help you go through any crisis because you can not do this alone.</p>
-                      </div>
-                      <div class="item text-center">
-                        <div class="user-img pb-2">
-                          <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="" class="rounded-circle m-auto">
-                        </div>
-                        <h6 class="blue mb-0">Samuel paul</h6>
-                        <p class="pb-1">Interior Designer | Phillipines</p>
-                        <p class="fs-7 content">BNI is more than just helping you grow your business – it is helping you build your network. You will gain colleagues, business partners, and friends who will become part of your newfound family. This positive and supportive group of people will help you go through any crisis because you can not do this alone.</p>
-                      </div>
+                      @endif
+                      @empty
+					                <div>No Events found.</div>
+					            @endforelse
+                      
                     </div>
                   </div>
                 </div>

@@ -13,31 +13,19 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class ApiUserProfileController extends Controller
 {
-    /*public function __construct()
-    {
-        $this->middleware('auth:sanctum'); // Adjust middleware as needed
-    }*/
-
     public function profile()
     {
         // Get authenticated user
-        $user = Auth::user(6);
-
-        // Fetch posts of the user, ordered by creation date
-        $posts = Post::where('user_id', $user->id)
-                     ->orderBy('created_at', 'desc')
-                     ->get();
+        $user = Auth::user();
 
         return response()->json([
             'success' => true,
-            'message' => 'User profile with posts fetched successfully.',
-            'data' => [
-                'user' => $user,
-                'posts' => $posts,
-            ],
+            'message' => 'User profile fetched successfully.',
+            'data' => $user,
         ], 200);
     }
 
@@ -204,7 +192,7 @@ class ApiUserProfileController extends Controller
             $validator = Validator::make($request->all(), [
                 'posttitle' => 'required|string|max:255',
                 'postdescription' => 'nullable|string|max:255',
-                'postimage' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+                'postimage' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             ]);
 
             if ($validator->fails()) {
@@ -244,6 +232,72 @@ class ApiUserProfileController extends Controller
         }
     }
 
+    public function postlist(Request $request)
+    {
+        // Get authenticated user
+        $user = Auth::user();
+
+        // Fetch posts of the user, ordered by creation date
+        $posts = Post::where('user_id', $user->id)
+                     ->orderBy('created_at', 'desc')
+                     ->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User posts fetched successfully.',
+            'data' => $posts,
+        ], 200);
+    }
+
+    public function showConnections()
+{
+    // Get the authenticated user
+    $user = auth()->user();
+
+    // Validate that the user exists
+    if (!$user) {
+        return response()->json([
+            'success' => false,
+            'message' => 'User not authenticated.',
+        ], 401);
+    }
+
+    // Use caching to store and retrieve connections and suggestions
+    $cacheKeyConnections = "user_{$user->id}_connections";
+    $cacheKeySuggestions = "user_{$user->id}_suggestions";
+
+    // Fetch connections from cache or database
+    $connections = Cache::remember($cacheKeyConnections, 3600, function () use ($user) {
+        return $user->connections; // Assuming `connections` is a relationship
+    });
+
+    // Fetch suggestions from cache or database
+    $suggestions = Cache::remember($cacheKeySuggestions, 3600, function () use ($user) {
+        return User::where('id', '!=', $user->id)
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'user')
+                      ->where('guard_name', 'web');
+            })
+            ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+                $query->where('sender_id', $user->id);
+            })
+            ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+                $query->where('receiver_id', $user->id);
+            })
+            ->take(10)
+            ->get();
+    });
+
+    // Return response as JSON
+    return response()->json([
+        'success' => true,
+        'message' => 'Connections and suggestions fetched successfully.',
+        'data' => [
+            'connections' => $connections,
+            'suggestions' => $suggestions,
+        ],
+    ], 200);
+}
 
 
 

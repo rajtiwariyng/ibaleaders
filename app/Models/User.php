@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
+
 
 class User extends Authenticatable
 {
@@ -102,4 +104,65 @@ class User extends Authenticatable
         )->wherePivot('status', 'approved')
          ->withTimestamps();
     }
+    public function posts()
+        {
+            return $this->hasMany(Post::class, 'user_id', 'id');
+        }
+    public function referrals()
+    {
+        return $this->hasMany(
+            Referrals::class,
+            'user_id','id'
+        );
+    }
+    public function referralslist()
+    {
+        return $this->hasMany(
+            Referrals::class,
+            'user_id','id'
+        )->with('user')->with('received');
+    }
+    
+    public function tyfcbreferralslist()
+    {
+        return $this->hasMany(
+            Tyfcbreferrals::class,
+            'user_id','id'
+        )->with('user')->with('received');
+        
+
+    }
+   
+    public function receivedReferralslist()
+    {
+        return $this->hasMany(
+            Referrals::class,
+            'received_to','id'
+        )->with('user')->with('received');
+    }
+    public function OneReferralslist()
+    {
+        return $this->hasMany(
+            Onereferrals::class,
+            'user_id','id'
+        )->with('user')->with('received');
+    }
+    public function tyfcbreferralstotal()
+    {
+        return $this->hasMany(
+            Tyfcbreferrals::class,
+            'user_id','id'
+        )->with('user')->with('received')
+        ->select(DB::raw('SUM(amount) as subtotal'));
+    }
+    public function testmonialRelated()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'testimonials', 
+            'user_id',      
+            'received_to'
+        );
+    }
+   
 }
