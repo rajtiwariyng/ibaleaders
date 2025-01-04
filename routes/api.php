@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\ApiVisitorController;
 use App\Http\Controllers\Api\ApiUserProfileController;
+use App\Http\Controllers\Api\ApiConnectionController;
 
 Route::prefix('v1/')->group(function () {
    Route::post('login', [AuthController::class, 'login']);
@@ -21,6 +22,11 @@ Route::prefix('v1/')->group(function () {
 
       Route::post('/user/createpost', [ApiUserProfileController::class, 'createPost']);
       Route::get('/user/postlist', [ApiUserProfileController::class, 'postlist']);
-      Route::get('/user/showconnections', [ApiUserProfileController::class, 'showConnections']);
+
+      Route::get('/user/showconnections', [ApiConnectionController::class, 'showConnections']);
+      Route::post('/user/sendconnectionrequest', [ApiConnectionController::class, 'sendConnectionRequest']);
+      Route::post('/user/approveconnectionrequest', [ApiConnectionController::class, 'approveConnectionRequest']);
+      Route::post('/user/rejectconnectionrequest', [ApiConnectionController::class, 'rejectConnectionRequest']);
+      Route::get('/user/pendingrequestlist', [ApiConnectionController::class, 'pendingRequestList']);
    });
 });

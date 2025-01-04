@@ -53,7 +53,7 @@
                     <i class="fa-regular fa-image"></i> <span class="fw-medium">Photo / Video </span>
                   </li>
                   <li class="list-inline-item">
-                    <i class="fa-solid fa-people-group"></i> <span class="fw-medium">Create Groups</span>
+                    <i class="fa-solid fa-people-group"></i> <span class="fw-medium">Create Group</span>
                   </li>
                   <li class="list-inline-item">
                     <i class="fa-solid fa-calendar-week"></i> <span class="fw-medium">Create Event</span>

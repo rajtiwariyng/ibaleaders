@@ -49,11 +49,11 @@
                       <td>18</td>
                       <td>20</td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                       <td>CEUs:</td>
                       <td>13</td>
                       <td>22</td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>
@@ -67,7 +67,7 @@
             </div>
           </div>
 
-          <div class="whiteBox bg-white p-4 mt-4">
+          <!-- <div class="whiteBox bg-white p-4 mt-4">
             <h3 class="blue poppins-bold">Submit and Track</h3>
 
             <div class="d-flex flex-wrap sbmtTrck">
@@ -90,7 +90,7 @@
                 <li>Event Slips-event title and event date subfield.</li>
               </ul>
             </div>
-          </div>
+          </div> -->
           
           <div class="whiteBox bg-white p-4 mt-4">
             <h3 class="blue poppins-bold">Visitor Registration</h3>

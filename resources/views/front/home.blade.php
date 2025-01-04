@@ -109,14 +109,14 @@
                 <h6 class="blue poppins-bold pb-2 fs-6 fw-600">Revenue Received To My Business: </h6>
                 <div class="blue poppins-bold fs-6 fw-600 Revenue-number">
                   <img src="images/earning.png" alt=""> 
-                  <p class="blue poppins-bold fs-4">136558852</p>
+                  <p class="blue poppins-bold fs-4">0</p>
                 </div>
-                <div class="mb-2">
+                <!-- <div class="mb-2">
                   <button class="bg-blue btn text-white fs-8" type="button">Print your weekly slip</button>
                 </div>
                 <div class="mb-2">
                   <button class="bg-blue btn text-white fs-8" type="button">Received refferal report</button>
-                </div>
+                </div> -->
                 <div class="mb-2">
                   <button class="bg-blue btn text-white fs-8 d-none" type="button">My Personal Participation Report</button>
                 </div>

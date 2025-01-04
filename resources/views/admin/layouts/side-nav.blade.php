@@ -87,6 +87,12 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="{{ route('admin.visitors.list') }}" class="nav-link {{ Request::is('admin/visitors/list') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>visitors List</p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ route('admin.blogs.create') }}" class="nav-link {{ Request::is('admin/blogs/create') ? 'active' : '' }}">
               <i class="nav-icon fas fa-th"></i>
               <p>Create Blog</p>

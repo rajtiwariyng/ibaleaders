@@ -38,4 +38,10 @@ class VisitorController extends Controller
 
         return response()->json(['success' => 'Visitor registered successfully!']);
     }
+
+    public function visitors()
+    {
+        $visitors = Visitor::orderBy('created_at', 'desc')->get(); // Fetch all visitors
+        return view('admin.users.visitors', compact('visitors')); // Pass to a view
+    }
 }
