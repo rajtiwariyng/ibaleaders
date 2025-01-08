@@ -8,7 +8,7 @@
                 <form id="eventFormProfile" method="POST">
                   @csrf
                  @method('POST')
-                  <div class="mb-3 profile-container">
+                  <div class="mb-3 profile-container d-none">
                   <img id="eventImage" src="{{ asset('front-assets/images/profile.jpg') }}" 
                            alt="User Profile" class="profile-image-event">
                       <label for="fileUploadevent" class="camera-icon">
@@ -48,7 +48,8 @@
               </div>
             </div>
             <div class="col-lg-5 mt-4">
-              <div class="whiteBox bg-white p-3 mb-3">
+            @include('front.users.suggestions')
+              <div class="whiteBox bg-white p-3 mb-3 d-none">
                 <div class="d-flex justify-content-between mb-4">
                   <h5 class="blue poppins-bold mb-0 fs-6">Suggestions</h5>
                   <div class="d-flex align-items-center siderbar-search">
@@ -61,7 +62,7 @@
                   </div>
                 </div>
                 
-                <div class="notification-wrapper mb-4">
+                <div class="notification-wrapper mb-4 d-none">
                   <div class="note-img">
                     <img src="{{ asset('front-assets/images/jm_denis.jpg') }}" alt="">
                   </div>

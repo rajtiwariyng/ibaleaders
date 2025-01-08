@@ -13,4 +13,8 @@ class Visitor extends Model
         'user_id', 'first_name', 'last_name', 'email', 'mobile_number', 
         'company_name', 'city', 'address', 'state_country_province', 'post_code'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

@@ -35,7 +35,7 @@ class ConnectionController extends Controller
             ->take(10)
             ->get();
 
-        return view('front.users.connections', compact('connections', 'suggestions'));
+        return view('front.users.connections', compact('connections', 'suggestions','user'));
     }
 
 
@@ -102,11 +102,30 @@ class ConnectionController extends Controller
     public function userConnectionProfile(Request $request)
     {
         // echo $request->id;
+        $userid= base64_decode($request->id);
         // exit;
-        $user = Auth::user();
-        $posts = Post::where('user_id', $request->id)->get();
+        $user = User::where('id', $userid)->first();
+        // echo "<pre>";
+        // print_r($user);
+        // exit;
+        $posts = Post::with('byuser')->where('user_id', $userid)->orderBy('posts.created_at', 'desc')->get();
         $customer = $request->id;
 
         return view('front.users.userprofile', compact('user', 'posts', 'customer'));
+    }
+    function userConnectionRemove(Request $request){
+        $connection = Connection::where('sender_id', $request->user_id)
+            ->where('receiver_id', auth()->id())
+            ->firstOrFail();
+       $connection->delete();
+       return response()->json(['success' => true, 'message' => 'User Connection Removed successfully!']);    
+    }
+
+    function userConnectionBlock(Request $request){
+        $connection = Connection::where('sender_id', $request->user_id)
+            ->where('receiver_id', auth()->id())
+            ->firstOrFail();
+       $connection->update(['status' => 'block']);
+       return response()->json(['success' => true, 'message' => 'User Connection Block successfully!']);    
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Connection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Carbon;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Session;
 class AuthController extends Controller
 {
     public function login(Request $request)
-{
+    {
     try {
         // Validate input
         $validator = Validator::make($request->all(), [
@@ -62,10 +63,10 @@ class AuthController extends Controller
             'error' => $e->getMessage(),
         ], 500);
     }
-}
+    }
 
-public function logout(Request $request)
-{
+    public function logout(Request $request)
+    {
     try {
         // Revoke the current token
         $request->user()->currentAccessToken()->delete();
@@ -84,44 +85,79 @@ public function logout(Request $request)
             'error' => $e->getMessage(),
         ], 500);
     }
-}
-
-    public function signup(Request $request)
-    {
-        // Validate input
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
-        // Create a new user
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-        ]);
-
-        // Generate a token for the user
-        $token = $user->createToken('API Token')->plainTextToken;
-
-        // Return success response
-        return response()->json([
-            'message' => 'User registered successfully.',
-            'user' => $user,
-            'token' => $token,
-        ], 201);
     }
 
-    public function userslist()
+
+    public function userslist(Request $request)
     {
-        $users = User::whereHas('roles', function ($query) {
-            $query->where('name', 'user'); // Filter users with 'user' role
-        })->get();
+        $perPage = $request->get('per_page', 10);
+
+        $users = User::where('id', '!=', auth()->id()) 
+            ->whereHas('roles', function ($query) {
+                $query->where('name', 'user'); 
+            })
+            ->paginate($perPage);
 
         return response()->json([
             'success' => true,
+            'message' => 'User list fetched successfully.',
             'data' => $users
         ], 200);
     }
+
+
+
+    public function searchUser(Request $request)
+    {
+        try {
+            $authUserId = auth()->id();
+
+            // Validate input
+            $request->validate([
+                'query' => 'required|string|max:255',
+                'per_page' => 'integer|min:1',
+            ]);
+
+            $query = $request->get('query');
+            $perPage = $request->get('per_page', 10);
+
+            $users = User::where('id', '!=', $authUserId)
+                ->where(function ($q) use ($query) {
+                    $q->where('name', 'LIKE', '%' . $query . '%')
+                      ->orWhere('email', 'LIKE', '%' . $query . '%')
+                      ->orWhere('industry', 'LIKE', '%' . $query . '%');
+                })
+                ->paginate($perPage, ['id', 'name', 'email', 'industry', 'profile_image']);
+
+            // Add connection status to each user
+            $users->getCollection()->transform(function ($user) use ($authUserId) {
+                $connection = Connection::where(function ($q) use ($authUserId, $user) {
+                    $q->where('sender_id', $authUserId)
+                      ->where('receiver_id', $user->id);
+                })->orWhere(function ($q) use ($authUserId, $user) {
+                    $q->where('sender_id', $user->id)
+                      ->where('receiver_id', $authUserId);
+                })->first();
+
+                $user->connection_status = $connection ? $connection->status : 'none';
+                return $user;
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Users retrieved successfully.',
+                'data' => $users,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+
+
 }

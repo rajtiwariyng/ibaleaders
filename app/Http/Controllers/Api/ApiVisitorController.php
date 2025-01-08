@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Visitor;
+use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +65,22 @@ class ApiVisitorController extends Controller
                 'error' => $e->getMessage(),
             ], 500); // HTTP 500 Internal Server Error
         }
+    }
+
+    public function getVideos()
+    {
+
+        $videos = Video::select('id', 'title', 'description', 'video_url', 'status', 'created_at')
+            ->where('status', 'active')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        // Return JSON response
+        return response()->json([
+            'success' => true,
+            'message' => 'Videos fetched successfully',
+            'data' => $videos,
+        ]);
     }
 
 }

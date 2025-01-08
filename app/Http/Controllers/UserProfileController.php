@@ -11,13 +11,14 @@ use App\Models\Event;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Postreact;
 
 class UserProfileController extends Controller
 {
     public function profile()
     {   
         $user = Auth::user();
-        $posts = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('posts.created_at', 'desc')->get();
+        $posts = Post::join('users', 'users.id', '=', 'posts.user_id')->where('user_id', '=', $user->id)->orderBy('posts.created_at', 'desc')->get();
        
         return view('front.users.profile', compact('user','posts'));
     }
@@ -131,7 +132,8 @@ class UserProfileController extends Controller
 
     public function editbio()
     {
-        return view('front.users.edit-bio');
+        $user = auth()->user();
+        return view('front.users.edit-bio', compact('user'));
     }
 
     public function events()
@@ -153,7 +155,7 @@ class UserProfileController extends Controller
         })
         ->take(10)
         ->get();
-        return view('front.users.events', compact('events','suggestions'));
+        return view('front.users.events', compact('events','suggestions','user'));
     }
 
     public function testimonials()
@@ -181,7 +183,7 @@ class UserProfileController extends Controller
         })
         ->take(10)
         ->get();
-        return view('front.users.testimonials', compact('testimonials','suggestions'));
+        return view('front.users.testimonials', compact('testimonials','suggestions','user'));
     }
 
     public function groupsjoined()
@@ -204,12 +206,30 @@ class UserProfileController extends Controller
         })
         ->take(10)
         ->get();
-        return view('front.users.groups-joined', compact('suggestions'));
+        return view('front.users.groups-joined', compact('suggestions','user'));
     }
 
     public function createEvent()
     {
-        return view('front.users.create-event');
+        $user = auth()->user();
+
+        
+
+        // Fetch suggestions (e.g., users not already connected or pending approval)
+        $suggestions = User::where('id', '!=', $user->id)
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user')
+                  ->where('guard_name', 'web');
+        })
+        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+            $query->where('sender_id', $user->id);
+        })
+        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+            $query->where('receiver_id', $user->id);
+        })
+        ->take(10)
+        ->get();
+        return view('front.users.create-event', compact('suggestions','user'));
         // $events = Event::user();
         // print_r($events);
         // return view('front.users.create-event', compact('events'));
@@ -253,7 +273,25 @@ class UserProfileController extends Controller
     }
     public function createPost()
     {
-        return view('front.users.create-post');
+        $user = auth()->user();
+
+        
+
+        // Fetch suggestions (e.g., users not already connected or pending approval)
+        $suggestions = User::where('id', '!=', $user->id)
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user')
+                  ->where('guard_name', 'web');
+        })
+        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+            $query->where('sender_id', $user->id);
+        })
+        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+            $query->where('receiver_id', $user->id);
+        })
+        ->take(10)
+        ->get();
+        return view('front.users.create-post', compact('suggestions','user'));
         // $events = Event::user();
         // print_r($events);
         // return view('front.users.create-event', compact('events'));
@@ -331,4 +369,29 @@ class UserProfileController extends Controller
     public function createEventapi(){
         return response()->json(['success' => true, 'message' => 'Testimonial added successfully!']);
     }
+    public function userPostReact(Request $request){
+        // echo $request->type;
+        $post = Post::findOrFail($request->postid);
+
+    $postreact = $post->postreact()->where('user_id', auth()->id())->first();
+
+    if (!$postreact) {
+        Postreact::create([
+            'user_id' => auth()->id(), // Logged-in user's ID
+            'post_id' => $request->postid,
+            'type' => $request->type,
+        ]);
+        
+    }
+    else {
+        $postreact = Postreact::where('post_id', $request->postid)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();          
+
+       $updategata= $postreact->update(['type' => $request->type]);
+    }
+        
+         return response()->json(['success' => true, 'message' => 'Post '.$request->type.' successfully!']);
+    }
+    
 }

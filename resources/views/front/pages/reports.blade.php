@@ -1,5 +1,21 @@
 @extends('front.layouts.app')
 @section('content') 
+@php
+                $subtotal = 0;
+                @$recievesubtotal=0;
+            @endphp
+           
+            @forelse($tyfcbreferralslist as $tyfcbreferrals) 
+            @php
+                $subtotal += (float)$tyfcbreferrals->amount;
+            @endphp
+            @if($tyfcbreferrals->received->id==auth()->user()->id)
+            @php
+            @$recievesubtotal += (float) $tyfcbreferrals->amount;
+            @endphp
+            @endif
+            @empty
+            @endforelse
       <div class="container">
         <div class="page-inner">
           <div class="dashboard-slider">
@@ -21,39 +37,39 @@
                   <tbody>
                     <tr>
                       <td>Revenue Received To My Business:</td>
-                      <td>108429800</td>
-                      <td>108429800</td>
+                      <td>{{$recievesubtotal}}</td>
+                      <td>{{$recievesubtotal}}</td>
                     </tr>
                     <tr>
                       <td>Referrals Received:</td>
-                      <td>77</td>
-                      <td>27505571</td>
+                      <td>{{count($receivedReferralslist)}}</td>
+                      <td>{{count($receivedReferralslist)}}</td>
                     </tr>
                     <tr>
                       <td>TYFCB Given:</td>
-                      <td>77</td>
-                      <td>27505571</td>
+                      <td>{{$subtotal}}</td>
+                      <td>{{$subtotal}}</td>
                     </tr>
                     <tr>
                       <td>Referrals Given:</td>
-                      <td>116</td>
-                      <td>116</td>
+                      <td>{{count($referralslist)}}</td>
+                      <td>{{count($referralslist)}}</td>
                     </tr>
                     <tr>
                       <td>Visitor:</td>
-                      <td>10</td>
-                      <td>16</td>
+                      <td>{{count($visitorlist)}}</td>
+                      <td>{{count($visitorlist)}}</td>
                     </tr>
                     <tr>
                       <td>One-to-Ones:</td>
-                      <td>18</td>
-                      <td>20</td>
+                      <td>{{count($onereferralslists)}}</td>
+                      <td>{{count($onereferralslists)}}</td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                       <td>CEUs:</td>
                       <td>13</td>
                       <td>22</td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>
@@ -75,40 +91,46 @@
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    Alliance Roster Report- Display list in tabular form with detailed report with mentioned positions in alliance.
+                  Referrals Given Report
                   </button>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
-                    <form>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field1" class="form-label">Field 1</label>
-                            <input type="text" class="form-control" id="field1">
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field2" class="form-label">Field 2</label>
-                            <input type="text" class="form-control" id="field2">
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field3" class="form-label">Field 3</label>
-                            <input type="text" class="form-control" id="field3">
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field4" class="form-label">Field 4</label>
-                            <input type="text" class="form-control" id="field4">
-                          </div>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary bg-blue border-0">Save</button>
-                    </form>
+                  <div class="table-responsive-md">
+          <table class="table table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Referral To</th>
+                <th scope="col">Referral By</th>
+                <th scope="col">Type</th>
+                <th scope="col">Status</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Comments</th>                
+              </tr>
+            </thead>
+            @forelse($referralslist as $referrals) 
+            <tr>
+              <th scope="row"><?php echo date("d M Y", strtotime($referrals->created_at));?></th>
+              <td>{{$referrals->received->name}}</td>
+              <td>{{$referrals->user->name}}</td>
+              <td>{{$referrals->type}}</td>
+              <td>{{$referrals->referralstatus==1?'Inside':'Outside'}}</td>
+              <td>{{$referrals->email}}</td>
+              <td>{{$referrals->telephone}}</td>
+              <td>{{$referrals->comments}}</td>
+            </tr>
+            @empty
+            <tr>
+            <td colspa='8'>No data</td>
+            </tr>
+            @endforelse
+            
+            
+          </table>
+        </div>
+      
                   </div>
                 </div>
               </div>
@@ -117,40 +139,44 @@
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Leadership Report
+                  Referrals Received Report
                   </button>
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
-                    <form>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field1" class="form-label">Field 1</label>
-                            <input type="text" class="form-control" id="field1">
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field2" class="form-label">Field 2</label>
-                            <input type="text" class="form-control" id="field2">
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field3" class="form-label">Field 3</label>
-                            <input type="text" class="form-control" id="field3">
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field4" class="form-label">Field 4</label>
-                            <input type="text" class="form-control" id="field4">
-                          </div>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary bg-blue border-0">Save</button>
-                    </form>
+                  <div class="table-responsive-md">
+          <table class="table table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Referral Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Status</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Comments</th>                
+              </tr>
+            </thead>
+            @forelse($receivedReferralslist as $getreferrals) 
+            <tr>
+              <th scope="row"><?php echo date("d M Y", strtotime($getreferrals->created_at));?></th>
+              <td>{{$getreferrals->user->name}}</td>
+              <td>{{$getreferrals->type}}</td>
+              <td>{{$getreferrals->referralstatus==1?'Inside':'Outside'}}</td>
+              <td>{{$getreferrals->email}}</td>
+              <td>{{$getreferrals->telephone}}</td>
+              <td>{{$getreferrals->comments}}</td>
+            </tr>
+            @empty
+            <tr>
+            <td colspa='8'>No data</td>
+            </tr>
+            @endforelse
+            
+            
+          </table>
+        </div>
+      
                   </div>
                 </div>
               </div>
@@ -159,40 +185,56 @@
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingThree">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Member Event Report
+                  Thank You Referrals Report
                   </button>
                 </h2>
                 <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
-                    <form>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field1" class="form-label">Field 1</label>
-                            <input type="text" class="form-control" id="field1">
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field2" class="form-label">Field 2</label>
-                            <input type="text" class="form-control" id="field2">
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field3" class="form-label">Field 3</label>
-                            <input type="text" class="form-control" id="field3">
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label for="field4" class="form-label">Field 4</label>
-                            <input type="text" class="form-control" id="field4">
-                          </div>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary bg-blue border-0">Save</button>
-                    </form>
+                  <div class="table-responsive-md">
+          <table class="table table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Thank you to</th>
+                <th scope="col">Referral By</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Business Type</th>
+                <th scope="col">Types</th>
+                <th scope="col">Comments</th>                
+              </tr>
+            </thead>
+            @php
+                $subtotal = 0;
+                @$recievesubtotal=0;
+            @endphp
+           
+            @forelse($tyfcbreferralslist as $tyfcbreferrals) 
+            <tr>
+              <th scope="row"><?php echo date("d M Y", strtotime($tyfcbreferrals->created_at));?></th>
+              <td>{{$tyfcbreferrals->received->name}}</td>
+              <td>{{$tyfcbreferrals->user->name}}</td>
+              <td>{{$tyfcbreferrals->amount}}</td>
+              <td>{{$tyfcbreferrals->businesstype}}</td>
+              <td>{{$tyfcbreferrals->type}}</td>
+              <td>{{$tyfcbreferrals->comments}}</td>
+            </tr>
+            @php
+                $subtotal += (float) $tyfcbreferrals->amount;
+            @endphp
+            @if($tyfcbreferrals->received->id==auth()->user()->id)
+            @php
+            @$recievesubtotal += (float) $tyfcbreferrals->amount;
+            @endphp
+            @endif
+            @empty
+            <tr>
+            <td colspa='8'>No data</td>
+            </tr>
+            @endforelse
+            
+            
+          </table>
+        </div>
                   </div>
                 </div>
               </div>
@@ -207,4 +249,68 @@
 @endsection
 
 @section('customJs')
+<script>
+  var lineChart = document.getElementById("lineChart").getContext("2d");
+    var myLineChart = new Chart(lineChart, {
+        type: "line",
+        data: {
+          labels: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          datasets: [
+            {
+              label: "",
+              borderColor: "#003386",
+              pointBorderColor: "#FFF",
+              pointBackgroundColor: "#fcc31c",
+              pointBorderWidth: 2,
+              pointHoverRadius: 6,
+              pointHoverBorderWidth: 1,
+              pointRadius: 4,
+              backgroundColor: "transparent",
+              fill: true,
+              borderWidth: 4,
+              data: [
+                0, 280, 330, 450, 630, 653, 780, 834, 568, 610, 700, 900,
+              ],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            position: "bottom",
+            labels: {
+              padding: 10,
+              fontColor: "#1d7af3",
+            },
+          },
+          tooltips: {
+            bodySpacing: 4,
+            mode: "nearest",
+            intersect: 0,
+            position: "nearest",
+            xPadding: 10,
+            yPadding: 10,
+            caretPadding: 10,
+          },
+          layout: {
+            padding: { left: 15, right: 15, top: 15, bottom: 15 },
+          },
+        },
+      });
+ 
+  </script>
 @endsection

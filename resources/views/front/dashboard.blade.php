@@ -1,5 +1,21 @@
 @extends('front.layouts.app')
 @section('content') 
+@php
+                $subtotal = 0;
+                @$recievesubtotal=0;
+            @endphp
+           
+            @forelse($tyfcbreferralslist as $tyfcbreferrals) 
+            @php
+                $subtotal +=(float)  $tyfcbreferrals->amount;
+            @endphp
+            @if($tyfcbreferrals->received->id==auth()->user()->id)
+            @php
+            @$recievesubtotal += (float)  $tyfcbreferrals->amount;
+            @endphp
+            @endif
+            @empty
+            @endforelse
       <div class="container">
         <div class="page-inner">
           <div class="dashboard-slider">
@@ -21,33 +37,33 @@
                   <tbody>
                     <tr>
                       <td>Revenue Received To My Business:</td>
-                      <td>108429800</td>
-                      <td>108429800</td>
+                      <td>{{$recievesubtotal}}</td>
+                      <td>{{$recievesubtotal}}</td>
                     </tr>
                     <tr>
                       <td>Referrals Received:</td>
-                      <td>77</td>
-                      <td>27505571</td>
+                      <td>{{count($receivedReferralslist)}}</td>
+                      <td>{{count($receivedReferralslist)}}</td>
                     </tr>
                     <tr>
                       <td>TYFCB Given:</td>
-                      <td>77</td>
-                      <td>27505571</td>
+                      <td>{{$subtotal}}</td>
+                      <td>{{$subtotal}}</td>
                     </tr>
                     <tr>
                       <td>Referrals Given:</td>
-                      <td>116</td>
-                      <td>116</td>
+                      <td>{{count($referralslist)}}</td>
+                      <td>{{count($referralslist)}}</td>
                     </tr>
                     <tr>
                       <td>Visitor:</td>
-                      <td>10</td>
-                      <td>16</td>
+                      <td>{{count($visitorlist)}}</td>
+                      <td>{{count($visitorlist)}}</td>
                     </tr>
                     <tr>
                       <td>One-to-Ones:</td>
-                      <td>18</td>
-                      <td>20</td>
+                      <td>{{count($onereferralslists)}}</td>
+                      <td>{{count($onereferralslists)}}</td>
                     </tr>
                     <!-- <tr>
                       <td>CEUs:</td>

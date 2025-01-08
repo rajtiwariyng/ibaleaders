@@ -78,10 +78,24 @@ class FrontendLoginController extends Controller
 
     public function dashboard()
     {
+        
         $user = auth()->user();
+        // $user = Auth::user();
+
+        $referralslist = $user->referralslist;
+        $tyfcbreferralslist = $user->tyfcbreferralslist;
+        // $referralslist=Referrals::with('user')->with('received')->get();
+        // echo "<pre>";
+        // // echo $sum = array_sum($tyfcbreferralslist->amount);
+        // print_r($tyfcbreferralslist);
+        // exit;
+        $receivedReferralslist = $user->receivedReferralslist;
+        $onereferralslists = $user->OneReferralslist;
+        $tyfcbreferralstotal = $user->tyfcbreferralstotal;
+        $visitorlist = $user->visitorlist;
         // Fetch approved connections
         $connections = $user->connections;
-        return view('front.dashboard', compact('connections'));
+        return view('front.dashboard', compact('connections','referralslist', 'tyfcbreferralslist', 'receivedReferralslist', 'onereferralslists', 'tyfcbreferralstotal','visitorlist'));
     }
 
     public function home()
@@ -99,11 +113,18 @@ class FrontendLoginController extends Controller
         $receivedReferralslist = $user->receivedReferralslist;
         $onereferralslists = $user->OneReferralslist;
         $tyfcbreferralstotal = $user->tyfcbreferralstotal;
+        $visitorlist = $user->visitorlist;
 
 
-        $posts = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('posts.created_at', 'desc')->get();
+        // $posts = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('posts.created_at', 'desc')->get();
+        
+        $posts=Post::with('byuser')->orderBy('posts.created_at', 'desc')->get();
+        // $postuer=$postlist->
+        // echo "<pre>";
+        // print_r($posts);
 
-        return view('front.home', compact('user', 'posts', 'referralslist', 'tyfcbreferralslist', 'receivedReferralslist', 'onereferralslists', 'tyfcbreferralstotal'));
+
+        return view('front.home', compact('user', 'posts', 'referralslist', 'tyfcbreferralslist', 'receivedReferralslist', 'onereferralslists', 'tyfcbreferralstotal','visitorlist'));
     }
     public function alliance()
     {
@@ -118,7 +139,20 @@ class FrontendLoginController extends Controller
 
     public function reports()
     {
-        return view('front.pages.reports');
+        $user = Auth::user();
+
+        $referralslist = $user->referralslist;
+        $tyfcbreferralslist = $user->tyfcbreferralslist;
+        // $referralslist=Referrals::with('user')->with('received')->get();
+        // echo "<pre>";
+        // // echo $sum = array_sum($tyfcbreferralslist->amount);
+        // print_r($tyfcbreferralslist);
+        // exit;
+        $receivedReferralslist = $user->receivedReferralslist;
+        $onereferralslists = $user->OneReferralslist;
+        $tyfcbreferralstotal = $user->tyfcbreferralstotal;
+        $visitorlist = $user->visitorlist;
+        return view('front.pages.reports', compact('referralslist', 'tyfcbreferralslist', 'receivedReferralslist','onereferralslists','tyfcbreferralstotal','visitorlist'));
     }
 
     public function aboutus()
@@ -146,10 +180,22 @@ class FrontendLoginController extends Controller
         return view('front.pages.terms-of-use');
     }
 
-    public function chats()
+    public function chats($channel_id = null)
     {
-        return view('front.chats');
-    }
+        //echo "<pre>";print_r(Auth::user());die; 
+        $messenger_color = Auth::user()->messenger_color;
+
+        if(!Auth::user()->channel_id){
+            Chatify::createPersonalChannel();
+        }
+               
+        return view('Chatify::pages.app', [
+            'channel_id' => $channel_id ?? 0,
+            'channel' => $channel_id ? Channel::where('id', $channel_id)->first() : null,
+            'messengerColor' => $messenger_color ? $messenger_color : Chatify::getFallbackColor(),
+            'dark_mode' => Auth::user()->dark_mode < 1 ? 'light' : 'dark',
+        ]);
+    }  
 
     public function notifications(Request $request)
     {

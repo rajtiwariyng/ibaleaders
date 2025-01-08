@@ -2,7 +2,7 @@
 @section('content')
 <div class="container">
         @include('front.users.profile-top')
-              <div class="mt-4">
+              <div class="mt-5">
               @forelse($posts as $post) 
                 <div class="whiteBox bg-white p-4 mt-4">
                   <div class="d-flex mb-3">
@@ -11,20 +11,29 @@
                         <img src="{{ $post->profile_image ? asset('storage/' . $post->profile_image) : asset('front-assets/images/profile2.jpg') }}" alt="{{ $post->title }}" class="linkdinImage">
                       </div>
                       <div>
-                        <p class="mb-0"><strong>{{ $post->title }}</strong></p>
+                        <p class="mb-0"><strong>{{ $post->name }}</strong></p>
                         <p class="mb-0"><?php echo date("d M Y", strtotime($post->created_at));?></p>
                       </div>
                     </div>
                   </div>
                   <p>{{ $post->description }}</p>
-                  <div>
-                    <img src="{{ url('storage/'.$post->image) }}" alt="">
+                  <div class="home-post-img">
+                  @if($post->image)
+                    <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->name }}">
+                    @endif
                   </div>
                   <div class="reactions d-flex align-items-center justify-content-between pt-3">
                     <a class="d-flex align-items-center text-color">
-                      <img src="{{ asset('front-assets/icons/React.png') }}" alt="" class="pe-2">
+                      <img src="{{ asset('front-assets/icons/React.png') }}" alt="Reaction" class="pe-2">
                       React
                     </a>
+                    <div id="postreactionmsg{{$post->id}}"></div>
+              <span onclick="postReactFun('{{$post->id}}','like')" style="cursor: pointer;"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+              <span onclick="postReactFun('{{$post->id}}','dislike')" style="cursor: pointer;"><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>
+              <span onclick="postReactFun('{{$post->id}}','heart')" style="cursor: pointer;"><i class="fa fa-heart" aria-hidden="true"></i></span>
+              <span onclick="postReactFun('{{$post->id}}','smile')" style="cursor: pointer;"><i class="fa fa-smile-o" aria-hidden="true"></i></span>
+              <span onclick="postReactFun('{{$post->id}}','smileheart')" style="cursor: pointer;"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
+              
                     <!-- <a class="d-flex align-items-center text-color">
                       <img src="{{ asset('front-assets/icons/Comment.png') }}" alt="" class="pe-2">
                       Comment
@@ -117,6 +126,18 @@
                 }
             }
         });
+    }
+    function postReactFun(postid,type){
+      console.log(' postid '+postid+' type '+type)
+      $.ajax({
+                url: "{{ route('user.post.react') }}",
+                method: "GET",
+                data: { postid: postid,type:type },
+                success: function(response) {
+
+                    $("#postreactionmsg"+postid).html(response.message)
+                }
+            });
     }
 </script>
 @endsection

@@ -190,8 +190,7 @@ class ApiUserProfileController extends Controller
         try {
             // Validate the request data
             $validator = Validator::make($request->all(), [
-                'posttitle' => 'required|string|max:255',
-                'postdescription' => 'nullable|string|max:255',
+                'postdescription' => 'required|string|max:255',
                 'postimage' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             ]);
 
@@ -213,7 +212,6 @@ class ApiUserProfileController extends Controller
             // Create the post
             $post = Post::create([
                 'user_id' => auth()->id(),
-                'title' => $request->posttitle,
                 'description' => $request->postdescription,
                 'image' => $path,
             ]);

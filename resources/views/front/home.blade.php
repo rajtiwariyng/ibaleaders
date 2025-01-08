@@ -1,5 +1,68 @@
 @extends('front.layouts.app')
 @section('content')
+
+<!-- Modal -->
+<div class="modal fade" id="modalTyfcbReferralView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-5 blue" id="exampleModalLabel">Chapter : Thank You Referrals Report
+        </h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <div class="table-responsive-md">
+          <table class="table table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Thank you to</th>
+                <th scope="col">Referral By</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Business Type</th>
+                <th scope="col">Types</th>
+                <th scope="col">Comments</th>                
+              </tr>
+            </thead>
+            @php
+                $subtotal = 0;
+                @$recievesubtotal=0;
+            @endphp
+           
+            @forelse($tyfcbreferralslist as $tyfcbreferrals) 
+            <tr>
+              <th scope="row"><?php echo date("d M Y", strtotime($tyfcbreferrals->created_at));?></th>
+              <td>{{$tyfcbreferrals->received->name}}</td>
+              <td>{{$tyfcbreferrals->user->name}}</td>
+              <td>{{$tyfcbreferrals->amount}}</td>
+              <td>{{$tyfcbreferrals->businesstype}}</td>
+              <td>{{$tyfcbreferrals->type}}</td>
+              <td>{{$tyfcbreferrals->comments}}</td>
+            </tr>
+            @php
+                $subtotal += (float) $tyfcbreferrals->amount;
+            @endphp
+            @if($tyfcbreferrals->received->id==auth()->user()->id)
+            @php
+            @$recievesubtotal +=$tyfcbreferrals->amount;
+            @endphp
+            @endif
+            @empty
+            <tr>
+            <td colspa='8'>No data</td>
+            </tr>
+            @endforelse
+            
+            
+          </table>
+        </div>
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal-->
       <div class="container">
         <div class="page-inner">
           <div class="dashboard-slider">
@@ -21,39 +84,39 @@
                   <tbody>
                     <tr>
                       <td>Revenue Received To My Business:</td>
-                      <td>108429800</td>
-                      <td>108429800</td>
+                      <td>{{$recievesubtotal}}</td>
+                      <td>{{$recievesubtotal}}</td>
                     </tr>
                     <tr>
                       <td>Referrals Received:</td>
-                      <td>77</td>
-                      <td>27505571</td>
+                      <td>{{count($receivedReferralslist)}}</td>
+                      <td>{{count($receivedReferralslist)}}</td>
                     </tr>
                     <tr>
                       <td>TYFCB Given:</td>
-                      <td>77</td>
-                      <td>27505571</td>
+                      <td>{{$subtotal}}</td>
+                      <td>{{$subtotal}}</td>
                     </tr>
                     <tr>
                       <td>Referrals Given:</td>
-                      <td>116</td>
-                      <td>116</td>
+                      <td>{{count($referralslist)}}</td>
+                      <td>{{count($referralslist)}}</td>
                     </tr>
                     <tr>
                       <td>Visitor:</td>
-                      <td>10</td>
-                      <td>16</td>
+                      <td>{{count($visitorlist)}}</td>
+                      <td>{{count($visitorlist)}}</td>
                     </tr>
                     <tr>
                       <td>One-to-Ones:</td>
-                      <td>18</td>
-                      <td>20</td>
+                      <td>{{count($onereferralslists)}}</td>
+                      <td>{{count($onereferralslists)}}</td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                       <td>CEUs:</td>
                       <td>13</td>
                       <td>22</td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>
@@ -73,23 +136,32 @@
             <div class="d-flex mb-3">
               <div class="d-flex align-items-center">
                 <div class="pe-3">
-                  <img src="{{ $post->profile_image ? asset('storage/' . $post->profile_image) : asset('front-assets/images/profile2.jpg') }}" alt="{{ $post->title }}">
+                  <img src="{{ $post->byuser && $post->byuser->profile_image ? asset('storage/' . $post->byuser->profile_image) : asset('front-assets/images/profile2.jpg') }}" alt="{{ $post->name }}" class="linkdinImage">
+
                 </div>
                 <div>
-                  <p class="mb-0"><strong>{{ $post->title }}</strong></p>
+                  <p class="mb-0"><strong>{{ $post->byuser ? $post->byuser->name : '' }}</strong></p>
                   <p class="mb-0">{{ \Carbon\Carbon::parse($post->created_at)->format('d M Y') }}</p>
                 </div>
               </div>
             </div>
             <p>{{ $post->description }}</p>
-            <div>
-              <img src="{{ url('storage/'.$post->image) }}" alt="">
+            <div class="home-post-img">
+              @if($post->image)
+              <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->name }}">
+              @endif
             </div>
             <div class="reactions d-flex align-items-center justify-content-between pt-3">
               <a class="d-flex align-items-center text-color">
                 <img src="{{ asset('front-assets/icons/React.png') }}" alt="" class="pe-2">
                 React
               </a>
+              <div id="postreactionmsg{{$post->id}}"></div>
+              <span onclick="postReactFun('{{$post->id}}','like')" style="cursor: pointer;"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+              <span onclick="postReactFun('{{$post->id}}','dislike')" style="cursor: pointer;"><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>
+              <span onclick="postReactFun('{{$post->id}}','heart')" style="cursor: pointer;"><i class="fa fa-heart" aria-hidden="true"></i></span>
+              <span onclick="postReactFun('{{$post->id}}','smile')" style="cursor: pointer;"><i class="fa fa-smile-o" aria-hidden="true"></i></span>
+              <span onclick="postReactFun('{{$post->id}}','smileheart')" style="cursor: pointer;"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
               <!-- <a class="d-flex align-items-center text-color">
                 <img src="{{ asset('front-assets/icons/Comment.png') }}" alt="" class="pe-2">
                 Comment
@@ -109,14 +181,14 @@
                 <h6 class="blue poppins-bold pb-2 fs-6 fw-600">Revenue Received To My Business: </h6>
                 <div class="blue poppins-bold fs-6 fw-600 Revenue-number">
                   <img src="images/earning.png" alt=""> 
-                  <p class="blue poppins-bold fs-4">0</p>
-                </div>
-                <!-- <div class="mb-2">
-                  <button class="bg-blue btn text-white fs-8" type="button">Print your weekly slip</button>
+                  <p class="blue poppins-bold fs-4">{{$recievesubtotal}}</p>
                 </div>
                 <div class="mb-2">
-                  <button class="bg-blue btn text-white fs-8" type="button">Received refferal report</button>
-                </div> -->
+                  <button class="bg-blue btn text-white fs-8 d-none" type="button">Print your weekly slip</button>
+                </div>
+                <div class="mb-2">
+                  <button class="bg-blue btn text-white fs-8 d-none" type="button">Received refferal report</button>
+                </div>
                 <div class="mb-2">
                   <button class="bg-blue btn text-white fs-8 d-none" type="button">My Personal Participation Report</button>
                 </div>
@@ -148,7 +220,7 @@
                 <h6 class="blue poppins-bold pb-2 fs-6 fw-600">TYFCB Given: </h6>
                 <div class="blue poppins-bold fs-6 fw-600 Revenue-number">
                   <img src="images/tyfcb.png" alt=""> 
-                  <p class="blue poppins-bold fs-4">{{$tyfcbreferralstotal[0]->subtotal}}</p>
+                  <p class="blue poppins-bold fs-4">{{$subtotal}}</p>
                 </div>
                 <div class="mb-2">
                 <button class="bg-blue btn text-white fs-8" data-bs-toggle="modal" data-bs-target="#modalReferralTYFCB" type="button">Submit</button>
@@ -639,7 +711,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title fs-5 blue" id="exampleModalLabel">Chapter : Referrals Given Report
+        <h2 class="modal-title fs-5 blue" id="exampleModalLabel">Chapter : Referrals Received Report
         </h2>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -667,56 +739,6 @@
               <td>{{$getreferrals->telephone}}</td>
               <td>{{$getreferrals->comments}}</td>
             </tr>
-            @empty
-            <tr>
-            <td colspa='8'>No data</td>
-            </tr>
-            @endforelse
-            
-            
-          </table>
-        </div>
-        
-        
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="modalTyfcbReferralView" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title fs-5 blue" id="exampleModalLabel">Chapter : Referrals Given Report
-        </h2>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      <div class="table-responsive-md">
-          <table class="table table-hover">
-            <thead class="table-dark">
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Thank you to</th>
-                <th scope="col">Referral By</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Business Type</th>
-                <th scope="col">Types</th>
-                <th scope="col">Comments</th>                
-              </tr>
-            </thead>
-            @$subtotal=0
-            @forelse($tyfcbreferralslist as $tyfcbreferrals) 
-            <tr>
-              <th scope="row"><?php echo date("d M Y", strtotime($tyfcbreferrals->created_at));?></th>
-              <td>{{$tyfcbreferrals->received->name}}</td>
-              <td>{{$tyfcbreferrals->user->name}}</td>
-              <td>{{$tyfcbreferrals->amount}}</td>
-              <td>{{$tyfcbreferrals->businesstype}}</td>
-              <td>{{$tyfcbreferrals->type}}</td>
-              <td>{{$tyfcbreferrals->comments}}</td>
-            </tr>
-            @$subtotal +=$tyfcbreferrals->amount
             @empty
             <tr>
             <td colspa='8'>No data</td>
@@ -858,7 +880,8 @@
             @forelse($onereferralslists as $onereferralslist) 
             <tr>
               <th scope="row"><?php echo date("d M Y", strtotime($onereferralslist->start_date));?></th>
-              <td>{{$onereferralslist->received->name}}</td>
+              <td>{{ $onereferralslist->received ? $onereferralslist->received->name : '' }}
+</td>
               <td>{{$onereferralslist->user->name}}</td>
               <td>{{$onereferralslist->location}}</td>
               <td>{{$onereferralslist->conversation}}</td>
@@ -878,6 +901,7 @@
     </div>
   </div>
 </div>
+
 @section('customJs')
 <script src="{{ asset('front-assets/js/chart.min.js') }}"></script>
   <script>
@@ -904,7 +928,10 @@
                 
                 setTimeout(() => {
                     $('#tyfcbreferralsuccessMsgPost').fadeOut();
-                }, 3000);
+                }, 2000);
+                setTimeout(function () {
+                  location.reload();
+			              }, 3000);
             },
             error: function(xhr) {
                 // console.log(xhr)
@@ -939,13 +966,14 @@
                 $('#onereferralsuccessMsgPost').text(response.message).show();
                 $('#onereferralPostForm')[0].reset();
                 
-                // setTimeout(function () {
-                //       window.location.href = "{{ route('user.profile') }}"
-			          //     }, 1000);
+                 
                 
                 setTimeout(() => {
                     $('#onereferralsuccessMsgPost').fadeOut();
-                }, 3000);
+                }, 2000);
+                setTimeout(function () {
+                  location.reload();
+			              }, 3000);
             },
             error: function(xhr) {
                 // console.log(xhr)
@@ -986,7 +1014,10 @@
                 
                 setTimeout(() => {
                     $('#referralsuccessMsgPost').fadeOut();
-                }, 3000);
+                }, 2000);
+                setTimeout(function () {
+                  location.reload();
+			              }, 3000);
             },
             error: function(xhr) {
                 // console.log(xhr)
@@ -1162,5 +1193,18 @@
             $('#suggestions').hide();
         }
     });
+
+    function postReactFun(postid,type){
+      console.log(' postid '+postid+' type '+type)
+      $.ajax({
+                url: "{{ route('user.post.react') }}",
+                method: "GET",
+                data: { postid: postid,type:type },
+                success: function(response) {
+
+                    $("#postreactionmsg"+postid).html(response.message)
+                }
+            });
+    }
 </script>
 @endsection   

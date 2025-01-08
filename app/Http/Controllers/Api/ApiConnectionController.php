@@ -17,55 +17,62 @@ use Illuminate\Support\Facades\Cache;
 
 class ApiConnectionController extends Controller
 {
-    public function showConnections()
+    public function showConnections(Request $request)
     {
-        // Get the authenticated user
-        $user = auth()->user();
+        try {
+            // Get the authenticated user
+            $user = auth()->user();
 
-        // Validate that the user exists
-        if (!$user) {
+            // Validate authentication
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated.',
+                ], 401);
+            }
+
+            // Define pagination parameters
+            $connectionsPerPage = $request->get('connections_per_page', 10);
+            $suggestionsPerPage = $request->get('suggestions_per_page', 10);
+
+            // Fetch paginated connections
+            $connections = Cache::remember("user_{$user->id}_connections_page_{$request->get('page', 1)}", 3600, function () use ($user, $connectionsPerPage) {
+                return $user->connections()->paginate($connectionsPerPage);
+            });
+
+            // Fetch paginated suggestions
+            $suggestions = Cache::remember("user_{$user->id}_suggestions_page_{$request->get('page', 1)}", 3600, function () use ($user, $suggestionsPerPage) {
+                return User::where('id', '!=', $user->id)
+                    ->whereHas('roles', function ($query) {
+                        $query->where('name', 'user')->where('guard_name', 'web');
+                    })
+                    ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+                        $query->where('sender_id', $user->id);
+                    })
+                    ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+                        $query->where('receiver_id', $user->id);
+                    })
+                    ->paginate($suggestionsPerPage);
+            });
+
+            // Return response as JSON
+            return response()->json([
+                'success' => true,
+                'message' => 'Connections and suggestions fetched successfully.',
+                'data' => [
+                    'connections' => $connections,
+                    'suggestions' => $suggestions,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'User not authenticated.',
-            ], 401);
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        // Use caching to store and retrieve connections and suggestions
-        $cacheKeyConnections = "user_{$user->id}_connections";
-        $cacheKeySuggestions = "user_{$user->id}_suggestions";
-
-        // Fetch connections from cache or database
-        $connections = Cache::remember($cacheKeyConnections, 3600, function () use ($user) {
-            return $user->connections; // Assuming `connections` is a relationship
-        });
-
-        // Fetch suggestions from cache or database
-        $suggestions = Cache::remember($cacheKeySuggestions, 3600, function () use ($user) {
-            return User::where('id', '!=', $user->id)
-                ->whereHas('roles', function ($query) {
-                    $query->where('name', 'user')
-                          ->where('guard_name', 'web');
-                })
-                ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
-                    $query->where('sender_id', $user->id);
-                })
-                ->whereDoesntHave('sentConnections', function ($query) use ($user) {
-                    $query->where('receiver_id', $user->id);
-                })
-                ->take(10)
-                ->get();
-        });
-
-        // Return response as JSON
-        return response()->json([
-            'success' => true,
-            'message' => 'Connections and suggestions fetched successfully.',
-            'data' => [
-                'connections' => $connections,
-                'suggestions' => $suggestions,
-            ],
-        ], 200);
     }
+
 
     public function sendConnectionRequest(Request $request)
     { 
@@ -78,6 +85,13 @@ class ApiConnectionController extends Controller
             $request->validate([
                 'receiver_id' => 'required|exists:users,id',
             ]);
+
+            if ($senderId == $receiverId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You cannot send a connection request to yourself.',
+            ], 400);
+        }
 
             // Check if connection already exists
             $existing = Connection::where(function ($query) use ($senderId, $receiverId) {
@@ -191,16 +205,15 @@ class ApiConnectionController extends Controller
         }
     }
   
-  public function pendingRequestList()
+    public function pendingRequestList(Request $request)
     {
         try {
-            // Fetch pending connection requests for the authenticated user
+            $perPage = $request->get('per_page', 10);
             $pendingRequests = Connection::where('receiver_id', auth()->id())
                 ->where('status', 'pending')
-                ->with('sender') // Assuming 'sender' is a relation for the sender's user details
-                ->get();
+                ->with('sender')
+                ->paginate($perPage);
 
-            // Return response with the pending requests
             return response()->json([
                 'success' => true,
                 'message' => 'Pending requests fetched successfully.',
@@ -214,6 +227,33 @@ class ApiConnectionController extends Controller
             ], 500);
         }
     }
+
+    public function sendRequestList(Request $request)
+    {
+        try {
+            $userId = auth()->id();
+            $perPage = $request->get('per_page', 10);
+
+            $sentRequests = Connection::where('sender_id', $userId)
+                ->where('status', 'pending')
+                ->with('receiver:id,name,email,industry,profile_image')
+                ->paginate($perPage);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Sent requests retrieved successfully.',
+                'data' => $sentRequests,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
 
 
 

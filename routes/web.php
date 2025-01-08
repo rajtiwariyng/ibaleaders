@@ -8,7 +8,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Role;
 
-
+// Redirect to home if the user is logged in, otherwise show login form
+/*Route::get('/', [FrontendLoginController::class, 'showLoginForm'])
+    ->name('front.login')
+    ->middleware('redirectIfAuthenticated');*/
+	
 Route::get('/clear-cache', function () {
     Artisan::call('cache:clear');
     Artisan::call('route:clear');
@@ -117,6 +121,13 @@ Route::middleware(['user_auth:user'])->group(function () {
 	// user connection
 	Route::get('/connection/userprofile/{id}', [ConnectionController::class, 'userConnectionProfile'])->name('user.connection.userprofile');
 
+	Route::get('/user-post-react', [UserProfileController::class, 'userPostReact'])->name('user.post.react');
+	Route::post('/user-connection-remove', [ConnectionController::class, 'userConnectionRemove'])->name('user.connection.remove');
+
+	Route::post('/user-connection-block', [ConnectionController::class, 'userConnectionBlock'])->name('user.connection.block');
+
+	Route::post('/user-event-apply', [UserProfileController::class, 'userEventApply'])->name('user.event.apply');
+
 	
 });
 
@@ -124,5 +135,4 @@ Route::middleware(['user_auth:user'])->group(function () {
 
 // Include admin routes file
 require __DIR__.'/admin.php';
-require __DIR__.'/api.php';
 

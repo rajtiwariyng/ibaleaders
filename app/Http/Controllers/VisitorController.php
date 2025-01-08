@@ -14,7 +14,7 @@ class VisitorController extends Controller
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:visitors,email',
+            'email' => 'required|email',
             'mobile_number' => 'required|string|max:15',
             'company_name' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',

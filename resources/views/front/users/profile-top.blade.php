@@ -10,7 +10,7 @@
       <div class="col-xl-2">
         <div class="user-profile-header">
           <div class="p-1 bg-white">
-            <a href="{{ route('user.profile') }}"><img src="{{ auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : asset('front-assets/images/profile2.jpg') }}" alt=""></a>
+            <a href="{{ route('user.profile') }}"><img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('front-assets/images/profile2.jpg') }}" alt=""></a>
           </div>
         </div>
       </div>
@@ -56,6 +56,11 @@
           <h6 class="blue poppins-semibold">{{ $user->name }}</h6>
           <p class="mb-0 fs-8">{{ old('industry', $user->industry) }}</p>
           <div class="d-flex align-items-center profile-btns">
+            <?php 
+            $getstatus=checkUserConnectionStatus($user->id);
+            ?>
+            @if($getstatus)
+            @if($getstatus->status=='approved')
             <button class="bg-blue text-white border-0 px-3 py-2 fs-8">Connected</button>
             <button class="blue btn fs-8">Message</button>
             <div class="dropdown morebtn">
@@ -64,11 +69,21 @@
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
                 <a class="dropdown-item" href="#">Send profile in a message</a>
-                <a class="dropdown-item" href="#">Remove Connection</a>
-                <a class="dropdown-item" href="#">Report/Block</a>
-              <a href='{{ URL::route("user.createtestimonial", [base64_encode($customer)]) }}' class="grey dropdown-item">Testimonial</a>
+                <a class="dropdown-item" href="#" type="button" data-bs-toggle="modal" data-bs-target="#UserConnectionRemoveModal"   data-toggle="modal" data-target="#UserConnectionRemoveModal" data-message="Are you sure you want to remove connection user - {{ $user->name }}?" data-action="{{ route('user.connection.remove') }}" data-userid="{{$user->id}}">Remove Connection</a>
+                <a class="dropdown-item" href="#"  type="button" data-bs-toggle="modal" data-bs-target="#UserConnectionRemoveModal"   data-toggle="modal" data-target="#UserConnectionRemoveModal" data-message="Are you sure you want to block connection user - {{ $user->name }}?" data-action="{{ route('user.connection.block') }}" data-userid="{{$user->id}}">Report/Block</a>
+                <a href='{{ URL::route("user.createtestimonial", [base64_encode($customer)]) }}' class="grey dropdown-item">Testimonial</a>              
               </div>
             </div>
+            @endif
+            @else
+            <div class="sr-btn">
+                        <form action="{{ route('user.sendConnection') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="receiver_id" value="{{ $user->id }}">
+                            <button class="bg-blue btn text-white fs-8" type="submit">Send Request</button>
+                        </form>
+                    </div>
+            @endif
           </div>
         </div>
       </div>
@@ -92,7 +107,7 @@
           </li>
           
           <li class="list-inline-item">
-            <i class="fa-solid fa-people-group"></i> <span class="fw-medium">Create Group</span>
+            <a href="{{ route('front.chats') }}" ><i class="fa-solid fa-people-group"></i> <span class="fw-medium">Create Group</span></a>
           </li>
           
           <li class="list-inline-item">

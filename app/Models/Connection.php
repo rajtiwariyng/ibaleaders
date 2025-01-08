@@ -7,7 +7,7 @@ use App\Models\User;
 
 class Connection extends Model
 {
-    protected $fillable = ['sender_id', 'receiver_id', 'status'];
+    protected $fillable = ['sender_id', 'receiver_id', 'status', 'block_status'];
 
     public function sender()
     {

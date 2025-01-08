@@ -1935,8 +1935,14 @@ main {
 }
 @media (min-width: 576px) {
   .modal-dialog {
-    max-width: 710px;
+    max-width: 910px;
     margin: 1.75rem auto;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  .modal-dialog .modal-content {
+    margin-top: -5%;
   }
 }
 .report-listing .accordion-item {
@@ -2006,6 +2012,9 @@ main {
 }
 .userStoryBox > div{
   gap: 10px
+}
+.userStoryBox a {
+  color: #434343;
 }
 .userStoryShare .form-control {
   border-radius: 40px;
@@ -2080,3 +2089,24 @@ main {
   border: none;
   box-shadow: none;
 }
+.home-post-img {
+  height: 400px;
+  overflow: hidden;
+}
+.dashboard-slider .slick-track {
+  height: 465px;
+}
+.table td, .table th {
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+}
+.table th:nth-child(1), .table td:nth-child(1) { width: 10%; }
+.table th:nth-child(2), .table td:nth-child(2) { width: 14%; }
+.table th:nth-child(3), .table td:nth-child(3) { width: 13%; }
+.table th:nth-child(4), .table td:nth-child(4) { width: 10%; }
+.table th:nth-child(5), .table td:nth-child(5) { width: 10%; }
+.table th:nth-child(6), .table td:nth-child(6) { width: 15%; }
+.table th:nth-child(7), .table td:nth-child(7) { width: 15%; }
+.table th:nth-child(8), .table td:nth-child(8) { width: 26%; }
+

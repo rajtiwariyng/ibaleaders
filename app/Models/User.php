@@ -164,5 +164,13 @@ class User extends Authenticatable
             'received_to'
         );
     }
-   
+    public function visitorlist(){
+        return $this->hasMany(
+            Visitor::class,
+            'user_id','id'
+        )->with('user');
+    }
+    public function postreact() {
+        return $this->hasMany(Postreact::class, 'user_id', 'id');
+    }
 }
