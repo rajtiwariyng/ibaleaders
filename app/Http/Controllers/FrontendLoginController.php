@@ -17,6 +17,7 @@ use App\Models\Referrals;
 use App\Models\Tyfcbreferrals;
 use App\Models\Onereferrals;
 use Illuminate\Support\Str;
+use Chatify\Facades\ChatifyMessenger as Chatify;
 use DB;
 use Illuminate\Support\Facades\Mail;
 
