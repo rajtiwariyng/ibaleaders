@@ -12,6 +12,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Postreact;
+use App\Models\Eventapply;
 
 class UserProfileController extends Controller
 {

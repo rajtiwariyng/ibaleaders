@@ -159,7 +159,7 @@
                           
                           if(!$getapplystatus){?><a class="dropdown-item" href="#"  type="button" data-bs-toggle="modal" data-bs-target="#eventApplyModal"   data-toggle="modal" data-target="#eventApplyModal" data-message="Are you sure you want to apply event on - {{ date('d M Y', strtotime($event->start_date)) }}" data-action="{{ route('user.event.apply') }}" data-eventid="{{$event->id}}">Apply</a>
                           <?php } else { ?>
-                          <p class="text-white fs-7 mb-0">Applied</p>
+                          <p class="">Applied</p>
                           <?php } ?></td>
                           </tr>
                       @empty

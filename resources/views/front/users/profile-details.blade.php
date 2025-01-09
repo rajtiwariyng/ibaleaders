@@ -53,10 +53,10 @@
                       <input type="text" name="brand_name" class="form-control" value="{{ old('brand_name', $user->brand_name) }}">
                   </div>
 
-                  <div class="mb-3">
-                      <label>Brand Logo</label>
-                      <input type="text" name="brand_logo" class="form-control" value="{{ old('brand_logo', $user->brand_logo) }}">
-                  </div>
+                  <!-- <div class="mb-3">
+                      <label>Brand Logo</label> -->
+                      <input type="hidden" name="brand_logo" class="form-control" value="{{ old('brand_logo', $user->brand_logo) }}">
+                  <!-- </div> -->
 
                   <div class="mb-3">
                       <label>Business Bio</label>
