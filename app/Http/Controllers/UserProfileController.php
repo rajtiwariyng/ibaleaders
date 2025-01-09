@@ -393,5 +393,19 @@ class UserProfileController extends Controller
         
          return response()->json(['success' => true, 'message' => 'Post '.$request->type.' successfully!']);
     }
-    
+    public function userEventApply(Request $request){
+        $eventapply = Eventapply::where('event_id',$request->event_id);
+
+    // Check if the user already liked the post
+    if ($eventapply->where('user_id', auth()->id())->exists()) {
+        return response()->json(['success' => true, 'message' => 'Event Already Applied!']);
+    } 
+        Eventapply::create([
+            'user_id' => auth()->id(), // Logged-in user's ID
+            'event_id' => $request->event_id
+        ]);
+        
+         return response()->json(['success' => true, 'message' => 'Event Apply successfully!']);
+    }
+
 }
