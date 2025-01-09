@@ -4,6 +4,7 @@ use App\Http\Controllers\FrontendLoginController;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ConnectionController;
+use App\Http\Controllers\Admin\BlogController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Role;
@@ -24,6 +25,10 @@ Route::get('/clear-cache', function () {
 
     return response()->json(['message' => 'All caches cleared and optimized.']);
 });
+
+Route::get('/blogs', [BlogController::class, 'blog'])->name('blog.show');
+Route::get('/blog/{id}', [BlogController::class, 'blogdetails'])->name('blog.details');
+
 
 Route::middleware('redirectIfAuthenticated')->group(function () {
     Route::get('/', [FrontendLoginController::class, 'showLoginForm'])->name('front.login');
