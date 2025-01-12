@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            if (!Schema::hasColumn('users', 'channel_id')) {
-                $table->string('channel_id')->nullable();
-            }
+        Schema::create('password_reset_otps', function (Blueprint $table) {
+            $table->id();
+            $table->string('email')->index();
+            $table->string('otp');
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
         });
     }
 
@@ -23,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('channel_id');
-        });
+        Schema::dropIfExists('password_reset_otps');
     }
 };

@@ -108,4 +108,52 @@
         </div>
     </div>
 </div>
+<script src="{{ asset('front-assets/vendor/js/jquery.min.js') }}"></script>
+<script>
+    $('#suggestionssearch').on('keyup', function() {
+          let query = $(this).val();
+          console.log(query)
+          if (query.length >= 3) {
+            $.ajax({
+                url: "{{ route('user.suggestionssearch') }}",
+                method: "GET",
+                data: { query: query },
+                success: function(response) {
+                  console.log(response)
+                    let suggestionssearch = $('#suggestionssearchid');
+                    suggestionssearch.empty(); // Clear previous suggestions
+                    if (response.length > 0) {
+                        response.forEach(user => {
+                            suggestionssearch.append(` <div class="notification-wrapper mb-4">
+                    <div class="note-img">
+                        <img src="${user.profile_image}" alt="">
+                    </div>
+                    <div class="note-content">
+                        <p class="mb-0 fs-7">
+                            <a href='${user.route_url}' class="grey">
+                                <strong>${user.name}</strong>
+                            </a>
+                        </p>
+                        <p class="mb-0 fs-8">${user.industry}</p>
+                    </div>
+                    <div class="sr-btn">
+                        <form action="${user.route_connect}" method="POST">
+                            @csrf
+                            <input type="hidden" name="receiver_id" value="${user.id}">
+                            <button class="bg-blue btn text-white fs-8" type="submit">Send Request</button>
+                        </form>
+                    </div>
+                </div>`);
+                        });
+                        suggestionssearch.show();
+                    } else {
+                        suggestionssearch.hide();
+                    }
+                }
+            });
+        } else {
+            // $('#connectionsearch').hide();
+        }
+        });
+        </script>
 @endsection

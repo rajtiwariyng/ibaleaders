@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDarkModeToUsers extends Migration
+class AddDarkModeToUsers2 extends Migration
 {
     /**
      * Run the migrations.
