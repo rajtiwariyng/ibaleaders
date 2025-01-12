@@ -8,10 +8,11 @@
                         <button class="border-0 bg-white">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
-                        <input type="text" placeholder="Search">
+                        <input type="text" placeholder="Search" id="suggestionssearch" name="suggestionssearch">
                     </div>
                 </div>
             </div>
+            <div id="suggestionssearchid">
 
             @forelse ($suggestions as $suggestion)
                 <div class="notification-wrapper mb-4">
@@ -37,6 +38,7 @@
             @empty
                 <p>No suggestions available.</p>
             @endforelse
+            </div>
         </div>
     </div>
 

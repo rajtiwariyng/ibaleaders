@@ -23,30 +23,26 @@
           <img src="{{ asset('front-assets/images/logo.png') }}" alt="">
         </div>
         <h5 class="blue poppins-bold py-3">Sign-in to IBA Leader</h5>
-        <form action="" id="reset_password_form" method="POST">
+        <form action="" id="validate_otp_form" method="POST">
         @csrf
         @method('POST')
-          <div class="form-group">
+
+        <div class="form-group">
             <label for="email">Enter Email</label>
             <input type="email" id="email" name="email" placeholder="Email" class="form-control">
             <div id="error-email" class="text-danger"></div>
           </div>
-          <!-- <div class="form-group">
-            <label for="email">Enter Password</label>
-            <input type="password" id="password" name="password" placeholder="Password"  class="form-control">
-          </div> 
-          <div class="text-end">
-            <a href="{{ route('front.forgetpassword') }}" class="blue">Forget Password</a>
-          </div>-->
+          <div class="form-group">
+            <label for="otp">Enter OTP</label>
+            <input type="text" id="otp" name="otp" placeholder="OTP" class="form-control">
+            <div id="error-otp" class="text-danger"></div>
+          </div>
+         
+         
           <div class="text-center sbmtBtn">
-            <!-- <a href="/IBA/home.html" class="white">
-              <div class="cornerbox mt-2">
-                <div class="bg"></div>
-                <p class="mb-0">Submit</p>
-              </div>
-            </a> -->
+            
             <div id="alert-success" class="text-success mt-3 alert-success" style="display: none;"></div>
-            <button type="button" id="send_password_reset_link" class="btn btn-primary btn-block">Submit</button>
+            <button type="button" id="send_validate_otp" class="btn btn-primary btn-block">Submit</button>
           </div>
           @if($errors->any())
             <div>
@@ -81,13 +77,13 @@
   <script src="{{ asset('front-assets/vendor/js/wow.min.js') }}"></script>
   <script src="{{ asset('front-assets/js/main.js') }}"></script>
 <script>
-  $('#send_password_reset_link').click(function(){
+  $('#send_validate_otp').click(function(){
    
         var that = $(this);
         that.prop('disabled', true);
-        var email = $('#email').val();
+        var otp = $('#otp').val();
         $('.invalid-feedback').html('');
-        let myForm = document.getElementById('reset_password_form');
+        let myForm = document.getElementById('validate_otp_form');
         let formData = new FormData(myForm);
         $.ajax({
             // type: "POST",
@@ -98,17 +94,17 @@
             async: true,
             processData: false,
             contentType: false,
-            url: "{{ route('front.send.otp') }}",
+            url: "{{ route('front.validate.otppost') }}",
             success: function(res) {
                 if(res.success){
-                    $('#email').val('');
+                    $('#otp').val('');
+                    $('#error-email').html('');
+                    $('#error-otp').html('');
                     that.prop('disabled', false);
                     $('.alert-success').html(res.message).show();
-                    $('#error-email').html('');
-                    // window.location.href = "{{ route('front.validate.otp') }}";
                 	setTimeout(function(){ 
                 		$('.alert-success').html('').hide();
-                    window.location.href = "{{ route('front.validate.otp') }}";
+                    window.location.href = res.url;
                 	}, 4000);
                 }
             },

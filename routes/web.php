@@ -40,7 +40,14 @@ Route::get('/forget-password', [FrontendLoginController::class, 'forgetpassword'
 Route::post('/forget-password-mail', [FrontendLoginController::class, 'forgetPasswordPostMail'])->name('front.reset.password.mail');
 
 Route::get('/change-password/{token}', [FrontendLoginController::class, 'changePassword'])->name('front.changepassword');
-Route::post('/change-password-mail', [FrontendLoginController::class, 'postChangePassword'])->name('front.changepasswordpost');
+Route::post('/change-password-mail', [FrontendLoginController::class, 'resetPasswordPostNew'])->name('front.changepasswordpost');
+
+Route::post('/send-otp', [FrontendLoginController::class, 'sendOtp'])->name('front.send.otp')->middleware('throttle:5,1');
+
+Route::post('/validate-otp-post', [FrontendLoginController::class, 'validateOtp'])->name('front.validate.otppost');
+Route::post('/reset-password-new', [FrontendLoginController::class, 'resetPasswordPostNew'])->name('front.reset.password.new');
+
+Route::get('/validate-otp', [FrontendLoginController::class, 'getValidateOtp'])->name('front.validate.otp');
 
 
 // Group routes for authenticated frontend users
@@ -127,6 +134,11 @@ Route::middleware(['user_auth:user'])->group(function () {
 	Route::post('/user-connection-block', [ConnectionController::class, 'userConnectionBlock'])->name('user.connection.block');
 
 	Route::post('/user-event-apply', [UserProfileController::class, 'userEventApply'])->name('user.event.apply');
+
+	Route::get('/user/connection/search', [FrontendLoginController::class, 'connectionSearch'])->name('user.connectionsearch');
+	Route::get('/user/suggestions/search', [FrontendLoginController::class, 'SuggestionsSearch'])->name('user.suggestionssearch');
+	// Route::post('/send-otp', [FrontendLoginController::class, 'sendOtp'])->name('front.send.otp');
+	
 
 	
 });

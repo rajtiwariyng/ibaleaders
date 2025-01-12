@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ch_channel_user', function (Blueprint $table) {
-	        $table->string('channel_id');
-	        $table->unsignedBigInteger('user_id');
+        // Schema::create('ch_channel_user', function (Blueprint $table) {
+	    //     $table->string('channel_id');
+	    //     $table->unsignedBigInteger('user_id');
 	        
-	        $table->foreign('channel_id')->references('id')->on('ch_channels');
-	        $table->foreign('user_id')->references('id')->on('users');
-        });
+	    //     $table->foreign('channel_id')->references('id')->on('ch_channels');
+	    //     $table->foreign('user_id')->references('id')->on('users');
+        // });
     }
 
     /**
