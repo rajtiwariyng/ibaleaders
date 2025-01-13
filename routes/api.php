@@ -32,6 +32,9 @@ Route::prefix('v1/')->group(function () {
       Route::post('/user/rejectconnectionrequest', [ApiConnectionController::class, 'rejectConnectionRequest']);
       Route::get('/user/pendingrequestlist', [ApiConnectionController::class, 'pendingRequestList']);
       Route::get('/user/sendrequestlist', [ApiConnectionController::class, 'sendRequestList']);
+      Route::post('/user/sendpostreact', [ApiUserProfileController::class, 'sendPostReact']);
+      Route::get('/user/eventlist', [ApiUserProfileController::class, 'eventlist']);
+
 
       
      /*********************************************** Caht  ***************** */
