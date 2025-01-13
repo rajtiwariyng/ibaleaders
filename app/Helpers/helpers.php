@@ -1,6 +1,8 @@
 <?php
 use App\Models\Connection;
 use App\Models\Eventapply;
+use App\Models\Notifications;
+
 
 if (!function_exists('greet_user')) {
     function greet_user($name) {
@@ -26,5 +28,12 @@ if (!function_exists('countEventApplyUser')) {
     function countEventApplyUser($eventid) {
         $eventapply = Eventapply::where('event_id', $eventid)->where('status', 'active')->get();
         return $eventapply;
+    }
+}
+if (!function_exists('createNotificationsData')) {
+    function createNotificationsData($data) {
+        Notifications::create($data);
+        
+        return response()->json(['success' => true, 'message' => 'Notification Added Successfully!']);
     }
 }

@@ -20,6 +20,8 @@ use Illuminate\Support\Str;
 use Chatify\Facades\ChatifyMessenger as Chatify;
 use DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
+use App\Models\Notifications;
 
 
 class FrontendLoginController extends Controller
@@ -204,8 +206,11 @@ class FrontendLoginController extends Controller
             ->where('status', 'pending')
             ->with('sender') // Assuming 'sender' is a relation for the sender's user details
             ->get();
+            $notificationslists=Notifications::with('user')->with('received')->where('received_id', auth()->id())->get();
+            // echo "<pre>";
+            // print_r($notificationslists);
         //dd($pendingRequests);
-        return view('front.notifications', compact('pendingRequests'));
+        return view('front.notifications', compact('pendingRequests','notificationslists'));
     }
 
     public function search(Request $request)
@@ -348,6 +353,7 @@ class FrontendLoginController extends Controller
             $token = Str::random(60);
             DB::table('password_reset_tokens')->insert(['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]);
             $user = User::where('email', $request->email)->first();
+            $message=`<p>Forget password OTP</p><p></p>`;
             $data = [
                 'token' => $token,
                 'mail_from' => 'rajtiwariyng@gmail.com',
@@ -355,7 +361,7 @@ class FrontendLoginController extends Controller
                 'client_name' => $user->name,
                 'logo' => asset('front-assets/images/white-logo.png'),
                 'subject' => 'Forgot Password',
-                'token' => $token,
+                'message' => $message,
             ];
             // dispatch(new \App\Jobs\sendForgotPasswordEmail($data))->onQueue('forgot_password_email');
             // SendForgotPasswordEmail::dispatch($data);
@@ -375,7 +381,7 @@ class FrontendLoginController extends Controller
             'logo' => $dataget['logo'],
             'token' => $dataget['token'],
         ];
-        print_r($dataget);
+        // print_r($dataget);
 
         Mail::send('email.forgotPaswordMail', ['mailData' => $datapush], function ($message) use ($dataget) {
             $message->to($dataget['email'])->from('noreply@gmail.com', $dataget['client_name'])->subject($dataget['subject']);
@@ -383,6 +389,8 @@ class FrontendLoginController extends Controller
     }
     function changePassword(Request $request)
     {
+        // echo "test";
+        // exit;
         $token = $request->token;
         return view('front.auth.change-password', compact('token'));
     }
@@ -404,8 +412,162 @@ class FrontendLoginController extends Controller
             return response()->json(['success' => true, 'message' => 'Your password has been changed!']);
             // return $this->successResponse([],__('Your password has been changed!'));
         } else {
-            return response()->json(['success' => true, 'message' => 'Invalid Token!']);
+            return response()->json(['success' => false, 'message' => 'Invalid Token!']);
             //  return $this->errorResponse(__('Invalid Token!'), 400);
         }
     }
+
+    public function sendOtp(Request $request)
+    {
+        //return response()->json(['success' => true, 'message' => 'Invalid Token!']);
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        // Generate a 6-digit OTP
+        $otp = random_int(100000, 999999);
+
+        // Save OTP to the database
+        DB::table('password_reset_otps')->updateOrInsert(
+            ['email' => $request->email],
+            [
+                'otp' => $otp,
+                'created_at' => now(),
+                'expires_at' => Carbon::now()->addMinutes(5), // OTP valid for 5 minutes
+            ]
+        );
+        $data = [
+            'otp' => $otp,
+            'mail_from' => 'rajtiwariyng@gmail.com',
+            // 'email' => $request->email,
+            // 'client_name' => $user->name,
+            'logo' => asset('front-assets/images/white-logo.png'),
+            'subject' => 'Forgot Password'
+        ];
+
+        // Send OTP via email
+        Mail::to($request->email)->send(new \App\Mail\SendOtpMail($data));
+       
+
+        return response()->json(['success' => true,'message' => 'OTP sent to your email.']);
+    }
+    function getValidateOtp(){
+        return view('front.auth.validate-otp');
+    }
+    public function validateOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:password_reset_otps,email',
+            'otp' => 'required|numeric',
+        ]);
+
+        $otpRecord = DB::table('password_reset_otps')
+                    ->where('email', $request->email)
+                    ->where('otp', $request->otp)
+                    ->first();
+
+        if (!$otpRecord) {
+            return response()->json(['success' => false,'message' => 'Invalid OTP.'], 400);
+        }
+
+        if (Carbon::now()->greaterThan(Carbon::parse($otpRecord->expires_at))) {
+            return response()->json(['success' => false,'message' => 'OTP has expired.'], 400);
+        }
+        
+        $obj = base64_encode($request->email.','.$request->otp);
+        // OTP is valid, allow password reset
+        $routeurl=URL::route("front.changepassword", [$obj]);
+        return response()->json(['success' => true,'message' => 'OTP verified. Proceed to reset password.','jasondata'=>$obj,'url'=>$routeurl]);
+    }
+
+    public function resetPasswordPostNew(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'password_confirmation' => 'required',
+            'password' => 'required|string|min:6|confirmed',
+        ], [
+            'password.required' => __('The password field is required.'),
+            'password.confirmed' => __('The password confirmation does not match.'),
+            'password_confirmation.required' => __('The password confirmation field is required.')
+        ]);
+        $tokenrequest=base64_decode($request->token);
+        $tokenarray=explode(",",$tokenrequest);
+       if(count($tokenarray)<2){
+        return response()->json(['success' => false,'message' => 'Invalid or mismatched OTP.'], 400);
+       }
+        // Validate OTP and its association with the email
+        $otpRecord = DB::table('password_reset_otps')
+                    ->where('email', $tokenarray[0])
+                    ->where('otp', $tokenarray[1])
+                    ->first();
+
+        if (!$otpRecord) {
+            return response()->json(['success' => false,'message' => 'Invalid or mismatched OTP.'], 400);
+        }
+
+        if (Carbon::now()->greaterThan(Carbon::parse($otpRecord->expires_at))) {
+            return response()->json(['success' => false,'message' => 'OTP has expired.'], 400);
+        }
+
+        // Reset the password
+        DB::table('users')->where('email', $otpRecord->email)->update([
+            'password' => bcrypt($request->password),
+        ]);
+
+        // Delete the OTP record after successful reset
+        DB::table('password_reset_otps')->where('email', $otpRecord->email)->delete();
+
+        return response()->json(['success' => true,'message' => 'Password reset successfully.']);
+    }
+    public function connectionSearch(Request $request)
+    {
+        $query = $request->input('query');
+
+        $users = User::role('user')->join('connections', 'users.id', '=', 'connections.sender_id') // Use Spatie Permission to filter users with "user" role
+            ->where('name', 'LIKE', '%' . $query . '%')
+            ->where('connections.receiver_id', auth()->id())
+            ->where('connections.status', 'approved')
+            ->take(5)
+            ->get(); // Select only the name field for lighter response
+            $users = $users->map(function ($user) {
+                $user->route_url = URL::route("user.connection.userprofile", [base64_encode($user->id)]);
+                return $user;
+            });
+
+        return response()->json($users);
+    }
+    public function SuggestionsSearch(Request $request)
+    {
+        $query = $request->input('query');
+        $user = auth()->user();
+        $suggestions = User::where('id', '!=', $user->id)->where('name', 'LIKE', '%' . $query . '%')
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user')
+                  ->where('guard_name', 'web');
+        })
+        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+            $query->where('sender_id', $user->id);
+        })
+        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+            $query->where('receiver_id', $user->id);
+        })
+        ->take(10)
+        ->get();
+        // $users = User::role('user')->join('connections', 'users.id', '=', 'connections.sender_id') // Use Spatie Permission to filter users with "user" role
+        //     ->where('name', 'LIKE', '%' . $query . '%')
+        //     // ->where('connections.sender_id', '!=',auth()->id())?
+        //     // ->where('connections.status', 'approved')?
+        //     ->take(5)
+        //     ->get(); // Select only the name field for lighter response
+            $suggestions = $suggestions->map(function ($suggestions) {
+                $suggestions->route_url = URL::route("user.connection.userprofile", [base64_encode($suggestions->id)]);
+                $suggestions->route_connect =route('user.sendConnection');
+
+                return $suggestions;
+            });
+
+        return response()->json($suggestions);
+    }
+
 }

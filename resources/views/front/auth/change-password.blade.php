@@ -26,16 +26,17 @@
         <form action="" id="reset_password_form" method="POST">
         @csrf
         @method('POST')
-          
-            <input type="hidden" id="token" name="token" placeholder="Email" value="{{$token}}">
+        <input type="hidden" id="token" name="token" value="{{$token}}">
+            
+            
             
           <div class="form-group">
-            <label for="email">Enter Password</label>
+            <label for="password">Enter Password</label>
             <input type="password" id="password" name="password" placeholder="Password"  class="form-control">
             <div id="error-password" class="text-danger"></div>
           </div> 
           <div class="form-group">
-            <label for="email">Enter Confirm Password</label>
+            <label for="password_confirmation">Enter Confirm Password</label>
             <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password"  class="form-control">
             <div id="error-password_confirmation" class="text-danger"></div>
           </div> 
@@ -110,6 +111,7 @@
                     $('.alert-success').html(res.message).show();
                 	setTimeout(function(){ 
                 		$('.alert-success').html('').hide();
+                    window.location.href = "{{ route('front.login') }}";
                 	}, 4000);
                 }
             },

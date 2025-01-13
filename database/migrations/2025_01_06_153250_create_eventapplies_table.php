@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('eventapplies', function (Blueprint $table) {
-            $table->id();
-            // $table->enum('type', ['like', 'dislike','heart','smile','smileheart'])->default('like');
-            $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->softDeletes();
-            $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->timestamps();
-        });
+        // Schema::create('eventapplies', function (Blueprint $table) {
+        //     $table->id();
+        //     // $table->enum('type', ['like', 'dislike','heart','smile','smileheart'])->default('like');
+        //     $table->foreignId('event_id')->constrained('events')->onDelete('cascade');
+        //     $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+        //     $table->softDeletes();
+        //     $table->enum('status', ['active', 'inactive'])->default('active');
+        //     $table->timestamps();
+        // });
     }
 
     /**

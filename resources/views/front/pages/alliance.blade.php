@@ -13,9 +13,9 @@
                       <button class="border-0 bg-white">
                         <i class="fa-solid fa-magnifying-glass"></i>
                       </button>
-                      <input type="text" placeholder="Search"></i>
+                      <input type="text" name="connectionsearch" id="connectionsearch" placeholder="Search"></i>
                     </div>
-                    <div class="dropdown ellipse-action ps-3">
+                    <div class="dropdown ellipse-action ps-3 d-none">
                       <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-sliders"></i> Filters
                       </button>
@@ -26,6 +26,7 @@
                     </div>
                   </div>
                 </div>
+                <div id="connectionsearchid">
                 @forelse ($connections as $connection)
                 <div class="mb-4">
                   <div class="notification-wrapper">
@@ -58,6 +59,7 @@
                 @empty
                 <div></div>
                 @endforelse
+                </div>
                 
                 <div>
                   <a href="{{ route('user.connections') }}" class="trans-btn">
@@ -421,7 +423,50 @@
         }
 
         // Initialize the API client when the page loads
-        
+        $('#connectionsearch').on('keyup', function() {
+          let query = $(this).val();
+          console.log(query)
+          if (query.length >= 3) {
+            $.ajax({
+                url: "{{ route('user.connectionsearch') }}",
+                method: "GET",
+                data: { query: query },
+                success: function(response) {
+                  console.log(response)
+                    let connectionsearch = $('#connectionsearchid');
+                    connectionsearch.empty(); // Clear previous suggestions
+                    if (response.length > 0) {
+                        response.forEach(user => {
+                          connectionsearch.append(`<div class="mb-4">
+                  <div class="notification-wrapper">
+                    <div class="note-img"><img src="${user.profile_image}" alt="${user.name}"></div>
+                    <div class="note-content">
+                      <p class="mb-0 fs-7" ><strong>${user.name}</strong></p>
+                      <p class="mb-0 fs-8" >${user.industry}</p>
+                    </div>
+                    <div class="connection-place">
+                      <ul class="d-flex fs-8">
+                        <li>${user.state}</li>
+                        <li>></li>
+                        <li>${user.city}</li>
+                      </ul>
+                    </div>
+                    <a href='${user.route_url}' class="trans-btn mx-4">
+                      View Details
+                    </a>
+                  </div>
+                </div>`);
+                        });
+                        connectionsearch.show();
+                    } else {
+                      connectionsearch.hide();
+                    }
+                }
+            });
+        } else {
+            // $('#connectionsearch').hide();
+        }
+        });
   </script>
 
 @endsection
