@@ -340,7 +340,8 @@ class UserProfileController extends Controller
     public function createTestimonial(Request $request)
     {
         $customer=$request->id;
-        return view('front.users.create-testimonial',compact('customer'));
+        $user = auth()->user();
+        return view('front.users.create-testimonial',compact('customer','user'));
         // $events = Event::user();
         // print_r($events);
         // return view('front.users.create-event', compact('events'));
@@ -355,8 +356,11 @@ class UserProfileController extends Controller
             'testimonialdescription' => 'nullable|string|max:255'
         ]);
         
-       
-        Testimonial::create([
+    //    echo ' decode '.base64_decode($request->customer_id);
+    //    echo ' encode '.base64_encode($request->customer_id);
+    //    echo ' cust '.$request->customer_id;
+    //    exit;
+        $addtestimonial=Testimonial::create([
             'user_id' => auth()->id(), // Logged-in user's ID
             'title' => $request->testimonialtitle,
             'author' => $request->testimonialauthor,
@@ -364,6 +368,27 @@ class UserProfileController extends Controller
             'description' => $request->testimonialdescription,
             'received_to'=>base64_decode($request->customer_id)
         ]);
+        
+        if(base64_decode($request->customer_id)!=auth()->id()){
+            $datajson=[
+                'subject'=>'Add Testimonial',
+                'message'=>'Add Testimonial',
+                'type' => 'Testimonial',
+                'action_id' => $addtestimonial->id,
+                'received_id'=>base64_decode($request->customer_id),
+                'user_id' => auth()->id(),
+            ];
+            $notificationdata=[
+                'type' => 'Testimonial',
+                'data' => json_encode($datajson),
+                'action_id' => $addtestimonial->id,
+                'received_id'=>base64_decode($request->customer_id),
+                'user_id' => auth()->id(), // Logged-in user's ID
+
+            ];
+            // print_r($notificationdata);
+            createNotificationsData($notificationdata);
+        }
         return response()->json(['success' => true, 'message' => 'Testimonial added successfully!']);
         
     }
@@ -375,7 +400,9 @@ class UserProfileController extends Controller
         $post = Post::findOrFail($request->postid);
 
     $postreact = $post->postreact()->where('user_id', auth()->id())->first();
-
+//     echo $post->user_id;
+// print_r($post);
+// exit;
     if (!$postreact) {
         Postreact::create([
             'user_id' => auth()->id(), // Logged-in user's ID
@@ -391,6 +418,24 @@ class UserProfileController extends Controller
 
        $updategata= $postreact->update(['type' => $request->type]);
     }
+    
+    $datajson=[
+        'subject'=>'Liked Your Post',
+        'message'=>'Liked Your Post',
+        'type' => 'Postreact',
+        'action_id' => $request->postid,
+        'received_id'=>$post->user_id,
+        'user_id' => auth()->id(),
+    ];
+    $notificationdata=[
+        'type' => 'Postreact',
+        'data' => json_encode($datajson),
+        'action_id' => $request->postid,
+        'received_id'=>$post->user_id,
+        'user_id' => auth()->id(), // Logged-in user's ID
+
+    ];
+    createNotificationsData($notificationdata);
         
          return response()->json(['success' => true, 'message' => 'Post '.$request->type.' successfully!']);
     }
@@ -405,6 +450,25 @@ class UserProfileController extends Controller
             'user_id' => auth()->id(), // Logged-in user's ID
             'event_id' => $request->event_id
         ]);
+        $eventdata=Event::findOrFail($request->event_id);
+        $datajson=[
+            'subject'=>'Applied Your Event',
+            'message'=>'Applied Your Event',
+            'type' => 'Eventapply',
+            'action_id' => $request->event_id,
+            'received_id'=>$eventdata->user_id,
+            'user_id' => auth()->id(),
+        ];
+        $notificationdata=[
+            'type' => 'Eventapply',
+            'data' => json_encode($datajson),
+            'action_id' => $request->event_id,
+            'received_id'=>$eventdata->user_id,
+            'user_id' => auth()->id(), // Logged-in user's ID
+    
+        ];
+        createNotificationsData($notificationdata);
+        
         
          return response()->json(['success' => true, 'message' => 'Event Apply successfully!']);
     }

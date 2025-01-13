@@ -21,6 +21,7 @@ use Chatify\Facades\ChatifyMessenger as Chatify;
 use DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
+use App\Models\Notifications;
 
 
 class FrontendLoginController extends Controller
@@ -205,8 +206,11 @@ class FrontendLoginController extends Controller
             ->where('status', 'pending')
             ->with('sender') // Assuming 'sender' is a relation for the sender's user details
             ->get();
+            $notificationslists=Notifications::with('user')->with('received')->where('received_id', auth()->id())->get();
+            // echo "<pre>";
+            // print_r($notificationslists);
         //dd($pendingRequests);
-        return view('front.notifications', compact('pendingRequests'));
+        return view('front.notifications', compact('pendingRequests','notificationslists'));
     }
 
     public function search(Request $request)

@@ -254,6 +254,7 @@ class ApiUserProfileController extends Controller
                         'industry' => $user->industry,
                         'profile_image' => $user->profile_image,
                     ],
+                    'postreactcount'=>Postreact::where('user_id', $user->id)->where('post_id', $post->id)->count(),
                 ];
             });
 

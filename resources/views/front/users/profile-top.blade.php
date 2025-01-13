@@ -71,7 +71,7 @@
                 <a class="dropdown-item" href="#">Send profile in a message</a>
                 <a class="dropdown-item" href="#" type="button" data-bs-toggle="modal" data-bs-target="#UserConnectionRemoveModal"   data-toggle="modal" data-target="#UserConnectionRemoveModal" data-message="Are you sure you want to remove connection user - {{ $user->name }}?" data-action="{{ route('user.connection.remove') }}" data-userid="{{$user->id}}">Remove Connection</a>
                 <a class="dropdown-item" href="#"  type="button" data-bs-toggle="modal" data-bs-target="#UserConnectionRemoveModal"   data-toggle="modal" data-target="#UserConnectionRemoveModal" data-message="Are you sure you want to block connection user - {{ $user->name }}?" data-action="{{ route('user.connection.block') }}" data-userid="{{$user->id}}">Report/Block</a>
-                <a href='{{ URL::route("user.createtestimonial", [base64_encode($customer)]) }}' class="grey dropdown-item">Testimonial</a>              
+                <a href='{{ URL::route("user.createtestimonial", [$customer]) }}' class="grey dropdown-item">Testimonial</a>              
               </div>
             </div>
             @endif
