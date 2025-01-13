@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use App\Models\Postreact;
+use App\Models\Event;
+use App\Models\Eventapply;
 
 class ApiUserProfileController extends Controller
 {
@@ -254,6 +257,7 @@ class ApiUserProfileController extends Controller
                         'industry' => $user->industry,
                         'profile_image' => $user->profile_image,
                     ],
+                    'postreactcount'=>Postreact::where('post_id', $post->id)->count(),
                 ];
             });
 
@@ -264,8 +268,93 @@ class ApiUserProfileController extends Controller
         ], 200);
     }
 
+    public function sendPostReact(Request $request)
+    {
+        
+        $user = Auth::user();
+        $post = Post::findOrFail($request->post_id);
+        
+        $postreact = $post->postreact()->where('user_id',$user->id)->first();
+        
+        if (!$postreact) {
+            Postreact::create([
+                'user_id' => $user->id, // Logged-in user's ID
+                'post_id' => $request->post_id,
+                'type' => $request->type,
+            ]);
+            
+        }
+        else {
+            $postreact = Postreact::where('post_id', $request->post_id)
+                ->where('user_id', auth()->id())
+                ->firstOrFail();          
+    
+           $updategata= $postreact->update(['type' => $request->type]);
+        }
+        
+        $datajson=[
+            'subject'=>'Liked Your Post',
+            'message'=>'Liked Your Post',
+            'type' => 'Postreact',
+            'action_id' => $request->post_id,
+            'received_id'=>$post->user_id,
+            'user_id' => auth()->id(),
+        ];
+        $notificationdata=[
+            'type' => 'Postreact',
+            'data' => json_encode($datajson),
+            'action_id' => $request->post_id,
+            'received_id'=>$post->user_id,
+            'user_id' => auth()->id(), // Logged-in user's ID
+    
+        ];
+        createNotificationsData($notificationdata);
+        return response()->json([
+            'success' => true,
+            'message' => 'Post React added successfully!',
+            'data' => $postreact,
+        ], 201);
+    }
 
+    public function eventlist(Request $request)
+    {
+       
+        // Get authenticated user
+        $user = Auth::user();
+// echo "tt";
+// exit;
+        // Fetch events with user details
+        $events = Event::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($event) use ($user) {
+                return [
+                    'id' => $event->id,
+                    'name' => $event->name,
+                    'location'=>$event->location,
+                    'start_date' => $event->start_date->toDateTimeString(),
+                    'description' => $event->description,
+                    'author' => $event->author,
+                    'type' => $event->type,
+                    'status' => $event->status,
+                    'created_at' => $event->created_at->toDateTimeString(),
+                    'updated_at' => $event->updated_at->toDateTimeString(),
+                    'user' => [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'industry' => $user->industry,
+                        'profile_image' => $user->profile_image,
+                    ],
+                    'eventcount'=>Eventapply::where('event_id', $event->id)->count(),
+                ];
+            });
 
+        return response()->json([
+            'success' => true,
+            'message' => 'User events fetched successfully.',
+            'data' => $events,
+        ], 200);
+    }
 
 
 }
