@@ -554,18 +554,13 @@ class FrontendLoginController extends Controller
         })
         ->take(10)
         ->get();
-        // $users = User::role('user')->join('connections', 'users.id', '=', 'connections.sender_id') // Use Spatie Permission to filter users with "user" role
-        //     ->where('name', 'LIKE', '%' . $query . '%')
-        //     // ->where('connections.sender_id', '!=',auth()->id())?
-        //     // ->where('connections.status', 'approved')?
-        //     ->take(5)
-        //     ->get(); // Select only the name field for lighter response
-            $suggestions = $suggestions->map(function ($suggestions) {
-                $suggestions->route_url = URL::route("user.connection.userprofile", [base64_encode($suggestions->id)]);
-                $suggestions->route_connect =route('user.sendConnection');
+       
+        $suggestions = $suggestions->map(function ($suggestions) {
+            $suggestions->route_url = URL::route("user.connection.userprofile", [base64_encode($suggestions->id)]);
+            $suggestions->route_connect =route('user.sendConnection');
 
-                return $suggestions;
-            });
+            return $suggestions;
+        });
 
         return response()->json($suggestions);
     }

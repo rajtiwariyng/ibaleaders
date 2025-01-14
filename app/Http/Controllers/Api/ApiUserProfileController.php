@@ -355,29 +355,56 @@ class ApiUserProfileController extends Controller
         ], 200);
     }
 
-public function notificationslists(Request $request)
-{
-    // echo "test";
-    // exit;
-    $user = Auth::user();
-    $notificationslists=Notifications::with('user')->with('received')->where('received_id', $user->id)->orderBy('created_at', 'desc')->get();
+    public function notificationslists(Request $request)
+    {
+        $user = Auth::user();
+        $notificationslists=Notifications::with('user')->with('received')->where('received_id', $user->id)->orderBy('created_at', 'desc')->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'User notifications fetched successfully.',
+            'data' => $notificationslists,
+        ], 200);      
+    }
+    public function viewProfile(Request $request)
+    {
+
+    $user = User::where('id', $request->user_id)
+    ->orderBy('created_at', 'desc')
+    ->first();
+
     return response()->json([
         'success' => true,
-        'message' => 'User notifications fetched successfully.',
-        'data' => $notificationslists,
-    ], 200);      
-}
-public function viewProfile(Request $request)
-{
-// print_r($request->all());?
-$user = User::where('id', $request->user_id)
-->orderBy('created_at', 'desc')
-->first();
-
-return response()->json([
-    'success' => true,
-    'message' => 'User profile details fetched successfully.',
-    'data' => $user,
-], 200);
-}
+        'message' => 'User profile details fetched successfully.',
+        'data' => $user,
+    ], 200);
+    }
+    public function changePassword(Request $request)
+    {
+        try{
+            $request->validate([
+                'current_password' => 'required|string',
+                'password' => 'required|string|max:15',
+                'password_confirmation' => 'required|string|max:15|same:password',
+            ]);
+            $current_password = Auth::User()->password;
+            if (!Hash::check($request->current_password, $current_password)) {
+                return response()->json(['success' => false,'message' => 'Current Password did not matched.'], 404);
+            }
+            $user_id = Auth::User()->id;
+            $obj_user = User::find(Auth::User()->id);
+            $obj_user->password = Hash::make($request->password);
+            $obj_user->save();
+            return response()->json([
+                'success' => true,
+                'message' => __('Password updated successfully.'),
+                'data' => $obj_user,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

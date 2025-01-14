@@ -9,6 +9,9 @@ Route::prefix('v1/')->group(function () {
    Route::post('login', [AuthController::class, 'login']);
    Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
    Route::post('signup', [AuthController::class, 'signup']);
+   Route::post('send-otp', [AuthController::class, 'sendOtp']);
+   Route::post('validate-otp', [AuthController::class, 'validateOtp']);  
+   Route::post('reset-password', [AuthController::class, 'resetPassword']);   
 
 
    Route::middleware('auth:sanctum')->group(function () {
@@ -36,6 +39,7 @@ Route::prefix('v1/')->group(function () {
       Route::get('/user/eventlist', [ApiUserProfileController::class, 'eventlist']);
       Route::get('/user/notificationslist', [ApiUserProfileController::class, 'notificationslists']);
       Route::get('/user/viewprofile', [ApiUserProfileController::class, 'viewProfile']);
+      Route::post('/user/changepassword', [ApiUserProfileController::class, 'changePassword']);
 
 
       

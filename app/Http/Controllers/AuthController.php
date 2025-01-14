@@ -12,6 +12,8 @@ use Illuminate\Support\Carbon;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
+use DB;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -158,6 +160,141 @@ class AuthController extends Controller
     }
 
 
+    public function sendOtp(Request $request)
+    {
+        try {
+            $request->validate([
+                'email' => 'required|email|exists:users,email',
+            ]);
+    
+            // Generate a 6-digit OTP
+            $otp = random_int(100000, 999999);
+    
+            // Save OTP to the database
+            DB::table('password_reset_otps')->updateOrInsert(
+                ['email' => $request->email],
+                [
+                    'otp' => $otp,
+                    'created_at' => now(),
+                    'expires_at' => Carbon::now()->addMinutes(5), // OTP valid for 5 minutes
+                ]
+            );
+            $data = [
+                'otp' => $otp,
+                'mail_from' => 'rajtiwariyng@gmail.com',
+                // 'email' => $request->email,
+                // 'client_name' => $user->name,
+                'logo' => asset('front-assets/images/white-logo.png'),
+                'subject' => 'Forgot Password'
+            ];
+    
+            // Send OTP via email
+            Mail::to($request->email)->send(new \App\Mail\SendOtpMail($data));
+            return response()->json([
+                'success' => true,
+                'message' => 'OTP sent to your email.',
+                'data' => $data,
+            ], 200);
+           
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function validateOtp(Request $request)
+    {
+        try {
+        
+            $request->validate([
+                'email' => 'required|email|exists:password_reset_otps,email',
+                'otp' => 'required|numeric',
+            ]);
+            $otpRecord = DB::table('password_reset_otps')
+                        ->where('email', $request->email)
+                        ->where('otp', $request->otp)
+                        ->first();
 
+            if (!$otpRecord) {
+                return response()->json(['success' => false,'message' => 'Invalid OTP.'], 400);
+            }
+
+            if (Carbon::now()->greaterThan(Carbon::parse($otpRecord->expires_at))) {
+                return response()->json(['success' => false,'message' => 'OTP has expired.'], 400);
+            }
+            
+            $obj = base64_encode($request->email.','.$request->otp);
+            // OTP is valid, allow password reset
+            // $routeurl=URL::route("front.changepassword", [$obj]);
+            $jsondata=[
+                "otp"=>$request->otp,
+                "email"=>$request->email
+            ];
+            return response()->json([
+                'success' => true,
+                'message' => 'OTP verified. Proceed to reset password.',
+                'data' => $jsondata,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+        
+    }
+    public function resetPassword(Request $request)
+    {
+        try {
+            $request->validate([
+                'otp' => 'required',
+                'email' => 'required',
+                'password_confirmation' => 'required',
+                'password' => 'required|string|min:6|confirmed',
+            ], [
+                'password.required' => __('The password field is required.'),
+                'password.confirmed' => __('The password confirmation does not match.'),
+                'password_confirmation.required' => __('The password confirmation field is required.')
+            ]);
+       
+            // Validate OTP and its association with the email
+            $otpRecord = DB::table('password_reset_otps')
+                        ->where('email', $request->email)
+                        ->where('otp', $request->otp)
+                        ->first();
+    
+            if (!$otpRecord) {
+                return response()->json(['success' => false,'message' => 'Invalid or mismatched OTP.'], 400);
+            }
+    
+            if (Carbon::now()->greaterThan(Carbon::parse($otpRecord->expires_at))) {
+                return response()->json(['success' => false,'message' => 'OTP has expired.'], 400);
+            }
+    
+            // Reset the password
+            $userdata=DB::table('users')->where('email', $otpRecord->email)->update([
+                'password' => bcrypt($request->password),
+            ]);
+    
+            // Delete the OTP record after successful reset
+            DB::table('password_reset_otps')->where('email', $otpRecord->email)->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Password reset successfully.',
+                'data' => [
+                    "email"=>$otpRecord->email
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
 }
