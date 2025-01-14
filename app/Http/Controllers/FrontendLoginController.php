@@ -206,7 +206,7 @@ class FrontendLoginController extends Controller
             ->where('status', 'pending')
             ->with('sender') // Assuming 'sender' is a relation for the sender's user details
             ->get();
-            $notificationslists=Notifications::with('user')->with('received')->where('received_id', auth()->id())->get();
+            $notificationslists=Notifications::with('user')->with('received')->where('received_id', auth()->id())->orderBy('created_at', 'desc')->get();
             // echo "<pre>";
             // print_r($notificationslists);
         //dd($pendingRequests);

@@ -34,6 +34,8 @@ Route::prefix('v1/')->group(function () {
       Route::get('/user/sendrequestlist', [ApiConnectionController::class, 'sendRequestList']);
       Route::post('/user/sendpostreact', [ApiUserProfileController::class, 'sendPostReact']);
       Route::get('/user/eventlist', [ApiUserProfileController::class, 'eventlist']);
+      Route::get('/user/notificationslist', [ApiUserProfileController::class, 'notificationslists']);
+      Route::get('/user/viewprofile', [ApiUserProfileController::class, 'viewProfile']);
 
 
       

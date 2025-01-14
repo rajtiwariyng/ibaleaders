@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Postreact;
 use App\Models\Event;
 use App\Models\Eventapply;
+use App\Models\Notifications;
 
 class ApiUserProfileController extends Controller
 {
@@ -321,8 +322,6 @@ class ApiUserProfileController extends Controller
        
         // Get authenticated user
         $user = Auth::user();
-// echo "tt";
-// exit;
         // Fetch events with user details
         $events = Event::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
@@ -356,5 +355,29 @@ class ApiUserProfileController extends Controller
         ], 200);
     }
 
+public function notificationslists(Request $request)
+{
+    // echo "test";
+    // exit;
+    $user = Auth::user();
+    $notificationslists=Notifications::with('user')->with('received')->where('received_id', $user->id)->orderBy('created_at', 'desc')->get();
+    return response()->json([
+        'success' => true,
+        'message' => 'User notifications fetched successfully.',
+        'data' => $notificationslists,
+    ], 200);      
+}
+public function viewProfile(Request $request)
+{
+// print_r($request->all());?
+$user = User::where('id', $request->user_id)
+->orderBy('created_at', 'desc')
+->first();
 
+return response()->json([
+    'success' => true,
+    'message' => 'User profile details fetched successfully.',
+    'data' => $user,
+], 200);
+}
 }
