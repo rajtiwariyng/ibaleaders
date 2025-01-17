@@ -20,6 +20,10 @@ class UserProfileController extends Controller
     {   
         $user = Auth::user();
         $posts = Post::join('users', 'users.id', '=', 'posts.user_id')->where('user_id', '=', $user->id)->orderBy('posts.created_at', 'desc')->get();
+        $posts = $posts->map(function ($post) {
+            $post->reactcount = Postreact::where('post_id', $post->id)->count();
+            return $post;
+        });
        
         return view('front.users.profile', compact('user','posts'));
     }

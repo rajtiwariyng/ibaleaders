@@ -22,6 +22,7 @@ use DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use App\Models\Notifications;
+use App\Models\Postreact;
 
 
 class FrontendLoginController extends Controller
@@ -122,7 +123,10 @@ class FrontendLoginController extends Controller
         // $posts = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('posts.created_at', 'desc')->get();
         
         $posts=Post::with('byuser')->orderBy('posts.created_at', 'desc')->get();
-        // $postuer=$postlist->
+        $posts = $posts->map(function ($post) {
+            $post->reactcount = Postreact::where('post_id', $post->id)->count();
+            return $post;
+        });
         // echo "<pre>";
         // print_r($posts);
 

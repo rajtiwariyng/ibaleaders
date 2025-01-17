@@ -25,7 +25,7 @@
             <div class="reactions d-flex align-items-center justify-content-between pt-3">
               <a class="d-flex align-items-center text-color">
                 <img src="{{ asset('front-assets/icons/React.png') }}" alt="" class="pe-2">
-                React
+                React {{$post->reactcount}}
               </a>
               <div id="postreactionmsg{{$post->id}}"></div>
               <span onclick="postReactFun('{{$post->id}}','like')" style="cursor: pointer;"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
