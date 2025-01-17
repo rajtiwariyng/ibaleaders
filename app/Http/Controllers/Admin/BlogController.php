@@ -89,15 +89,4 @@ class BlogController extends Controller
 
         return redirect()->route('admin.blogs.index')->with('success', 'Blog deleted successfully.');
     }
-
-    public function blog()
-    {
-        $blogs = Blog::with('category')->paginate(10);
-        return view("front.blogs.blog",compact('blogs'));
-    }
-
-    public function blogdetails()
-    {
-        return view("front.blogs.blog-details");
-    }
 }

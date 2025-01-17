@@ -109,10 +109,6 @@ class ConnectionController extends Controller
         // print_r($user);
         // exit;
         $posts = Post::with('byuser')->where('user_id', $userid)->orderBy('posts.created_at', 'desc')->get();
-        $posts = $posts->map(function ($post) {
-            $post->reactcount = Postreact::where('post_id', $post->id)->count();
-            return $post;
-        });
         $customer = $request->id;
 
         return view('front.users.userprofile', compact('user', 'posts', 'customer'));
