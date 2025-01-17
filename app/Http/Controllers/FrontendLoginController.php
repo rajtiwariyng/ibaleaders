@@ -564,5 +564,13 @@ class FrontendLoginController extends Controller
 
         return response()->json($suggestions);
     }
+    public function trackSubmitSearch(Request $request)
+    {
+        $user = auth()->user();
+        
+        $receivedReferralslist = $user->receivedReferralslist;
+        return response()->json(['success' => true,'message' => 'Data get successfully.','data'=>$receivedReferralslist]);
+
+    }
 
 }

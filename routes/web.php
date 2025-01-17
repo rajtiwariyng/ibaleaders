@@ -143,6 +143,8 @@ Route::middleware(['user_auth:user'])->group(function () {
 	Route::get('/user/connection/search', [FrontendLoginController::class, 'connectionSearch'])->name('user.connectionsearch');
 	Route::get('/user/suggestions/search', [FrontendLoginController::class, 'SuggestionsSearch'])->name('user.suggestionssearch');
 	// Route::post('/send-otp', [FrontendLoginController::class, 'sendOtp'])->name('front.send.otp');
+	Route::get('/user/track/search', [FrontendLoginController::class, 'trackSubmitSearch'])->name('user.track.search');
+	
 	
 
 	

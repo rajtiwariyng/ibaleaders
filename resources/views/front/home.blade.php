@@ -716,6 +716,23 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <div class="tracksubmitdiv">
+          <form id="tracksubmitform" class="vrForm pt-4 row">
+            <div class="col-md-4 form-group">
+              <input type="text" name="startdate" id="startdate"   class="form-control" placeholder="Start Date" required>
+            </div>
+            <div class="col-md-4 form-group">
+              <input type="text" name="enddate" id="enddate"   class="form-control" placeholder="End Start" required>
+            </div>
+            
+            <div class="col-md-4 form-group">
+              
+              <button type="button" onclick="trackSubmitFun()" class="btn btn-primary">
+                                Search
+                            </button>
+            </div>
+        </form>
+      </div>
       <div class="table-responsive-md">
           <table class="table table-hover">
             <thead class="table-dark">
@@ -905,6 +922,19 @@
 @section('customJs')
 <script src="{{ asset('front-assets/js/chart.min.js') }}"></script>
   <script>
+    function trackSubmitFun(){
+      
+      $.ajax({
+                url: "{{ route('user.track.search') }}",
+                method: "GET",
+                data: {  },
+                success: function(response) {
+                  console.log(response)
+
+                    // $("#postreactionmsg"+postid).html(response.message)
+                }
+            });
+    }
     function tyfcbreferralSubmitForm() {
         // Clear previous error messages
         $('.text-danger').text('');
