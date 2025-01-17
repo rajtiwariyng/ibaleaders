@@ -345,7 +345,20 @@ class UserProfileController extends Controller
     {
         $customer=$request->id;
         $user = auth()->user();
-        return view('front.users.create-testimonial',compact('customer','user'));
+        $suggestions = User::where('id', '!=', $user->id)
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user')
+                  ->where('guard_name', 'web');
+        })
+        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+            $query->where('sender_id', $user->id);
+        })
+        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+            $query->where('receiver_id', $user->id);
+        })
+        ->take(10)
+        ->get();
+        return view('front.users.create-testimonial',compact('customer','user','suggestions'));
         // $events = Event::user();
         // print_r($events);
         // return view('front.users.create-event', compact('events'));
