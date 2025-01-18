@@ -238,11 +238,13 @@ class ApiUserProfileController extends Controller
     {
         // Get authenticated user
         $user = Auth::user();
-
+        $page = $request->input('page', 1);
+        $limit = $request->input('limit', 10);
         // Fetch posts with user details
         $posts = Post::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
-            ->get()
+            // ->get()
+            ->paginate($limit, ['*'], 'page', $page)
             ->map(function ($post) use ($user) {
                 return [
                     'id' => $post->id,

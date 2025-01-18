@@ -121,7 +121,9 @@ class AuthController extends Controller
             ]);
 
             $query = $request->get('query');
-            $perPage = $request->get('per_page', 10);
+            // $perPage = $request->get('per_page', 10);
+            $page = $request->input('page', 1);
+            $limit = $request->input('limit', 10);
 
             $users = User::where('id', '!=', $authUserId)
                 ->where(function ($q) use ($query) {
@@ -129,7 +131,8 @@ class AuthController extends Controller
                       ->orWhere('email', 'LIKE', '%' . $query . '%')
                       ->orWhere('industry', 'LIKE', '%' . $query . '%');
                 })
-                ->paginate($perPage, ['id', 'name', 'email', 'industry', 'profile_image']);
+                ->paginate($limit, ['id', 'name', 'email', 'industry', 'profile_image'], 'page', $page);
+                // ->paginate($perPage, ['id', 'name', 'email', 'industry', 'profile_image']);
 
             // Add connection status to each user
             $users->getCollection()->transform(function ($user) use ($authUserId) {
