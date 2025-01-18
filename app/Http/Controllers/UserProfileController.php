@@ -12,18 +12,19 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Postreact;
+use App\Models\ChChannel as Channel;   
 use App\Models\Eventapply;
+use DB;
+use Exception;
+    
 
 class UserProfileController extends Controller
 {
+    protected $perPage = 30;  
     public function profile()
     {   
         $user = Auth::user();
         $posts = Post::join('users', 'users.id', '=', 'posts.user_id')->where('user_id', '=', $user->id)->orderBy('posts.created_at', 'desc')->get();
-        $posts = $posts->map(function ($post) {
-            $post->reactcount = Postreact::where('post_id', $post->id)->count();
-            return $post;
-        });
        
         return view('front.users.profile', compact('user','posts'));
     }
@@ -160,6 +161,8 @@ class UserProfileController extends Controller
         })
         ->take(10)
         ->get();
+
+
         return view('front.users.events', compact('events','suggestions','user'));
     }
 
@@ -194,9 +197,7 @@ class UserProfileController extends Controller
     public function groupsjoined()
     {
         $user = auth()->user();
-
-        
-
+        //echo "<pre>";print_r($user);die; 
         // Fetch suggestions (e.g., users not already connected or pending approval)
         $suggestions = User::where('id', '!=', $user->id)
         ->whereHas('roles', function ($query) {
@@ -210,8 +211,70 @@ class UserProfileController extends Controller
             $query->where('receiver_id', $user->id);
         })
         ->take(10)
-        ->get();
-        return view('front.users.groups-joined', compact('suggestions','user'));
+        ->get(); 
+        
+            $queryData =  Channel::join('ch_messages', 'ch_channels.id', '=', 'ch_messages.to_channel_id')
+            ->join('ch_channel_user', 'ch_channels.id', '=', 'ch_channel_user.channel_id')
+            ->where('ch_channel_user.user_id','=',Auth::user()->id)->where('ch_channels.name','!=','NULL')
+            ->select('ch_channels.*', DB::raw('ch_messages.created_at messaged_at'))
+            ->groupBy('ch_channels.id')
+            ->orderBy('messaged_at', 'desc')
+            ->paginate($request->per_page ?? $this->perPage);
+            
+            $channelsList = $queryData->items();   
+            if (count($channelsList) > 0) {
+                $res = [];
+                foreach ($channelsList as $channel) { 
+                    $contacts= $this->getContactItem1($channel);
+                    $total_user= DB::table('ch_channel_user')->where('channel_id', '=', $channel->id)->count();
+                    if(!empty($contacts['channel']['owner_id'])){  
+                    $res['name']=!empty($contacts['channel']['name']) ? $contacts['channel']['name']:"";
+                    $res['image']=!empty($contacts['channel']['avatar']) ? $contacts['channel']['avatar']:"";
+                    }else{
+                        $res['name']=!empty($contacts['user']['name']) ? $contacts['user']['name']:"";
+                        $res['image']=!empty($contacts['user']['avatar']) ? $contacts['user']['avatar']:"";
+                    }
+                    $res['total_User']= !empty($total_user) ? $total_user:0;
+                    $res['channel_id']= !empty($channel->id) ? $channel->id:"";
+                  
+                    $Groupdata[]=$res;
+                    
+    
+                }
+            } else {
+                $Groupdata=array();
+            }
+             
+            
+        return view('front.users.groups-joined', compact('suggestions','user','Groupdata'));    
+    }
+
+    public function getContactItem1($channel)
+    {
+        if($channel->id == Auth::user()->channel_id) return ''; // myself channel | saved messages
+        try {
+           
+            // check if this channel is a group
+            if(isset($channel->owner_id)){
+                return  array(
+                    'channel' => $this->getChannelWithAvatar($channel),
+                );
+            } 
+        } catch (\Throwable $th) {
+            throw new Exception($th->getMessage());
+        }
+    }
+
+    public function getChannelWithAvatar($channel)
+    {
+        if ($channel->avatar == 'avatar.png' && config('chatify.gravatar.enabled')) {
+            $imageSize = config('chatify.gravatar.image_size');
+            $imageset = config('chatify.gravatar.imageset');
+            $channel->avatar = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($channel->name))) . '?s=' . $imageSize . '&d=' . $imageset;
+        } else {
+            $channel->avatar = self::getChannelAvatarUrl($channel->avatar);
+        }
+        return $channel;
     }
 
     public function createEvent()
