@@ -719,10 +719,12 @@
         <div class="tracksubmitdiv">
           <form id="tracksubmitform" class="vrForm pt-4 row">
             <div class="col-md-4 form-group">
-              <input type="text" name="startdate" id="startdate"   class="form-control" placeholder="Start Date" required>
+              <input type="datetime-local" name="startdate" id="startdate"   class="form-control" placeholder="Start Date" required>
+              <div id="error-startdate"></div>
             </div>
             <div class="col-md-4 form-group">
-              <input type="text" name="enddate" id="enddate"   class="form-control" placeholder="End Start" required>
+              <input type="datetime-local" name="enddate" id="enddate"   class="form-control" placeholder="End Start" required>
+              <div id="error-enddate"></div>
             </div>
             
             <div class="col-md-4 form-group">
@@ -746,6 +748,7 @@
                 <th scope="col">Comments</th>                
               </tr>
             </thead>
+            <tbody id="submittrackdatadiv">
             @forelse($receivedReferralslist as $getreferrals) 
             <tr>
               <th scope="row"><?php echo date("d M Y", strtotime($getreferrals->created_at));?></th>
@@ -761,8 +764,7 @@
             <td colspa='8'>No data</td>
             </tr>
             @endforelse
-            
-            
+          </tbody>
           </table>
         </div>
         
@@ -923,16 +925,49 @@
 <script src="{{ asset('front-assets/js/chart.min.js') }}"></script>
   <script>
     function trackSubmitFun(){
-      
+      let startdate= $('#startdate').val();
+        let enddate= $('#enddate').val();
       $.ajax({
-                url: "{{ route('user.track.search') }}",
+                url: "{{ route('user.track.search') }}?startdate="+startdate+"&enddate="+enddate,
                 method: "GET",
                 data: {  },
                 success: function(response) {
                   console.log(response)
+                  var htmldata = '';
+                  if(response.data.length>0){
+                  for (var i = 0; i < response.data.length; i++) {
+                    htmldata += `<tr>
+                        <th scope="row">`+response.data.created_at+`</th>
+                        <td>`+response.data.user.name+`</td>
+                        <td>`+response.data.type+`</td>
+                        <td>`+response.data.type==1?"Inside":"Outside"+`</td>
+                        <td>`+response.data.email+`</td>
+                        <td>`+response.data.telephone+`</td>
+                        <td>`+response.data.comments+`</td>
+                      </tr>`;
+                  }
+                }
+                  else {
+                    htmldata += `<tr>
+            <td colspa='8'>No data</td>
+            </tr>`;
+                  }
+                  $('#submittrackdatadiv').html(htmldata);
 
                     // $("#postreactionmsg"+postid).html(response.message)
-                }
+                },
+                error: function(xhr) {
+                // console.log(xhr)
+                // alert("test")
+                // $('#referralsuccessMsgPost').text(xhr.responseJSON.message).css('color', 'red').show();
+                if (xhr.responseJSON.errors) {
+                    let errors = xhr.responseJSON.errors;
+                    for (let field in errors) {
+                        console.log(field)
+                        $(`#error-${field}`).text(errors[field][0]);
+                    }
+                } 
+            }
             });
     }
     function tyfcbreferralSubmitForm() {
@@ -1203,7 +1238,7 @@
             $.ajax({
                 url: "{{ route('user.search') }}",
                 method: "GET",
-                data: { query: query },
+                data: {query: query},
                 success: function(response) {
                     let suggestions = $('#suggestions');
                     suggestions.empty(); // Clear previous suggestions
@@ -1226,6 +1261,7 @@
 
     function postReactFun(postid,type){
       console.log(' postid '+postid+' type '+type)
+
       $.ajax({
                 url: "{{ route('user.post.react') }}",
                 method: "GET",

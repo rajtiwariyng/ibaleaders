@@ -33,7 +33,7 @@
 
                   <div class="mb-3">
                       <label>location</label>
-                      <input type="text" name="eventtype" id="eventtype" class="form-control" >
+                      <input type="text" name="eventlocation" id="eventlocation" class="form-control" >
                       <div id="error-eventtype" class="text-danger"></div>
                   </div>
                  

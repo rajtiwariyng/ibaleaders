@@ -173,4 +173,15 @@ class User extends Authenticatable
     public function postreact() {
         return $this->hasMany(Postreact::class, 'user_id', 'id');
     }
+    public function receivedReferralslistdate($startdate,$enddate)
+    {
+        return $this->hasMany(
+            Referrals::class,
+            'received_to','id'
+        )->with('user')->with('received')->whereBetween('created_at', [$startdate, $enddate]);
+    }
+    public function receivedReferralslistDateFilter($query,$comment)
+    {
+        return $query->where('comments', $comment);
+    }
 }

@@ -224,7 +224,7 @@ class FrontendLoginController extends Controller
         $users = User::role('user') // Use Spatie Permission to filter users with "user" role
             ->where('name', 'LIKE', '%' . $query . '%')
             ->take(5)
-            ->get(['name']); // Select only the name field for lighter response
+            ->get(['name','type']); // Select only the name field for lighter response
 
         return response()->json($users);
     }
@@ -570,9 +570,19 @@ class FrontendLoginController extends Controller
     }
     public function trackSubmitSearch(Request $request)
     {
+        $request->validate([
+            'startdate' => 'required',
+            'enddate' => 'required',
+        ], [
+            'startdate.required' => __('The start date field is required.'),
+            'enddate.confirmed' => __('The end date field is required.'),
+        ]);
+        $startdate=$request->startdate;
+        $enddate=$request->enddate;
         $user = auth()->user();
-        
-        $receivedReferralslist = $user->receivedReferralslist;
+        // DB::enableQueryLog();
+        $receivedReferralslist = $user->receivedReferralslistdate($startdate,$enddate)->get();
+        // dd(DB::getQueryLog());
         return response()->json(['success' => true,'message' => 'Data get successfully.','data'=>$receivedReferralslist]);
 
     }

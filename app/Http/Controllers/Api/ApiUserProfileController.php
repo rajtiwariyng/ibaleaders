@@ -356,11 +356,71 @@ class ApiUserProfileController extends Controller
             'data' => $events,
         ], 200);
     }
-
+    public function addEvent(Request $request)
+    {
+        try {
+            // Validate the request data
+            $request->validate([
+                'eventtitle' => 'required|string|max:255',            
+                'start_date' => 'required|string|max:255', 
+                'eventlocation' => 'required|string|max:15',
+                'eventdescription' => 'nullable|string|max:255'
+            ]);
+            $path="";
+            
+            $event=Event::create([
+                'user_id' => auth()->id(), // Logged-in user's ID
+                'name' => $request->eventtitle,
+                'start_date' => $request->start_date,
+                'location' => $request->eventlocation,
+                'description' => $request->eventdescription,
+                'image'=>$path
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Event added successfully!',
+                'data' => $event,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
     public function notificationslists(Request $request)
     {
         $user = Auth::user();
-        $notificationslists=Notifications::with('user')->with('received')->where('received_id', $user->id)->orderBy('created_at', 'desc')->get();
+        $notificationslists=Notifications::with('user')->with('received')->where('received_id', $user->id)->orderBy('created_at', 'desc')->get() 
+        ->map(function ($notificationslists) use ($notification) {
+            $decodedata=json_decode($notification->data, true); 
+                    // print_r($decodedata['message']);
+            return [
+                'id' => $notification->id,
+                'subject' => $decodedata['subject'],
+                'message'=>$decodedata['message'],
+                'type' => $notification->type,
+                'created_at' => $notification->created_at->toDateTimeString(),
+                'updated_at' => $notification->updated_at->toDateTimeString(),
+                'user' => [
+                    'id' => $notification->user->id,
+                    'name' => $notification->user->name,
+                    'email' => $notification->user->email,
+                    'industry' => $notification->user->industry,
+                    'profile_image' => $notification->user->profile_image,
+                ],
+                'received' => [
+                    'id' => $notification->received->id,
+                    'name' => $notification->received->name,
+                    'email' => $notification->received->email,
+                    'industry' => $notification->received->industry,
+                    'profile_image' => $notification->received->profile_image,
+                ]
+            ];
+        });
+
         return response()->json([
             'success' => true,
             'message' => 'User notifications fetched successfully.',

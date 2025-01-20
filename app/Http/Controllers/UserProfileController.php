@@ -305,33 +305,18 @@ class UserProfileController extends Controller
     public function createEventPost(Request $request)
     {
         $request->validate([
-            'eventtitle' => 'required|string|max:255',
-            //'eventauthor' => 'required|string|max:15',
-            'eventtype' => 'required|string|max:255',            
-            'eventdescription' => 'nullable|string|max:255',
-            'eventimage' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'eventtitle' => 'required|string|max:255',            
+            'start_date' => 'required|string|max:255', 
+            'eventlocation' => 'required|string|max:15',
+            'eventdescription' => 'nullable|string|max:255'
         ]);
         $path="";
-        if ($request->hasFile('eventimage')) {
-            $file = $request->file('eventimage');
-            $path = $file->store('event', 'public');  // Store the file in the 'public' disk
-
-            // Save the file path to the user's record or return the file URL
-            // $user = auth()->user();
-            // $user->eventimage = $path;
-            // $user->save();
-
-            // return response()->json([
-            //     'success' => true,
-            //     'profile_image_url' => asset('storage/' . $path),
-            // ]);
-        }
-        //dd($request->eventtitle);
+        
         Event::create([
             'user_id' => auth()->id(), // Logged-in user's ID
             'name' => $request->eventtitle,
             'start_date' => $request->start_date,
-            'location' => $request->eventtype,
+            'location' => $request->eventlocation,
             'description' => $request->eventdescription,
             'image'=>$path
         ]);

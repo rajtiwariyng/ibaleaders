@@ -57,7 +57,9 @@
           <p class="mb-0 fs-8">{{ old('industry', $user->industry) }}</p>
           <div class="d-flex align-items-center profile-btns">
             <?php 
+            // echo "tesst";
             $getstatus=checkUserConnectionStatus($user->id);
+            // print_r($getstatus);
             ?>
             @if($getstatus)
             @if($getstatus->status=='approved')

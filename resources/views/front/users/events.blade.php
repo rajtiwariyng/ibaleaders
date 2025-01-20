@@ -33,7 +33,7 @@
                         class="rounded-circle m-auto">
                         </div>
                         <div>
-                          <h6 class="blue mb-0">{{ $event->title }}</h6>
+                          <h6 class="blue mb-0">{{ $event->name }}</h6>
                           <p class="fs-7 pb-1">{{ $event->user->name }} | {{ $event->location }}</p>
                         </div>
                       </div>

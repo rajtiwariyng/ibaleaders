@@ -12,8 +12,10 @@ if (!function_exists('greet_user')) {
 if (!function_exists('checkUserConnectionStatus')) {
     function checkUserConnectionStatus($userid) {
         // return $userid.' '.auth()->id();
-        $connection = Connection::where('id', $userid)
-        ->where('receiver_id', auth()->id())->first();
+        $connection = Connection::where('sender_id', $userid)
+        ->where('receiver_id', auth()->id())
+        // ->where("status","approved")
+        ->first();
         return $connection;
     }
 }
