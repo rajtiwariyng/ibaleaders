@@ -41,6 +41,7 @@ Route::prefix('v1/')->group(function () {
       Route::get('/user/notificationslist', [ApiUserProfileController::class, 'notificationslists']);
       Route::get('/user/viewprofile', [ApiUserProfileController::class, 'viewProfile']);
       Route::post('/user/changepassword', [ApiUserProfileController::class, 'changePassword']);
+      Route::get('/user/referral/report', [ApiUserProfileController::class, 'referralReport']);
 
 
       

@@ -394,7 +394,7 @@ class ApiUserProfileController extends Controller
     {
         $user = Auth::user();
         $notificationslists=Notifications::with('user')->with('received')->where('received_id', $user->id)->orderBy('created_at', 'desc')->get() 
-        ->map(function ($notificationslists) use ($notification) {
+        ->map(function ($notification)  {
             $decodedata=json_decode($notification->data, true); 
                     // print_r($decodedata['message']);
             return [
@@ -468,5 +468,37 @@ class ApiUserProfileController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+    public function referralReport(){
+        $user = Auth::user();
+        $referralslist = $user->referralslist;
+        $tyfcbreferralslist = $user->tyfcbreferralslist;
+        $receivedReferralslist = $user->receivedReferralslist;
+        $onereferralslists = $user->OneReferralslist;
+        $tyfcbreferralstotal = $user->tyfcbreferralstotal;
+        $visitorlist = $user->visitorlist;
+        $subtotal = 0;
+        $recievesubtotal=0;
+        foreach($tyfcbreferralslist as $tyfcbreferrals) {
+            $subtotal += (float) $tyfcbreferrals->amount;
+            if($tyfcbreferrals->received->id==auth()->user()->id){
+            $recievesubtotal +=$tyfcbreferrals->amount;
+            }
+        }
+        $referraldata=[
+            "revenue_received"=>$recievesubtotal,
+            "referrals_received"=>count($receivedReferralslist),
+            "tyfcb_given"=>$subtotal,
+            "referrals_given"=>count($referralslist),
+            "visitor"=>count($visitorlist),
+            "one_to_ones"=>count($onereferralslists),
+
+        ];
+        return response()->json([
+            'success' => true,
+            'message' => __('Referral data fetched successfully.'),
+            'data' => $referraldata,
+        ]);
+
     }
 }
