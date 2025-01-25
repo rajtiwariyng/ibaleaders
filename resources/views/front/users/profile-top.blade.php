@@ -55,6 +55,12 @@
         <div class="userStoryBoxHeader">
           <h6 class="blue poppins-semibold">{{ $user->name }}</h6>
           <p class="mb-0 fs-8">{{ old('industry', $user->industry) }}</p>
+          @if($privacysettings && $privacysettings->phoneshow==1)
+              <div id="phoneshow">Phone: {{ $user->phone }}</div>
+              @endif
+              @if($privacysettings && $privacysettings->phoneshow==1)
+              <div id="emailshow">Email: {{ $user->email }}</div>
+              @endif
           <div class="d-flex align-items-center profile-btns">
             <?php 
             // echo "tesst";
@@ -73,7 +79,9 @@
                 <a class="dropdown-item" href="#">Send profile in a message</a>
                 <a class="dropdown-item" href="#" type="button" data-bs-toggle="modal" data-bs-target="#UserConnectionRemoveModal"   data-toggle="modal" data-target="#UserConnectionRemoveModal" data-message="Are you sure you want to remove connection user - {{ $user->name }}?" data-action="{{ route('user.connection.remove') }}" data-userid="{{$user->id}}">Remove Connection</a>
                 <a class="dropdown-item" href="#"  type="button" data-bs-toggle="modal" data-bs-target="#UserConnectionRemoveModal"   data-toggle="modal" data-target="#UserConnectionRemoveModal" data-message="Are you sure you want to block connection user - {{ $user->name }}?" data-action="{{ route('user.connection.block') }}" data-userid="{{$user->id}}">Report/Block</a>
-                <a href='{{ URL::route("user.createtestimonial", [$customer]) }}' class="grey dropdown-item">Testimonial</a>              
+                @if($privacysettings && $privacysettings->addtestimonial==1)
+                 <a href='{{ URL::route("user.createtestimonial", [$customer]) }}' class="grey dropdown-item">Testimonial</a>
+                 @endif              
               </div>
             </div>
             @endif

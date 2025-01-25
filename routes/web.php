@@ -144,6 +144,9 @@ Route::middleware(['user_auth:user'])->group(function () {
 	Route::get('/user/suggestions/search', [FrontendLoginController::class, 'SuggestionsSearch'])->name('user.suggestionssearch');
 	// Route::post('/send-otp', [FrontendLoginController::class, 'sendOtp'])->name('front.send.otp');
 	Route::get('/user/track/search', [FrontendLoginController::class, 'trackSubmitSearch'])->name('user.track.search');
+
+	Route::get('/user/privacysetting', [FrontendLoginController::class, 'UserPrivacySetting'])->name('user.privacy.setting');
+	Route::post('/user/postprivacysetting', [FrontendLoginController::class, 'postUserPrivacySetting'])->name('user.post.privacy.setting');
 	
 	
 

@@ -2,7 +2,9 @@
 @section('content')
 <div class="container">
         @include('front.users.profile-top')
+
               <div class="mt-4">
+                @if($privacysettings && $privacysettings->postshow==1)
               @forelse($posts as $post) 
               <div class="whiteBox bg-white p-4 mt-4">
             <div class="d-flex mb-3">
@@ -47,6 +49,7 @@
                 @empty
 					                <div>No post found.</div>
 					            @endforelse
+                      @endif
                 <!-- <div class="whiteBox bg-white p-4 mt-4">
                   <div class="d-flex mb-3">
                     <div class="d-flex align-items-center">

@@ -36,7 +36,7 @@
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="{{ route('user.profile') }}">View Profile</a>
                     <a class="dropdown-item" href="{{ route('front.resetpassword') }}">Reset Password</a>
-                    <a class="dropdown-item" href="{{ route('front.privacysettings') }}">Privacy Setting</a>
+                    <a class="dropdown-item" href="{{ route('user.privacy.setting') }}">Privacy Setting</a>
                     <a class="dropdown-item" href="{{ route('front.logout') }}">Log Out</a>
                   </div>
                 </div>

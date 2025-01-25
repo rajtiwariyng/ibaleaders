@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Post;
 use App\Models\Postreact;
+use App\Models\Privacysettings;
 
 class ConnectionController extends Controller
 {
@@ -102,17 +103,12 @@ class ConnectionController extends Controller
 
     public function userConnectionProfile(Request $request)
     {
-        // echo $request->id;
         $userid= base64_decode($request->id);
-        // exit;
         $user = User::where('id', $userid)->first();
-        // echo "<pre>";
-        // print_r($user);
-        // exit;
         $posts = Post::with('byuser')->where('user_id', $userid)->orderBy('posts.created_at', 'desc')->get();
         $customer = $request->id;
-
-        return view('front.users.userprofile', compact('user', 'posts', 'customer'));
+        $privacysettings = Privacysettings::where('user_id',$userid)->first();
+        return view('front.users.userprofile', compact('user', 'posts', 'customer','privacysettings'));
     }
     function userConnectionRemove(Request $request){
         $connection = Connection::where('sender_id', $request->user_id)

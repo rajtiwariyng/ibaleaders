@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use App\Models\Notifications;
 use App\Models\Postreact;
+use App\Models\Privacysettings;
 
 
 class FrontendLoginController extends Controller
@@ -584,6 +585,61 @@ class FrontendLoginController extends Controller
         $receivedReferralslist = $user->receivedReferralslistdate($startdate,$enddate)->get();
         // dd(DB::getQueryLog());
         return response()->json(['success' => true,'message' => 'Data get successfully.','data'=>$receivedReferralslist]);
+
+    }
+    public function UserPrivacySetting()
+    {
+        $user = Auth::user();
+        $suggestions = User::where('id', '!=', $user->id)
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user')
+                  ->where('guard_name', 'web');
+        })
+        ->whereDoesntHave('receivedConnections', function ($query) use ($user) {
+            $query->where('sender_id', $user->id);
+        })
+        ->whereDoesntHave('sentConnections', function ($query) use ($user) {
+            $query->where('receiver_id', $user->id);
+        })
+        ->take(10)
+        ->get();
+        $privacysettings = Privacysettings::where('user_id', auth()->id())->first();
+         return view('front.auth.privacysetting', compact('user','suggestions','privacysettings'));
+    }
+
+    public function postUserPrivacySetting(Request $request)
+    {
+        $request->validate([
+            'phoneshow' => 'required',
+            'emailshow' => 'required',
+            'addtestimonial' => 'required',
+            'postshow' => 'required',
+        ], [
+            'phoneshow.required' => __('The phone show field is required.'),
+            'emailshow.confirmed' => __('The email show field is required.'),
+            'addtestimonial.confirmed' => __('The add testimonial show field is required.'),
+            'postshow.confirmed' => __('The post show field is required.'),
+        ]);
+        $privacysettings = Privacysettings::where('user_id', auth()->id())->first();  
+        if (!$privacysettings) {
+            Privacysettings::create([
+                'user_id' => auth()->id(), // Logged-in user's ID
+                'phoneshow' => $request->phoneshow,
+                'emailshow' => $request->emailshow,
+                'addtestimonial' => $request->addtestimonial,
+                'postshow' => $request->postshow
+            ]);
+        } else {
+            $privacysettings = Privacysettings::where('user_id', auth()->id())
+                ->firstOrFail();          
+
+        $updategata= $privacysettings->update([
+                'phoneshow' => $request->phoneshow,
+                'emailshow' => $request->emailshow,
+                'addtestimonial' => $request->addtestimonial,
+                'postshow' => $request->postshow]);
+        }
+        return response()->json(['success' => true, 'message' => 'Privacy setting saved successfully!']);
 
     }
 

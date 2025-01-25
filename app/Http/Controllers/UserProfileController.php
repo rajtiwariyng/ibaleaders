@@ -144,8 +144,6 @@ class UserProfileController extends Controller
 
     public function events()
     {
-        // return view('front.users.events');
-        // $events = Event::latest()->all();
         $events = Event::orderBy('events.created_at', 'desc')->get();
         $user = auth()->user();
         $suggestions = User::where('id', '!=', $user->id)
