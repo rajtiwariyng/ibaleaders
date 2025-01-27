@@ -93,44 +93,63 @@
                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                   Referrals Given Report
                   </button>
+                  
                 </h2>
+                  
                 <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
+                  <div class="tracksubmitdiv">
+                    <form id="tracksubmitform" class="vrForm pt-4 row">
+                      <div class="col-md-4 form-group">
+                        <input type="datetime-local" name="startdate" id="startdate"   class="form-control" placeholder="Start Date" required>
+                        <div id="error-startdate"></div>
+                      </div>
+                      <div class="col-md-4 form-group">
+                        <input type="datetime-local" name="enddate" id="enddate"   class="form-control" placeholder="End Start" required>
+                        <div id="error-enddate"></div>
+                      </div>
+                      
+                      <div class="col-md-4 form-group">
+                        <button type="button" onclick="trackSubmitFun()" class="btn btn-primary bg-blue">
+                            Search
+                        </button>
+                      </div>
+                    </form>
+                  </div>
                   <div class="table-responsive-md">
-          <table class="table table-hover">
-            <thead class="table-dark">
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Referral To</th>
-                <th scope="col">Referral By</th>
-                <th scope="col">Type</th>
-                <th scope="col">Status</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
-                <th scope="col">Comments</th>                
-              </tr>
-            </thead>
-            @forelse($referralslist as $referrals) 
-            <tr>
-              <th scope="row"><?php echo date("d M Y", strtotime($referrals->created_at));?></th>
-              <td>{{$referrals->received->name}}</td>
-              <td>{{$referrals->user->name}}</td>
-              <td>{{$referrals->type}}</td>
-              <td>{{$referrals->referralstatus==1?'Inside':'Outside'}}</td>
-              <td>{{$referrals->email}}</td>
-              <td>{{$referrals->telephone}}</td>
-              <td>{{$referrals->comments}}</td>
-            </tr>
-            @empty
-            <tr>
-            <td colspa='8'>No data</td>
-            </tr>
-            @endforelse
-            
-            
-          </table>
-        </div>
-      
+                    <table class="table table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th scope="col">Date</th>
+                          <th scope="col">Referral To</th>
+                          <th scope="col">Referral By</th>
+                          <th scope="col">Type</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Phone</th>
+                          <th scope="col">Comments</th>                
+                        </tr>
+                      </thead>
+                      @forelse($referralslist as $referrals) 
+                      <tr>
+                        <th scope="row"><?php echo date("d M Y", strtotime($referrals->created_at));?></th>
+                        <td>{{$referrals->received->name}}</td>
+                        <td>{{$referrals->user->name}}</td>
+                        <td>{{$referrals->type}}</td>
+                        <td>{{$referrals->referralstatus==1?'Inside':'Outside'}}</td>
+                        <td>{{$referrals->email}}</td>
+                        <td>{{$referrals->telephone}}</td>
+                        <td>{{$referrals->comments}}</td>
+                      </tr>
+                      @empty
+                      <tr>
+                      <td colspa='8'>No data</td>
+                      </tr>
+                      @endforelse
+                      
+                      
+                    </table>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -145,38 +164,37 @@
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-          <table class="table table-hover">
-            <thead class="table-dark">
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Referral Name</th>
-                <th scope="col">Type</th>
-                <th scope="col">Status</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
-                <th scope="col">Comments</th>                
-              </tr>
-            </thead>
-            @forelse($receivedReferralslist as $getreferrals) 
-            <tr>
-              <th scope="row"><?php echo date("d M Y", strtotime($getreferrals->created_at));?></th>
-              <td>{{$getreferrals->user->name}}</td>
-              <td>{{$getreferrals->type}}</td>
-              <td>{{$getreferrals->referralstatus==1?'Inside':'Outside'}}</td>
-              <td>{{$getreferrals->email}}</td>
-              <td>{{$getreferrals->telephone}}</td>
-              <td>{{$getreferrals->comments}}</td>
-            </tr>
-            @empty
-            <tr>
-            <td colspa='8'>No data</td>
-            </tr>
-            @endforelse
-            
-            
-          </table>
-        </div>
-      
+                    <table class="table table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th scope="col">Date</th>
+                          <th scope="col">Referral Name</th>
+                          <th scope="col">Type</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Phone</th>
+                          <th scope="col">Comments</th>                
+                        </tr>
+                      </thead>
+                      @forelse($receivedReferralslist as $getreferrals) 
+                      <tr>
+                        <th scope="row"><?php echo date("d M Y", strtotime($getreferrals->created_at));?></th>
+                        <td>{{$getreferrals->user->name}}</td>
+                        <td>{{$getreferrals->type}}</td>
+                        <td>{{$getreferrals->referralstatus==1?'Inside':'Outside'}}</td>
+                        <td>{{$getreferrals->email}}</td>
+                        <td>{{$getreferrals->telephone}}</td>
+                        <td>{{$getreferrals->comments}}</td>
+                      </tr>
+                      @empty
+                      <tr>
+                      <td colspa='8'>No data</td>
+                      </tr>
+                      @endforelse
+                      
+                      
+                    </table>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -191,50 +209,50 @@
                 <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-          <table class="table table-hover">
-            <thead class="table-dark">
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Thank you to</th>
-                <th scope="col">Referral By</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Business Type</th>
-                <th scope="col">Types</th>
-                <th scope="col">Comments</th>                
-              </tr>
-            </thead>
-            @php
-                $subtotal = 0;
-                @$recievesubtotal=0;
-            @endphp
-           
-            @forelse($tyfcbreferralslist as $tyfcbreferrals) 
-            <tr>
-              <th scope="row"><?php echo date("d M Y", strtotime($tyfcbreferrals->created_at));?></th>
-              <td>{{$tyfcbreferrals->received->name}}</td>
-              <td>{{$tyfcbreferrals->user->name}}</td>
-              <td>{{$tyfcbreferrals->amount}}</td>
-              <td>{{$tyfcbreferrals->businesstype}}</td>
-              <td>{{$tyfcbreferrals->type}}</td>
-              <td>{{$tyfcbreferrals->comments}}</td>
-            </tr>
-            @php
-                $subtotal += (float) $tyfcbreferrals->amount;
-            @endphp
-            @if($tyfcbreferrals->received->id==auth()->user()->id)
-            @php
-            @$recievesubtotal += (float) $tyfcbreferrals->amount;
-            @endphp
-            @endif
-            @empty
-            <tr>
-            <td colspa='8'>No data</td>
-            </tr>
-            @endforelse
-            
-            
-          </table>
-        </div>
+                      <table class="table table-hover">
+                        <thead class="table-dark">
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Thank you to</th>
+                            <th scope="col">Referral By</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Business Type</th>
+                            <th scope="col">Types</th>
+                            <th scope="col">Comments</th>                
+                          </tr>
+                        </thead>
+                        @php
+                            $subtotal = 0;
+                            @$recievesubtotal=0;
+                        @endphp
+                      
+                        @forelse($tyfcbreferralslist as $tyfcbreferrals) 
+                        <tr>
+                          <th scope="row"><?php echo date("d M Y", strtotime($tyfcbreferrals->created_at));?></th>
+                          <td>{{$tyfcbreferrals->received->name}}</td>
+                          <td>{{$tyfcbreferrals->user->name}}</td>
+                          <td>{{$tyfcbreferrals->amount}}</td>
+                          <td>{{$tyfcbreferrals->businesstype}}</td>
+                          <td>{{$tyfcbreferrals->type}}</td>
+                          <td>{{$tyfcbreferrals->comments}}</td>
+                        </tr>
+                        @php
+                            $subtotal += (float) $tyfcbreferrals->amount;
+                        @endphp
+                        @if($tyfcbreferrals->received->id==auth()->user()->id)
+                        @php
+                        @$recievesubtotal += (float) $tyfcbreferrals->amount;
+                        @endphp
+                        @endif
+                        @empty
+                        <tr>
+                        <td colspa='8'>No data</td>
+                        </tr>
+                        @endforelse
+                        
+                        
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>

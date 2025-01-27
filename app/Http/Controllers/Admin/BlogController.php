@@ -34,8 +34,10 @@ class BlogController extends Controller
 
         $data = $request->all();
         $data['slug'] = Str::slug($request->slug);
+        
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('blogs');
+            // Store the image and return its path
+            $data['image'] = $request->file('image')->store('blogs', 'public');
         }
 
         Blog::create($data);
@@ -62,7 +64,8 @@ class BlogController extends Controller
         $data = $request->all();
         $data['slug'] = Str::slug($request->slug);
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('blogs');
+            // Store the image and return its path
+            $data['image'] = $request->file('image')->store('blogs', 'public');
         }
 
         $blog->update($data);
@@ -88,5 +91,19 @@ class BlogController extends Controller
         $blog->delete();
 
         return redirect()->route('admin.blogs.index')->with('success', 'Blog deleted successfully.');
+    }
+    public function blog(Request $request)
+    {
+        $blogs = Blog::with('category')->latest()->paginate(10);
+        return view('front.blogs.blog', compact('blogs'));
+    }
+
+    public function blogdetails($id)
+    {
+        $latestBlogs = Blog::latest()->take(5)->get();
+        $categories = Category::all();
+        $blog = Blog::where('id', $id)->orWhere('slug', $id)->firstOrFail();
+
+        return view('front.blogs.blog-details', compact('blog','latestBlogs','categories'));
     }
 }

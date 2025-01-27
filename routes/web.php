@@ -19,9 +19,9 @@ Route::get('/clear-cache', function () {
     Artisan::call('route:clear');
     Artisan::call('config:clear');
     Artisan::call('view:clear');
-    Artisan::call('optimize');
     Artisan::call('route:cache');
     Artisan::call('config:cache');
+	Artisan::call('optimize');   
 
     return response()->json(['message' => 'All caches cleared and optimized.']);
 });

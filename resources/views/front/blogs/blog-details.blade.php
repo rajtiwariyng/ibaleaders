@@ -6,21 +6,20 @@
             <div class="col-md-8">
                 <div class="blogDetailSection">
                     <div class="prBlog-date grey py-3">
-                        14, june, 2022 
+                        {{ $blog->created_at ? $blog->created_at->format('d, F, Y') : 'Date not available' }} 
                     </div>
-                    <h3 class="prBlogTitle blue m-0">Options for Foreign Companies to Set Up Business in India </h3>
+                    <h3 class="prBlogTitle blue m-0">{{ $blog->title ?? 'Untitled Blog' }}</h3>
                     <div class="prblogImgBig py-4">
                         <a href="blog-detail.php">
-                            <img src="images/banner-img.png" alt=""  class="w-100">
+                            <img src="{{ $blog->image ? asset('storage/' . $blog->image) : asset('front-assets/images/blog/default.png') }}" alt="{{ $blog->title }}"  class="w-100">
                         </a>
                     </div>
                     <div class="blog-desc">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nemo porro, eum sequi iure et atque? Nobis, ipsum aperiam! Rem iste quidem repellendus in laboriosam iusto aliquid aliquam quis optio. lor sit amet consectetur adipisicing elit. Totam nemo porro, eum sequi tio. lor sit amet consectetur adipisicing elit. Totam nemo porro, eum seq obis, ipsum aperiam! Rem iste quidem repellendus in laboriosam iusto aliquid aliquam quis op iure et atque? Nobis, ipsum aperiam! Rem iste quidem repellendus in laboriosam iusto aliquid aliquam quis optio.</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nemo porro, eum sequi iure et atque? Nobis, ipsum aperiam! Rem iste quidem repellendus in laboriosam iusto aliquid aliquam quis optio. lor sit amet consectetur adipisicing elit. Totam nemo porro, eum sequi tio. lor sit amet consectetur adipisicing elit. Totam nemo porro, eum seq obis, ipsum aperiam! Rem iste quidem repellendus in laboriosam iusto aliquid aliquam quis op iure et atque? Nobis, ipsum aperiam! Rem iste quidem repellendus in laboriosam iusto aliquid aliquam quis optio.</p>
+                        <p>{{ $blog->description ?? 'No description available.' }}</p>
                     </div>
                 </div>
               
-                <div class="post-block mt-4 pt-2 post-author">
+                <!-- <div class="post-block mt-4 pt-2 post-author">
                     <h6 class="mb-3 blue poppins-semibold">Author</h6>
                     <div class="d-flex gap-2">
                         <div class="img-thumbnail-no-borders d-block pb-3">
@@ -86,13 +85,14 @@
                         </div>
                         <h4 class="blue relBlog-Title">Why to Outsource Compliance Services to a Professional? </h4>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="col-md-4">
                 <div class="sideBar">
-                    <div class="Categories borderLines border-0">
+                    <!-- <div class="Categories borderLines border-0">
                         <h6 class="blue sideBarCommon-head">Categories</h6>
                         <ul class="ps-0 mb-0">
+                            @foreach($categories as $category)
                             <li><a href="#">Buildings</a></li>
                             <li><a href="#">Construction</a></li>
                             <li><a href="#">Educational</a></li>
@@ -101,49 +101,28 @@
                             <li><a href="#">Standards</a></li>
                             <li><a href="#">Super Structures</a></li>
                             <li><a href="#">Technology</a></li>
+                            @endforeach
                         </ul>
-                    </div>
+                    </div> -->
                     <div class="latstBlogs borderLines">
                         <h6 class="blue sideBarCommon-head">Latest Blogs</h6>
 
+                        @foreach($latestBlogs as $blog)
                         <div class="d-flex latBlogflex my-3">
                             <div class="ltb-Img">
-                                <img src="images/rpcImg.png" alt="" class="w-100">
+                                <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}" class="w-100">
                             </div>
                             <div class="right">
                                 <h5 class="blue ltsBlogTitle">
-                                    <a href="#" class="blue">Why to Outsource Compliance Services to a Professional?</a>   </h5>
+                                    <a href="{{ url('blog/' . $blog->slug) }}" class="blue">{{ $blog->title }}</a>
+                                </h5>
                                 <div class="prBlog-date grey py-1">
-                                    14, june, 2022 
+                                    {{ $blog->created_at->format('d, F, Y') }}
                                 </div>
                             </div>
                         </div>
+                        @endforeach
 
-                        <div class="d-flex latBlogflex my-3">
-                            <div class="ltb-Img">
-                                <img src="images/rpcImg.png" alt="" class="w-100">
-                            </div>
-                            <div class="right">
-                                <h5 class="blue ltsBlogTitle">
-                                    <a href="#" class="blue">Why to Outsource Compliance Services to a Professional?</a>   </h5>
-                                <div class="prBlog-date grey py-1">
-                                    14, june, 2022 
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex latBlogflex my-3">
-                            <div class="ltb-Img">
-                                <img src="images/rpcImg.png" alt="" class="w-100">
-                            </div>
-                            <div class="right">
-                                <h5 class="blue ltsBlogTitle">
-                                    <a href="#" class="blue">Why to Outsource Compliance Services to a Professional?</a>   </h5>
-                                <div class="prBlog-date grey py-1">
-                                    14, june, 2022 
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- <div class="tags borderLines">

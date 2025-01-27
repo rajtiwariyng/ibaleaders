@@ -51,6 +51,18 @@
             </a>
           </li> -->
           <li class="nav-item">
+            <a href="{{ route('admin.permissions.index') }}" class="nav-link {{ Request::is('admin/permissions/index') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Manage Permissions</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('admin.roles.index') }}" class="nav-link {{ Request::is('admin/roles/index') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Manage Roles</p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ route('admin.frontedUsers.list') }}" class="nav-link {{ Request::is('admin/users') ? 'active' : '' }}">
               <i class="nav-icon fas fa-th"></i>
               <p>Front User List</p>

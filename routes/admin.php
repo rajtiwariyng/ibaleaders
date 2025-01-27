@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\AdminEventController;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RolesController;
 use Spatie\Permission\Models\Role;
 
 Route::middleware(['admin_guest'])->prefix('/admin/')->name('admin.')->group(function(){
@@ -64,6 +66,21 @@ Route::middleware(['admin_auth:admin,superadmin'])->prefix('/admin/')->name('adm
     Route::post('categories/{category}/status', [CategoryController::class, 'changeStatus'])->name('categories.changeStatus');
     Route::get('categories/trashed', [CategoryController::class, 'trashed'])->name('categories.trashed');
     Route::post('categories/restore/{id}', [CategoryController::class, 'restore'])->name('categories.restore');
+    
+    //permissions route
+    Route::get('permissions/create', [PermissionController::class,'create'])->name('permissions.create');
+    Route::post('permissions', [PermissionController::class,'store'])->name('permissions.store');
+    Route::post('permissions/{id}', [PermissionController::class,'update'])->name('permissions.update');
+    Route::get('permissions/list', [PermissionController::class,'index'])->name('permissions.index');
+    Route::get('permissions/{id}/edit', [PermissionController::class,'edit'])->name('permissions.edit');
+    Route::delete('permissions/{id}', [PermissionController::class,'destroy'])->name('permissions.destroy');
+    //Roles route
+    Route::get('roles/create', [RolesController::class,'create'])->name('roles.create');
+    Route::post('roles', [RolesController::class,'store'])->name('roles.store');
+    Route::post('roles/{id}', [RolesController::class,'update'])->name('roles.update');
+    Route::get('roles/list', [RolesController::class,'index'])->name('roles.index');
+    Route::get('roles/{id}/edit', [RolesController::class,'edit'])->name('roles.edit');
+    Route::delete('roles/{id}', [RolesController::class,'destroy'])->name('roles.destroy');
 
 });
 

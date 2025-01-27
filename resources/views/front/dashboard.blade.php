@@ -26,7 +26,7 @@
                 <p class="mb-0"><strong>Renewal Due Date: 01/04/2025</strong></p>
               </div>
               <div class="table-responsive mt-3">
-                <table class="table">
+                <table class="table table-bordered">
                   <thead>
                     <tr>
                       <th></th>
