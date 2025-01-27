@@ -10,30 +10,30 @@
                  @method('POST')
                   <div class="mb-3">
                       <label>Phone Number Show</label>
-                      <input type="radio" class="form-control" value="1" id="phoneshow1" name="phoneshow" {{($privacysettings->phoneshow==1)?"checked":""}} >
+                      <input type="radio" class="form-control" value="1" id="phoneshow1" name="phoneshow" {{ (isset($privacysettings) && $privacysettings->phoneshow == 1) ? "checked" : "" }} >
                       <label for="phoneshow1">Yes</label>
-                      <input type="radio" class="form-control" value="0" id="phoneshow2" name="phoneshow" {{($privacysettings->phoneshow==0)?"checked":""}}>
+                      <input type="radio" class="form-control" value="0" id="phoneshow2" name="phoneshow" {{ (isset($privacysettings) && $privacysettings->phoneshow == 0) ? "checked" : "" }}>
                       <label for="phoneshow2">No</label>
                   </div>
                   <div class="mb-3">
                       <label>Email Show</label>
-                      <input type="radio" class="form-control" value="1" id="emailshow1" name="emailshow" {{($privacysettings->emailshow==1)?"checked":""}}>
+                      <input type="radio" class="form-control" value="1" id="emailshow1" name="emailshow" {{ ($privacysettings?->emailshow == 1) ? "checked" : "" }}>
                       <label for="emailshow1">Yes</label>
-                      <input type="radio" class="form-control" value="0" id="emailshow2" name="emailshow" {{($privacysettings->emailshow==0)?"checked":""}}>
+                      <input type="radio" class="form-control" value="0" id="emailshow2" name="emailshow" {{ ($privacysettings?->emailshow == 0) ? "checked" : "" }}>
                       <label for="emailshow2">No</label>
                   </div>
                   <div class="mb-3">
                       <label>Allow Add Testimonial</label>
-                      <input type="radio" class="form-control" value="1" id="addtestimonial1" name="addtestimonial" {{($privacysettings->addtestimonial==1)?"checked":""}}>
+                      <input type="radio" class="form-control" value="1" id="addtestimonial1" name="addtestimonial" {{ ($privacysettings?->addtestimonial == 1) ? "checked" : "" }}>
                       <label for="addtestimonial1">Yes</label>
-                      <input type="radio" class="form-control" value="0" id="addtestimonial2" name="addtestimonial" {{($privacysettings->addtestimonial==0)?"checked":""}}>
+                      <input type="radio" class="form-control" value="0" id="addtestimonial2" name="addtestimonial" {{ ($privacysettings?->addtestimonial == 0) ? "checked" : "" }}>
                       <label for="addtestimonial2">No</label>
                   </div>
                   <div class="mb-3">
                       <label>Show Post</label>
-                      <input type="radio" class="form-control" value="1" id="postshow1" name="postshow" {{($privacysettings->postshow==1)?"checked":""}}>
+                      <input type="radio" class="form-control" value="1" id="postshow1" name="postshow" {{($privacysettings?->postshow==1)?"checked":""}}>
                       <label for="postshow1">Yes</label>
-                      <input type="radio" class="form-control" value="0" id="postshow2" name="postshow" {{($privacysettings->postshow==0)?"checked":""}}>
+                      <input type="radio" class="form-control" value="0" id="postshow2" name="postshow" {{($privacysettings?->postshow==0)?"checked":""}}>
                       <label for="postshow2">No</label>
                   </div>
 
