@@ -225,7 +225,7 @@ class FrontendLoginController extends Controller
         $users = User::role('user') // Use Spatie Permission to filter users with "user" role
             ->where('name', 'LIKE', '%' . $query . '%')
             ->take(5)
-            ->get(['name','type']); // Select only the name field for lighter response
+            ->get(); // Select only the name field for lighter response
 
         return response()->json($users);
     }

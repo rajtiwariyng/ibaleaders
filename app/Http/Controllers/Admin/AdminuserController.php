@@ -25,7 +25,7 @@ class AdminuserController extends Controller
     public function create()
     {
        $roles = Role::where('guard_name', 'admin')
-             ->whereIn('name', ['admin', 'superadmin', 'Data Entry Operator', 'Customer Support Teams']) // Filter by role names
+             //->whereIn('name', ['admin', 'superadmin', 'Data Entry Operator', 'Customer Support Teams']) // Filter by role names
              ->paginate(50);
         return view('admin.users.create', compact('roles'));
     }

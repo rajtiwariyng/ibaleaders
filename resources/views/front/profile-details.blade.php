@@ -60,7 +60,7 @@
                   </li>
                 </ul>
               </div>
-              <div class="mt-4">
+              <div class="mt-5">
                 <h4 class="blue poppins-bold">Edit Profile</h4>
                 <form action="" class="pt-3 profile-form">
                   <div class="row">

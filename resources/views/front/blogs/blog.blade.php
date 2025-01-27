@@ -14,7 +14,7 @@
                         </div>
                         <div class="p-3">
                             <div class="prBlog-date grey pb-2">
-                                {{ $blog->published_at ? $blog->published_at->format('d, F, Y') : 'Date not available' }}
+                                {{ $blog->created_at ? $blog->created_at->format('d, F, Y') : 'Date not available' }}
                             </div>
                             <a href="{{ route('blog.details', $blog->id) }}">
                                 <h3 class="prBlogTitle blue m-0">{{ $blog->title ?? 'Untitled Blog' }}</h3>

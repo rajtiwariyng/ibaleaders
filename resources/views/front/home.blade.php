@@ -73,7 +73,7 @@
                 <p class="mb-0"><strong>Renewal Due Date: 01/04/2025</strong></p>
               </div>
               <div class="table-responsive mt-3">
-                <table class="table">
+                <table class="table table-bordered">
                   <thead>
                     <tr>
                       <th></th>
@@ -112,11 +112,6 @@
                       <td>{{count($onereferralslists)}}</td>
                       <td>{{count($onereferralslists)}}</td>
                     </tr>
-                    <!-- <tr>
-                      <td>CEUs:</td>
-                      <td>13</td>
-                      <td>22</td>
-                    </tr> -->
                   </tbody>
                 </table>
               </div>
@@ -155,7 +150,29 @@
               <a class="d-flex align-items-center text-color">
                 <img src="{{ asset('front-assets/icons/React.png') }}" alt="" class="pe-2">
                 React {{$post->reactcount}}
+                <div class="emoji-hover">
+                    <div class="emoji-container">
+                      <picture>
+                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f603/512.webp" type="image/webp">
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f603/512.gif" alt="😃" width="40" height="32">
+                      </picture>
+                      <picture>
+                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f929/512.webp" type="image/webp">
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f929/512.gif" alt="🤩" width="40" height="64">
+                      </picture>
+                      <picture>
+                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/2764/512.webp" type="image/webp">
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764/512.gif" alt="❤️" width="40" height="40">
+                      </picture>
+                      <picture>
+                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d/512.webp" type="image/webp">
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d/512.gif" alt="👍" width="40" height="64">
+                      </picture>
+                      
+                    </div>
+                  </div>
               </a>
+              
               <div id="postreactionmsg{{$post->id}}"></div>
               <span onclick="postReactFun('{{$post->id}}','like')" style="cursor: pointer;"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
               <span onclick="postReactFun('{{$post->id}}','dislike')" style="cursor: pointer;"><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>
@@ -265,6 +282,20 @@
                 </div>
                 
               </div>
+
+              <div class="whiteBox bg-white p-4 mt-4">
+                <h6 class="blue poppins-bold fs-6 fw-600">Profile Optimisation </h6>
+                <p class="fs-7">Complete your profile to optimize your network</p>
+                <div class="progress-data">
+                  <div class="progress-dial" id="progressDial" data-value="40">
+                    
+                  </div>
+                      <span class="marks-line"></span>
+                    </div>
+                </div>
+                
+              </div>
+
             </div>
           </div>
         </div>
@@ -728,13 +759,12 @@
             </div>
             
             <div class="col-md-4 form-group">
-              
               <button type="button" onclick="trackSubmitFun()" class="btn btn-primary">
-                                Search
-                            </button>
+                  Search
+              </button>
             </div>
-        </form>
-      </div>
+          </form>
+        </div>
       <div class="table-responsive-md">
           <table class="table table-hover">
             <thead class="table-dark">

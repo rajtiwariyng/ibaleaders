@@ -97,7 +97,11 @@ Route::post('/updateSettings', 'MessagesController@updateSettings')->name('avata
 Route::post('/setActiveStatus', 'MessagesController@setActiveStatus')->name('activeStatus.set');
 
 
-
+Route::name('group-chat.')->prefix('group-chat')->group(function () {
+    Route::post('/create', 'MessagesController@createGroupChat')->name('create');
+    Route::post('/delete', 'MessagesController@deleteGroupChat')->name('delete');
+    Route::post('/leave', 'MessagesController@leaveGroupChat')->name('leave');
+});    
 
 
 

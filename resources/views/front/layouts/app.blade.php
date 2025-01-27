@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="{{ asset('front-assets/vendor/slick/slick.css') }}">
   <link rel="stylesheet" href="{{ asset('front-assets/vendor/slick/slick-theme.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('front-assets/css/style.css') }}">
   <link rel="stylesheet" href="{{ asset('front-assets/css/responsive.css') }}">
   <title>IBA</title>
@@ -75,6 +76,7 @@
   <script src="{{ asset('front-assets/vendor/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('front-assets/vendor/slick/slick.min.js') }}"></script>
   <script src="{{ asset('front-assets/vendor/js/wow.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.1.1/progressbar.min.js"></script>
   <script src="{{ asset('front-assets/js/main.js') }}"></script>
   @yield('customJs')
   <script>
