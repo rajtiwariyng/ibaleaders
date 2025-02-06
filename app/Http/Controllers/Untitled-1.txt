@@ -1,2 +1,0 @@
-git config --global user.email "eati.scitm@gmail.com"
-  git config --global user.name "eatigithubpro"

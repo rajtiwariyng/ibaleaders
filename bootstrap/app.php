@@ -7,8 +7,6 @@ use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-//use Spatie\Permission\Middlewares\Role;
-//use Spatie\Permission\Middlewares\RoleMiddleware;
 
 
 return Application::configure(basePath: dirname(__DIR__))

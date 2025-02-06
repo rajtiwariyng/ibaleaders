@@ -24,7 +24,16 @@ use Illuminate\Support\Facades\URL;
 use App\Models\Notifications;
 use App\Models\Postreact;
 use App\Models\Privacysettings;
-
+use App\Models\Alliance_roster_report;
+use App\Models\Leadership_report;
+use App\Models\Event_report;
+use App\Models\Leadership_dues_report;
+use App\Models\Vacant_category;
+use App\Models\Sponsor_report;
+use App\Models\Vp_report;
+use App\Models\Visitor_report;
+use App\Models\Leadership_victory_program;
+use App\Models\Knowledge_partner_report;
 
 class FrontendLoginController extends Controller
 {
@@ -151,16 +160,23 @@ class FrontendLoginController extends Controller
 
         $referralslist = $user->referralslist;
         $tyfcbreferralslist = $user->tyfcbreferralslist;
-        // $referralslist=Referrals::with('user')->with('received')->get();
-        // echo "<pre>";
-        // // echo $sum = array_sum($tyfcbreferralslist->amount);
-        // print_r($tyfcbreferralslist);
-        // exit;
         $receivedReferralslist = $user->receivedReferralslist;
         $onereferralslists = $user->OneReferralslist;
         $tyfcbreferralstotal = $user->tyfcbreferralstotal;
         $visitorlist = $user->visitorlist;
-        return view('front.pages.reports', compact('referralslist', 'tyfcbreferralslist', 'receivedReferralslist','onereferralslists','tyfcbreferralstotal','visitorlist'));
+        $alliance_roster_report = Alliance_roster_report::with('user')->get();
+        $leadership_report = Leadership_report::with('user')->get();
+        $event_report = Event_report::with('user')->get();
+        $leadership_dues_report=Leadership_dues_report::with('user')->get();
+        $vacant_category=Vacant_category::with('user')->get();
+        $sponsor_report=Sponsor_report::with('user')->get();
+        $vp_report=Vp_report::with('user')->get();
+        $visitor_report=Visitor_report::with('user')->get();
+        $leadership_victory_program=Leadership_victory_program::with('user')->get();
+        $knowledge_partner_report=Knowledge_partner_report::with('user')->get();
+        // print_r($alliance_roster_report);
+
+        return view('front.pages.reports', compact('referralslist', 'tyfcbreferralslist', 'receivedReferralslist','onereferralslists','tyfcbreferralstotal','visitorlist','alliance_roster_report','leadership_report','event_report','leadership_dues_report','vacant_category','sponsor_report','vp_report','visitor_report','leadership_victory_program','knowledge_partner_report'));
     }
 
     public function aboutus()

@@ -82,5 +82,17 @@ Route::middleware(['admin_auth:admin,superadmin'])->prefix('/admin/')->name('adm
     Route::get('roles/{id}/edit', [RolesController::class,'edit'])->name('roles.edit');
     Route::delete('roles/{id}', [RolesController::class,'destroy'])->name('roles.destroy');
 
+    Route::get('report/import', [AdminuserController::class, 'reportImport'])->name('report.import');
+    Route::post('report/importpost', [AdminuserController::class, 'reportImportPost'])->name('report.import.post');
+    Route::post('report/importpost2', [AdminuserController::class, 'reportImportPost2'])->name('report2.import.post');
+    Route::post('report/importpost3', [AdminuserController::class, 'reportImportPost3'])->name('report3.import.post');
+    Route::post('report/importpost4', [AdminuserController::class, 'reportImportPost4'])->name('report4.import.post');
+    Route::post('report/importpost5', [AdminuserController::class, 'reportImportPost5'])->name('report5.import.post');
+    Route::post('report/importpost6', [AdminuserController::class, 'reportImportPost6'])->name('report6.import.post');
+    Route::post('report/importpost7', [AdminuserController::class, 'reportImportPost7'])->name('report7.import.post');
+    Route::post('report/importpost8', [AdminuserController::class, 'reportImportPost8'])->name('report8.import.post');
+    Route::post('report/importpost9', [AdminuserController::class, 'reportImportPost9'])->name('report9.import.post');
+    Route::post('report/importpost10', [AdminuserController::class, 'reportImportPost10'])->name('report10.import.post');
+
 });
 

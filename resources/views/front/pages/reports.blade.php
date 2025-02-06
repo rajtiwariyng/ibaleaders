@@ -91,7 +91,7 @@
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Referrals Given Report
+                  Alliance Roster Reports
                   </button>
                   
                 </h2>
@@ -101,16 +101,16 @@
                   <div class="tracksubmitdiv">
                     <form id="tracksubmitform" class="vrForm pt-4 row">
                       <div class="col-md-4 form-group">
-                        <input type="datetime-local" name="startdate" id="startdate"   class="form-control" placeholder="Start Date" required>
+                        <input type="datetime-local" name="startdatealliance" id="startdatealliance"   class="form-control" placeholder="Start Date" required>
                         <div id="error-startdate"></div>
                       </div>
                       <div class="col-md-4 form-group">
-                        <input type="datetime-local" name="enddate" id="enddate"   class="form-control" placeholder="End Start" required>
+                        <input type="datetime-local" name="enddatealliance" id="enddatealliance"   class="form-control" placeholder="End Start" required>
                         <div id="error-enddate"></div>
                       </div>
                       
                       <div class="col-md-4 form-group">
-                        <button type="button" onclick="trackSubmitFun()" class="btn btn-primary bg-blue">
+                        <button type="button" onclick="AllianceRosterReportsFun()" class="btn btn-primary bg-blue">
                             Search
                         </button>
                       </div>
@@ -121,31 +121,39 @@
                       <thead class="table-dark">
                         <tr>
                           <th scope="col">Date</th>
-                          <th scope="col">Referral To</th>
-                          <th scope="col">Referral By</th>
-                          <th scope="col">Type</th>
-                          <th scope="col">Status</th>
-                          <th scope="col">Email</th>
-                          <th scope="col">Phone</th>
-                          <th scope="col">Comments</th>                
+                          <th scope="col">Leader's Name</th>
+                          <th scope="col">Category</th>
+                          <th scope="col">Company Name</th>
+                          <th scope="col">LVP Score</th>
+                          <th scope="col">RG</th>
+                          <th scope="col">RR</th> 
+                          <th scope="col">V</th>
+                          <th scope="col">GBR</th>
+                          <th scope="col">BG</th>                           
+                          <th scope="col">Status</th>               
                         </tr>
                       </thead>
-                      @forelse($referralslist as $referrals) 
+                      <tbody id="alliancerosterreport">
+                      @forelse($alliance_roster_report as $alliance_roster_reportlist) 
                       <tr>
-                        <th scope="row"><?php echo date("d M Y", strtotime($referrals->created_at));?></th>
-                        <td>{{$referrals->received->name}}</td>
-                        <td>{{$referrals->user->name}}</td>
-                        <td>{{$referrals->type}}</td>
-                        <td>{{$referrals->referralstatus==1?'Inside':'Outside'}}</td>
-                        <td>{{$referrals->email}}</td>
-                        <td>{{$referrals->telephone}}</td>
-                        <td>{{$referrals->comments}}</td>
+                        <th scope="row"><?php echo date("d M Y", strtotime($alliance_roster_reportlist->start_date));?></th>
+                        <td>{{$alliance_roster_reportlist->leader_name}}</td>
+                        <td>{{$alliance_roster_reportlist->category}}</td>                        
+                        <td>{{$alliance_roster_reportlist->company_name}}</td>
+                        <td>{{$alliance_roster_reportlist->lvp_score}}</td>
+                        <td>{{$alliance_roster_reportlist->rg}}</td>
+                        <td>{{$alliance_roster_reportlist->rr}}</td>
+                        <td>{{$alliance_roster_reportlist->v}}</td>
+                        <td>{{$alliance_roster_reportlist->gbr}}</td>                        
+                        <td>{{$alliance_roster_reportlist->bg}}</td>
+                        <td>{{$alliance_roster_reportlist->status==1?'Active':'Deactive'}}</td>
                       </tr>
                       @empty
                       <tr>
                       <td colspa='8'>No data</td>
                       </tr>
                       @endforelse
+                      </tbody>
                       
                       
                     </table>
@@ -158,7 +166,7 @@
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  Referrals Received Report
+                  Leadership Report
                   </button>
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#reportAccordion">
@@ -168,23 +176,40 @@
                       <thead class="table-dark">
                         <tr>
                           <th scope="col">Date</th>
-                          <th scope="col">Referral Name</th>
-                          <th scope="col">Type</th>
-                          <th scope="col">Status</th>
-                          <th scope="col">Email</th>
-                          <th scope="col">Phone</th>
-                          <th scope="col">Comments</th>                
+                          <th scope="col">Leader's Name</th>
+                          <th scope="col">P</th>
+                          <th scope="col">A</th>
+                          <th scope="col">L</th>
+                          <th scope="col">M</th>
+                          <th scope="col">S</th>
+                          <th scope="col">RG</th>
+                          <th scope="col">RR</th>
+                          <th scope="col">BG</th>
+                          <th scope="col">GBR</th>
+                          <th scope="col">V</th>
+                          <th scope="col">DM</th>
+                          <th scope="col">Events</th>
+                          <th scope="col">T</th>
+                          <th scope="col">Status</th>               
                         </tr>
                       </thead>
-                      @forelse($receivedReferralslist as $getreferrals) 
+                      @forelse($leadership_report as $leadership_reportlist) 
                       <tr>
-                        <th scope="row"><?php echo date("d M Y", strtotime($getreferrals->created_at));?></th>
-                        <td>{{$getreferrals->user->name}}</td>
-                        <td>{{$getreferrals->type}}</td>
-                        <td>{{$getreferrals->referralstatus==1?'Inside':'Outside'}}</td>
-                        <td>{{$getreferrals->email}}</td>
-                        <td>{{$getreferrals->telephone}}</td>
-                        <td>{{$getreferrals->comments}}</td>
+                        <th scope="row"><?php echo date("d M Y", strtotime($leadership_reportlist->start_date));?></th>
+                        <td>{{$leadership_reportlist->p}}</td>
+                        <td>{{$leadership_reportlist->a}}</td>
+                        <td>{{$leadership_reportlist->l}}</td>
+                        <td>{{$leadership_reportlist->m}}</td>
+                        <td>{{$leadership_reportlist->s}}</td>
+                        <td>{{$leadership_reportlist->rg}}</td>
+                        <td>{{$leadership_reportlist->rr}}</td>
+                        <td>{{$leadership_reportlist->bg}}</td>
+                        <td>{{$leadership_reportlist->gbr}}</td>
+                        <td>{{$leadership_reportlist->v}}</td>
+                        <td>{{$leadership_reportlist->dm}}</td>
+                        <td>{{$leadership_reportlist->events}}</td>
+                        <td>{{$leadership_reportlist->t}}</td>
+                        <td>{{$leadership_reportlist->status==1?'Inside':'Outside'}}</td>
                       </tr>
                       @empty
                       <tr>
@@ -203,7 +228,7 @@
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingThree">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                  Thank You Referrals Report
+                  Event Report
                   </button>
                 </h2>
                 <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#reportAccordion">
@@ -213,37 +238,385 @@
                         <thead class="table-dark">
                           <tr>
                             <th scope="col">Date</th>
-                            <th scope="col">Thank you to</th>
-                            <th scope="col">Referral By</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Business Type</th>
-                            <th scope="col">Types</th>
-                            <th scope="col">Comments</th>                
+                            <th scope="col">Leader's Name</th>
+                            <th scope="col">Date of Event</th>
+                            <th scope="col">Event Name</th>
+                            <th scope="col">Email ID</th>
+                            <th scope="col">Status</th>               
                           </tr>
                         </thead>
-                        @php
-                            $subtotal = 0;
-                            @$recievesubtotal=0;
-                        @endphp
-                      
-                        @forelse($tyfcbreferralslist as $tyfcbreferrals) 
+                        @forelse($event_report as $event_reportlist) 
                         <tr>
-                          <th scope="row"><?php echo date("d M Y", strtotime($tyfcbreferrals->created_at));?></th>
-                          <td>{{$tyfcbreferrals->received->name}}</td>
-                          <td>{{$tyfcbreferrals->user->name}}</td>
-                          <td>{{$tyfcbreferrals->amount}}</td>
-                          <td>{{$tyfcbreferrals->businesstype}}</td>
-                          <td>{{$tyfcbreferrals->type}}</td>
-                          <td>{{$tyfcbreferrals->comments}}</td>
+                          <th scope="row"><?php echo date("d M Y", strtotime($event_reportlist->start_date));?></th>
+                          <td>{{$event_reportlist->leader_name}}</td>
+                          <td>{{$event_reportlist->date_of_event}}</td>
+                          <td>{{$event_reportlist->event_name}}</td>
+                          <td>{{$event_reportlist->email_id}}</td>
+                          <td>{{$event_reportlist->status==1?'Inside':'Outside'}}</td>
+                        </tr>                       
+                        @empty
+                        <tr>
+                        <td colspa='8'>No data</td>
                         </tr>
-                        @php
-                            $subtotal += (float) $tyfcbreferrals->amount;
-                        @endphp
-                        @if($tyfcbreferrals->received->id==auth()->user()->id)
-                        @php
-                        @$recievesubtotal += (float) $tyfcbreferrals->amount;
-                        @endphp
-                        @endif
+                        @endforelse
+                        
+                        
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Member Event Report -->
+              <!-- <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  Event Report
+                  </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#reportAccordion">
+                  <div class="accordion-body">
+                  <div class="table-responsive-md">
+                      <table class="table table-hover">
+                        <thead class="table-dark">
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Leader's Name</th>
+                            <th scope="col">Date of Event</th>
+                            <th scope="col">Event Name</th>
+                            <th scope="col">Email ID</th>
+                            <th scope="col">Status</th>               
+                          </tr>
+                        </thead>
+                        @forelse($event_report as $event_reportlist) 
+                        <tr>
+                          <th scope="row"><?php echo date("d M Y", strtotime($event_reportlist->start_date));?></th>
+                          <td>{{$event_reportlist->leader_name}}</td>
+                          <td>{{$event_reportlist->date_of_event}}</td>
+                          <td>{{$event_reportlist->event_name}}</td>
+                          <td>{{$event_reportlist->email_id}}</td>
+                          <td>{{$event_reportlist->status==1?'Inside':'Outside'}}</td>
+                        </tr>                       
+                        @empty
+                        <tr>
+                        <td colspa='8'>No data</td>
+                        </tr>
+                        @endforelse
+                        
+                        
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+              <!-- Member Event Report -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  Leadership Dues Report
+                  </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#reportAccordion">
+                  <div class="accordion-body">
+                  <div class="table-responsive-md">
+                      <table class="table table-hover">
+                        <thead class="table-dark">
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Leader's Name</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Membership Status</th>
+                            <th scope="col">Renewal Date</th>
+                            <th scope="col">Status</th>               
+                          </tr>
+                        </thead>
+                        @forelse($leadership_dues_report as $leadership_dues_reportlist) 
+                        <tr>
+                          <th scope="row"><?php echo date("d M Y", strtotime($leadership_dues_reportlist->start_date));?></th>
+                          <td>{{$leadership_dues_reportlist->leader_name}}</td>
+                          <td>{{$leadership_dues_reportlist->category}}</td>
+                          <td>{{$leadership_dues_reportlist->role}}</td>
+                          <td>{{$leadership_dues_reportlist->membership_status}}</td>
+                          <td>{{$leadership_dues_reportlist->renewal_date}}</td>
+                          <td>{{$leadership_dues_reportlist->status==1?'Inside':'Outside'}}</td>
+                        </tr>                       
+                        @empty
+                        <tr>
+                        <td colspa='8'>No data</td>
+                        </tr>
+                        @endforelse
+                        
+                        
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Member Event Report -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                  Vacant Categories
+                  </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#reportAccordion">
+                  <div class="accordion-body">
+                  <div class="table-responsive-md">
+                      <table class="table table-hover">
+                        <thead class="table-dark">
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Category Name</th>
+                            <th scope="col">Status</th>               
+                          </tr>
+                        </thead>
+                        @forelse($vacant_category as $vacant_categorylist) 
+                        <tr>
+                          <th scope="row"><?php echo date("d M Y", strtotime($vacant_categorylist->start_date));?></th>
+                          <td>{{$vacant_categorylist->category}}</td>
+                          <td>{{$vacant_categorylist->status==1?'Inside':'Outside'}}</td>
+                        </tr>                       
+                        @empty
+                        <tr>
+                        <td colspa='8'>No data</td>
+                        </tr>
+                        @endforelse
+                        
+                        
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+              <!-- Member Event Report -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSix">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                  Sponsor Report
+                  </button>
+                </h2>
+                <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#reportAccordion">
+                  <div class="accordion-body">
+                  <div class="table-responsive-md">
+                      <table class="table table-hover">
+                        <thead class="table-dark">
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Sponsor Leader Name</th>
+                            <th scope="col">Total leaders created</th>               
+                            <th scope="col">New Leader Name</th> 
+                            <th scope="col">Alliance Name</th> 
+                            <th scope="col">Application Date</th> 
+                            <th scope="col">Status</th> 
+                          </tr>
+                        </thead>
+                        @forelse($sponsor_report as $sponsor_reportlist) 
+                        <tr>
+                          <th scope="row"><?php echo date("d M Y", strtotime($sponsor_reportlist->start_date));?></th>
+                          <td>{{$sponsor_reportlist->sponsor_leader_name}}</td>
+                          <td>{{$sponsor_reportlist->total_leaders_created}}</td>
+                          <td>{{$sponsor_reportlist->new_leader_name}}</td>
+                          <td>{{$sponsor_reportlist->alliance_name}}</td>
+                          <td>{{$sponsor_reportlist->application_date}}</td>
+                          <td>{{$sponsor_reportlist->status==1?'Inside':'Outside'}}</td>
+                        </tr>                       
+                        @empty
+                        <tr>
+                        <td colspa='8'>No data</td>
+                        </tr>
+                        @endforelse
+                        
+                        
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+               <!-- Member Event Report -->
+               <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSeven">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                  VP Report
+                  </button>
+                </h2>
+                <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#reportAccordion">
+                  <div class="accordion-body">
+                  <div class="table-responsive-md">
+                      <table class="table table-hover">
+                        <thead class="table-dark">
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Leader's Name</th>
+                            <th scope="col">Renewal Date</th>               
+                            <th scope="col">RG</th> 
+                            <th scope="col">RR</th> 
+                            <th scope="col">BG</th> 
+                            <th scope="col">GBR</th>                
+                            <th scope="col">V</th> 
+                            <th scope="col">DM</th> 
+                            <th scope="col">T</th> 
+                            <th scope="col">Status</th> 
+                          </tr>
+                        </thead>
+                        @forelse($vp_report as $vp_reportlist) 
+                        <tr>
+                          <th scope="row"><?php echo date("d M Y", strtotime($vp_reportlist->start_date));?></th>
+                          <td>{{$vp_reportlist->leader_name}}</td>
+                          <td>{{$vp_reportlist->renewal_date}}</td>
+                          <td>{{$vp_reportlist->rg}}</td>
+                          <td>{{$vp_reportlist->rr}}</td>
+                          <td>{{$vp_reportlist->bg}}</td>
+                          <td>{{$vp_reportlist->gbr}}</td>
+                          <td>{{$vp_reportlist->v}}</td>
+                          <td>{{$vp_reportlist->dm}}</td>
+                          <td>{{$vp_reportlist->t}}</td>
+                          <td>{{$vp_reportlist->status==1?'Inside':'Outside'}}</td>
+                        </tr>                       
+                        @empty
+                        <tr>
+                        <td colspa='8'>No data</td>
+                        </tr>
+                        @endforelse
+                        
+                        
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              
+               <!-- Member Event Report -->
+               <div class="accordion-item">
+                <h2 class="accordion-header" id="headingEight">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                  Visitor Report
+                  </button>
+                </h2>
+                <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#reportAccordion">
+                  <div class="accordion-body">
+                  <div class="table-responsive-md">
+                      <table class="table table-hover">
+                        <thead class="table-dark">
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Visitor Name</th>
+                            <th scope="col">Company Name</th>               
+                            <th scope="col">Category</th> 
+                            <th scope="col">Visit Date</th> 
+                            <th scope="col">Invited By</th>
+                            <th scope="col">Status</th> 
+                          </tr>
+                        </thead>
+                        @forelse($visitor_report as $visitor_reportlist) 
+                        <tr>
+                          <th scope="row"><?php echo date("d M Y", strtotime($visitor_reportlist->start_date));?></th>
+                          <td>{{$visitor_reportlist->visitor_name}}</td>
+                          <td>{{$visitor_reportlist->company_name}}</td>
+                          <td>{{$visitor_reportlist->category}}</td>
+                          <td>{{$visitor_reportlist->visit_date}}</td>
+                          <td>{{$visitor_reportlist->invited_by}}</td>
+                          <td>{{$visitor_reportlist->status==1?'Inside':'Outside'}}</td>
+                        </tr>                       
+                        @empty
+                        <tr>
+                        <td colspa='8'>No data</td>
+                        </tr>
+                        @endforelse
+                        
+                        
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Member Event Report -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingNine">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                  Leadership Victory Program
+                  </button>
+                </h2>
+                <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine" data-bs-parent="#reportAccordion">
+                  <div class="accordion-body">
+                  <div class="table-responsive-md">
+                      <table class="table table-hover">
+                        <thead class="table-dark">
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Company Name</th>               
+                            <th scope="col">Category</th>
+                            <th scope="col">Avg referrals</th>
+                            <th scope="col">Avg visitors</th>
+                            <th scope="col">Business given</th>
+                            <th scope="col">Absenteeism</th>
+                            <th scope="col">Events attended</th>
+                            <th scope="col">Testimonial</th>
+                            <th scope="col">Late</th>
+                            <th scope="col">LVP Score</th>
+                            <th scope="col">Status</th> 
+                          </tr>
+                        </thead>
+                        @forelse($leadership_victory_program as $leadership_victory_programlist) 
+                        <tr>
+                          <th scope="row"><?php echo date("d M Y", strtotime($leadership_victory_programlist->start_date));?></th>
+                          <td>{{$leadership_victory_programlist->company_name}}</td>
+                          <td>{{$leadership_victory_programlist->category}}</td>
+                          <td>{{$leadership_victory_programlist->avg_referrals}}</td>
+                          <td>{{$leadership_victory_programlist->avg_visitors}}</td>                          
+                          <td>{{$leadership_victory_programlist->business_given}}</td>
+                          <td>{{$leadership_victory_programlist->absenteeism}}</td>
+                          <td>{{$leadership_victory_programlist->events_attended}}</td>
+                          <td>{{$leadership_victory_programlist->testimonial}}</td>                          
+                          <td>{{$leadership_victory_programlist->late}}</td>
+                          <td>{{$leadership_victory_programlist->lvp_score}}</td>
+                          <td>{{$leadership_victory_programlist->status==1?'Inside':'Outside'}}</td>
+                        </tr>                       
+                        @empty
+                        <tr>
+                        <td colspa='8'>No data</td>
+                        </tr>
+                        @endforelse
+                        
+                        
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Member Event Report -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTen">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                  Knowledge Partner Report
+                  </button>
+                </h2>
+                <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#reportAccordion">
+                  <div class="accordion-body">
+                  <div class="table-responsive-md">
+                      <table class="table table-hover">
+                        <thead class="table-dark">
+                          <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Meeting Date</th>
+                            <th scope="col">Knowledge Partner Name</th>               
+                            <th scope="col">Meeting Agenda</th> 
+                            <th scope="col">Status</th> 
+                          </tr>
+                        </thead>
+                        @forelse($knowledge_partner_report as $knowledge_partner_reportlist) 
+                        <tr>
+                          <th scope="row"><?php echo date("d M Y", strtotime($knowledge_partner_reportlist->start_date));?></th>
+                          <td>{{$knowledge_partner_reportlist->meeting_date}}</td>
+                          <td>{{$knowledge_partner_reportlist->knowledge_partner_name}}</td>
+                          <td>{{$knowledge_partner_reportlist->meeting_agenda}}</td>
+                          <td>{{$knowledge_partner_reportlist->status==1?'Inside':'Outside'}}</td>
+                        </tr>                       
                         @empty
                         <tr>
                         <td colspa='8'>No data</td>
@@ -330,5 +703,52 @@
         },
       });
  
+
+      function AllianceRosterReportsFun(){
+      let startdate= $('#startdatealliance').val();
+        let enddate= $('#enddatealliance').val();
+      $.ajax({
+                url: "{{ route('user.track.search') }}?startdate="+startdate+"&enddate="+enddate,
+                method: "GET",
+                data: {  },
+                success: function(response) {
+                  console.log(response)
+                  var htmldata = '';
+                  if(response.data.length>0){
+                  for (var i = 0; i < response.data.length; i++) {
+                    htmldata += `<tr>
+                        <th scope="row">`+response.data.created_at+`</th>
+                        <td>`+response.data.user.name+`</td>
+                        <td>`+response.data.type+`</td>
+                        <td>`+response.data.type==1?"Inside":"Outside"+`</td>
+                        <td>`+response.data.email+`</td>
+                        <td>`+response.data.telephone+`</td>
+                        <td>`+response.data.comments+`</td>
+                      </tr>`;
+                  }
+                }
+                  else {
+                    htmldata += `<tr>
+            <td colspa='8'>No data</td>
+            </tr>`;
+                  }
+                  $('#submittrackdatadiv').html(htmldata);
+
+                    // $("#postreactionmsg"+postid).html(response.message)
+                },
+                error: function(xhr) {
+                // console.log(xhr)
+                // alert("test")
+                // $('#referralsuccessMsgPost').text(xhr.responseJSON.message).css('color', 'red').show();
+                if (xhr.responseJSON.errors) {
+                    let errors = xhr.responseJSON.errors;
+                    for (let field in errors) {
+                        console.log(field)
+                        $(`#error-${field}`).text(errors[field][0]);
+                    }
+                } 
+            }
+            });
+    }
   </script>
 @endsection
