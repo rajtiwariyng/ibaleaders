@@ -99,7 +99,7 @@
                 <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="tracksubmitdiv">
-                    <form id="tracksubmitform" class="vrForm pt-4 row">
+                    <form id="tracksubmitform" class="vrForm pt-4 row" style="display:none">
                       <div class="col-md-4 form-group">
                         <input type="datetime-local" name="startdatealliance" id="startdatealliance"   class="form-control" placeholder="Start Date" required>
                         <div id="error-startdate"></div>
