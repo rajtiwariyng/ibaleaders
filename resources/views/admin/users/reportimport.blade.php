@@ -22,6 +22,7 @@
                       <button type="submit">Import</button>
                     </div>
                   </div>
+                  <a href="{{ asset('admin-assets/dist/img/AllianceRosterReports.csv') }}" download> Download Sample</a>
               </form>
               <form action="{{ route('admin.report2.import.post') }}" method="POST" enctype="multipart/form-data">
                   @csrf
@@ -32,6 +33,7 @@
                       <button type="submit">Import</button>
                     </div>
                   </div>
+                  <a href="{{ asset('admin-assets/dist/img/LeadershipReport.csv') }}" download> Download Sample</a>
               </form>
               <form action="{{ route('admin.report3.import.post') }}" method="POST" enctype="multipart/form-data">
                   @csrf
@@ -42,6 +44,7 @@
                       <button type="submit">Import</button>
                     </div>
                   </div>
+                  <a href="{{ asset('admin-assets/dist/img/EventReport.csv') }}" download> Download Sample</a>
               </form>
               <form action="{{ route('admin.report4.import.post') }}" method="POST" enctype="multipart/form-data">
                   @csrf
@@ -52,6 +55,7 @@
                       <button type="submit">Import</button>
                     </div>
                   </div>
+                  <a href="{{ asset('admin-assets/dist/img/LeadershipDuesReport.csv') }}" download> Download Sample</a>
               </form>
               <form action="{{ route('admin.report5.import.post') }}" method="POST" enctype="multipart/form-data">
                   @csrf
@@ -62,6 +66,7 @@
                       <button type="submit">Import</button>
                     </div>
                   </div>
+                  <a href="{{ asset('admin-assets/dist/img/VacantCategories.csv') }}" download> Download Sample</a>
               </form>
               <form action="{{ route('admin.report6.import.post') }}" method="POST" enctype="multipart/form-data">
                   @csrf
@@ -72,6 +77,7 @@
                       <button type="submit">Import</button>
                     </div>
                   </div>
+                  <a href="{{ asset('admin-assets/dist/img/SponsorReport.csv') }}" download> Download Sample</a>
               </form>
               <form action="{{ route('admin.report7.import.post') }}" method="POST" enctype="multipart/form-data">
                   @csrf
@@ -82,6 +88,7 @@
                       <button type="submit">Import</button>
                     </div>
                   </div>
+                  <a href="{{ asset('admin-assets/dist/img/VPReport.csv') }}" download> Download Sample</a>
               </form>
               <form action="{{ route('admin.report8.import.post') }}" method="POST" enctype="multipart/form-data">
                   @csrf
@@ -92,6 +99,7 @@
                       <button type="submit">Import</button>
                     </div>
                   </div>
+                  <a href="{{ asset('admin-assets/dist/img/VisitorReport.csv') }}" download> Download Sample</a>
               </form>
               <form action="{{ route('admin.report9.import.post') }}" method="POST" enctype="multipart/form-data">
                   @csrf
@@ -102,6 +110,7 @@
                       <button type="submit">Import</button>
                     </div>
                   </div>
+                  <a href="{{ asset('admin-assets/dist/img/LeadershipVictoryProgram.csv') }}" download> Download Sample</a>
               </form>
               <form action="{{ route('admin.report10.import.post') }}" method="POST" enctype="multipart/form-data">
                   @csrf
@@ -112,6 +121,7 @@
                       <button type="submit">Import</button>
                     </div>
                   </div>
+                  <a href="{{ asset('admin-assets/dist/img/KnowledgePartnerReport.csv') }}" download> Download Sample</a>
               </form>
              
             </div>
