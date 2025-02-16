@@ -992,64 +992,64 @@
               
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualname" id="individualname" class="form-control" placeholder="Name" value="{{$individuals->individualname}}">
+              <input type="text" name="individualname" id="individualname" class="form-control" placeholder="Name" value="{{ (isset($individuals) && $individuals->individualname) ? $individuals->individualname:''}}">
               <div id="error-individualname" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualbusiness" id="individualbusiness" class="form-control" placeholder="Business Of" value="{{$individuals->individualbusiness}}">
+              <input type="text" name="individualbusiness" id="individualbusiness" class="form-control" placeholder="Business Of" value="{{ (isset($individuals) && $individuals->individualbusiness) ? $individuals->individualbusiness:''}}">
               <div id="error-individualbusiness" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualachievement" id="individualachievement" class="form-control" placeholder="Achievement Of" value="{{$individuals->individualachievement}}">
+              <input type="text" name="individualachievement" id="individualachievement" class="form-control" placeholder="Achievement Of" value="{{ (isset($individuals) && $individuals->individualachievement) ? $individuals->individualachievement:''}}">
               <div id="error-individualachievement" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualreferrals" id="individualreferrals" class="form-control" placeholder="referrals" value="{{$individuals->individualreferrals}}">
+              <input type="text" name="individualreferrals" id="individualreferrals" class="form-control" placeholder="referrals" value="{{ (isset($individuals) && $individuals->individualreferrals) ? $individuals->individualreferrals:''}}">
               <div id="error-individualreferrals" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualreferralsqty" id="individualreferralsqty" class="form-control" placeholder="referrals qty" value="{{$individuals->individualreferralsqty}}">
+              <input type="text" name="individualreferralsqty" id="individualreferralsqty" class="form-control" placeholder="referrals qty" value="{{ (isset($individuals) && $individuals->individualreferralsqty) ? $individuals->individualreferralsqty:''}}">
               <div id="error-individualreferralsqty" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualreferralsmrs" id="individualreferralsmrs" class="form-control" placeholder="referrals Mrs" value="{{$individuals->individualreferralsmrs}}">
+              <input type="text" name="individualreferralsmrs" id="individualreferralsmrs" class="form-control" placeholder="referrals Mrs" value="{{ (isset($individuals) && $individuals->individualreferralsmrs) ? $individuals->individualreferralsmrs:''}}">
               <div id="error-individualreferralsmrs" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualreferralsmrsqty" id="individualreferralsmrsqty" class="form-control" placeholder="referrals Mrs QTY" value="{{$individuals->individualreferralsmrsqty}}">
+              <input type="text" name="individualreferralsmrsqty" id="individualreferralsmrsqty" class="form-control" placeholder="referrals Mrs QTY" value="{{ (isset($individuals) && $individuals->individualreferralsmrsqty) ? $individuals->individualreferralsmrsqty:''}}">
               <div id="error-individualreferralsmrsqty" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualdirect" id="individualdirect" class="form-control" placeholder="Direct" value="{{$individuals->individualdirect}}">
+              <input type="text" name="individualdirect" id="individualdirect" class="form-control" placeholder="Direct" value="{{ (isset($individuals) && $individuals->individualdirect) ? $individuals->individualdirect:''}}">
               <div id="error-individualdirect" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualdirectmrs" id="individualdirectmrs" class="form-control" placeholder="Direct Mrs"  value="{{$individuals->individualdirectmrs}}">
+              <input type="text" name="individualdirectmrs" id="individualdirectmrs" class="form-control" placeholder="Direct Mrs"  value="{{ (isset($individuals) && $individuals->individualdirectmrs) ? $individuals->individualdirectmrs:''}}">
               <div id="error-individualdirectmrs" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualbusinesstotal" id="individualbusinesstotal" class="form-control" placeholder="Business total "  value="{{$individuals->individualbusinesstotal}}">
+              <input type="text" name="individualbusinesstotal" id="individualbusinesstotal" class="form-control" placeholder="Business total "  value="{{ (isset($individuals) && $individuals->individualbusinesstotal) ? $individuals->individualbusinesstotal:''}}">
               <div id="error-individualbusinesstotal" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualgbrmrs" id="individualgbrmrs" class="form-control" placeholder="GBR Mrs"  value="{{$individuals->individualgbrmrs}}">
+              <input type="text" name="individualgbrmrs" id="individualgbrmrs" class="form-control" placeholder="GBR Mrs"  value="{{ (isset($individuals) && $individuals->individualgbrmrs) ? $individuals->individualgbrmrs:''}}">
               <div id="error-individualgbrmrs" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualgbramount" id="individualgbramount" class="form-control" placeholder="GBR Mrs"   value="{{$individuals->individualgbramount}}">
+              <input type="text" name="individualgbramount" id="individualgbramount" class="form-control" placeholder="GBR Mrs"   value="{{ (isset($individuals) && $individuals->individualgbramount) ? $individuals->individualgbramount:''}}">
               <div id="error-individualgbramount" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualvisitors" id="individualvisitors" class="form-control" placeholder="Visitor" value="{{$individuals->individualvisitors}}"> 
+              <input type="text" name="individualvisitors" id="individualvisitors" class="form-control" placeholder="Visitor" value="{{ (isset($individuals) && $individuals->individualvisitors) ? $individuals->individualvisitors:''}}"> 
               <div id="error-individualvisitors" class="text-danger"></div>
             </div>
             <div class="col-md-6 form-group">
-              <input type="text" name="individualtestimonialmrs" id="individualtestimonialmrs" class="form-control" placeholder="testimonial Mrs" value="{{$individuals->individualtestimonialmrs}}">
+              <input type="text" name="individualtestimonialmrs" id="individualtestimonialmrs" class="form-control" placeholder="testimonial Mrs" value="{{ (isset($individuals) && $individuals->individualtestimonialmrs) ? $individuals->individualtestimonialmrs:''}}">
               <div id="error-individualtestimonialmrs" class="text-danger"></div>
             </div>
 
             <div class="col-md-6 form-group">
-              <input type="text" name="individualgivetoday" id="individualgivetoday" class="form-control" placeholder="Give Today" value="{{$individuals->individualgivetoday}}">
+              <input type="text" name="individualgivetoday" id="individualgivetoday" class="form-control" placeholder="Give Today" value="{{ (isset($individuals) && $individuals->individualgivetoday) ? $individuals->individualgivetoday:''}}">
               <div id="error-individualgivetoday" class="text-danger"></div>
             </div>
            
