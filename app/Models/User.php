@@ -57,6 +57,7 @@ class User extends Authenticatable
         'networking_groups',
         'profile_image',
         'status',
+        'renewal_due_date'
     ];
 
     /**
@@ -183,5 +184,9 @@ class User extends Authenticatable
     public function receivedReferralslistDateFilter($query,$comment)
     {
         return $query->where('comments', $comment);
+    }
+    public function individuals()
+    {
+        return $this->hasOne(Individuals::class, 'user_id', 'id');
     }
 }

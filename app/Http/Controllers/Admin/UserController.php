@@ -91,6 +91,7 @@ class UserController extends Controller
             'mobile_number' => 'nullable|string|max:15',
             'industry' => 'nullable|string|max:255',
             'role' => 'required|exists:roles,name',
+            'renewal_due_date'=>'required',
         ]);
 
         $user->update([
@@ -98,6 +99,7 @@ class UserController extends Controller
             'email' => $request->email,
             'mobile_number' => $request->mobile_number,
             'industry' => $request->industry,
+            'renewal_due_date' => $request->renewal_due_date,
         ]);
         //dd($request->all());
 

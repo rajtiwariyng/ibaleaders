@@ -148,7 +148,8 @@ Route::middleware(['user_auth:user'])->group(function () {
 	Route::get('/user/privacysetting', [FrontendLoginController::class, 'UserPrivacySetting'])->name('user.privacy.setting');
 	Route::post('/user/postprivacysetting', [FrontendLoginController::class, 'postUserPrivacySetting'])->name('user.post.privacy.setting');
 	
-	
+	Route::post('/post-individual-leader', [FrontendLoginController::class, 'IndividualLeaderPost'])->name('user.individualpost');
+
 
 	
 });

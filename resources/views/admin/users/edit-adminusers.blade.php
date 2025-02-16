@@ -51,6 +51,15 @@
 			                <small class="text-danger">{{ $message }}</small>
 			            @enderror
 			        </div>
+              <div class="form-group">
+			            <label for="renewal_due_date">Renewal Due Date</label>
+                 
+			            <input type="datetime-local"  name="renewal_due_date" id="renewal_due_date" class="form-control" value="{{ old('renewal_due_date', $user->renewal_due_date) }}">
+			            @error('renewal_due_date')
+			                <small class="text-danger">{{ $message }}</small>
+			            @enderror
+			       </div>
+              
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
