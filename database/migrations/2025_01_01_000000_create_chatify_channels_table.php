@@ -13,13 +13,13 @@ class CreateChatifyChannelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ch_channels', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-	        $table->string('name')->nullable();
-	        $table->bigInteger('owner_id')->nullable();
-            $table->string('avatar')->default(config('chatify.channel_avatar.default'));
-            $table->timestamps();
-        });
+        // Schema::create('ch_channels', function (Blueprint $table) {
+        //     $table->uuid('id')->primary();
+	    //     $table->string('name')->nullable();
+	    //     $table->bigInteger('owner_id')->nullable();
+        //     $table->string('avatar')->default(config('chatify.channel_avatar.default'));
+        //     $table->timestamps();
+        // });
     }
 
     /**
@@ -29,6 +29,6 @@ class CreateChatifyChannelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ch_channels');
+        // Schema::dropIfExists('ch_channels');
     }
 }

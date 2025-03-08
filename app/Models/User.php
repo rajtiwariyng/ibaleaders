@@ -57,6 +57,7 @@ class User extends Authenticatable
         'networking_groups',
         'profile_image',
         'status',
+        'renewal_due_date'
     ];
 
     /**
