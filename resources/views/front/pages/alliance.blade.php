@@ -26,9 +26,9 @@
                     </div>
                   </div>
                 </div>
-                <div id="connectionsearchid">
+                <div id="connectionsearchid" class="mb-3">
                 @forelse ($connections as $connection)
-                <div class="mb-4">
+                <div class="">
                   <div class="notification-wrapper">
                     <div class="note-img"><img src="{{ $connection->profile_image ?? asset('front-assets/images/default.jpg') }}" alt="{{ $connection->name }}"></div>
                     <div class="note-content">
@@ -201,7 +201,7 @@
             <div class="col-md-4">
               <div class="whiteBox bg-white p-3 mb-3">
                 <h6 class="blue poppins-bold pb-3 fs-6 fw-600">Unread Messages(3)</h6>
-                <div class="unread-messages mb-4 d-flex align-items-center justify-content-between">
+                <div class="unread-messages d-flex align-items-center justify-content-between">
                   <div class="pe-4">
                     <h6 class="mb-0 fs-7 fw-600"><a href="chats.html" class="light-grey">Join Group: Cctv And
                       Access Biometric</a></h6>
@@ -212,7 +212,7 @@
                     <i class="fa-regular fa-envelope"></i>
                   </div>
                 </div>
-                <div class="unread-messages mb-4 d-flex align-items-center justify-content-between">
+                <div class="unread-messages d-flex align-items-center justify-content-between">
                   <div class="pe-4">
                     <h6 class="mb-0 fs-7 fw-600"><a href="chats.html" class="light-grey">Join Group: Cctv And
                       Access Biometric</a></h6>
@@ -223,7 +223,7 @@
                     <i class="fa-regular fa-envelope"></i>
                   </div>
                 </div>
-                <div class="unread-messages mb-4 d-flex align-items-center justify-content-between">
+                <div class="unread-messages d-flex align-items-center justify-content-between">
                   <div class="pe-4">
                     <h6 class="mb-0 fs-7 fw-600"><a href="chats.html" class="light-grey">Join Group: Cctv And
                       Access Biometric</a></h6>
@@ -234,7 +234,7 @@
                     <i class="fa-regular fa-envelope"></i>
                   </div>
                 </div>
-                <a href="#" class="trans-btn">
+                <a href="#" class="trans-btn mt-3 d-inline-block">
                   View Messages
                 </a>             
               </div>

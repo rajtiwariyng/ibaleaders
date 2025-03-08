@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
-
-use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\ReportImport;
 use Illuminate\Support\Facades\DB;
 
 class AdminuserController extends Controller
@@ -156,7 +153,8 @@ class AdminuserController extends Controller
 
         return redirect()->route('admin.users.index')->with('success', 'Admin User restored successfully.');
     }
-    public function reportImport(){
+    
+     public function reportImport(){
         $user = auth()->user();
         return view('admin.users.reportimport', compact('user'));
     }
@@ -314,8 +312,8 @@ class AdminuserController extends Controller
         $data = [];
         while (($row = fgetcsv($handle, $maxLength, ",")) !== false) {
            $data[] = [
-                'category' => $row[1], // Column B
-                'start_date' => $row[5],
+                'category' => $row[0], // Column B
+                'start_date' => $row[1],
                 'user_id'=>1
             ];
         }    
@@ -470,4 +468,5 @@ class AdminuserController extends Controller
         DB::table('knowledge_partner_reports')->insert($data); 
         return back()->with('success', 'Data imported successfully!');
     }
+
 }

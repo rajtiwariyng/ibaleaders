@@ -77,6 +77,7 @@
   <script src="{{ asset('front-assets/vendor/slick/slick.min.js') }}"></script>
   <script src="{{ asset('front-assets/vendor/js/wow.min.js') }}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.1.1/progressbar.min.js"></script>
+  <script src="{{ asset('front-assets/js/chart.min.js') }}"></script>
   <script src="{{ asset('front-assets/js/main.js') }}"></script>
   @yield('customJs')
   <script>

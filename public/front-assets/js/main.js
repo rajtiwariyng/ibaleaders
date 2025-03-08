@@ -1,29 +1,29 @@
 // WOW.js initialization
 new WOW({
-  boxClass: 'wow',
-  animateClass: 'animated',
+  boxClass: "wow",
+  animateClass: "animated",
   offset: 90,
   mobile: false,
-  live: true
+  live: true,
 }).init();
 
 // document.querySelector('.topbar-toggler').addEventListener('click', function(){
 //   document.documentElement.classList.toggle('topbar_open');
 // })
-document.querySelector('.nav-toggle').addEventListener('click', function(){
-  document.documentElement.classList.toggle('nav_open');
-})
-$('.slider-for').slick({
+document.querySelector(".nav-toggle").addEventListener("click", function () {
+  document.documentElement.classList.toggle("nav_open");
+});
+$(".slider-for").slick({
   slidesToShow: 1,
   slidesToScroll: 1,
   arrows: true,
   fade: true,
-  asNavFor: '.slider-nav'
+  asNavFor: ".slider-nav",
 });
-$('.slider-nav').slick({
+$(".slider-nav").slick({
   slidesToShow: 7,
   slidesToScroll: 1,
-  asNavFor: '.slider-for',
+  asNavFor: ".slider-for",
   dots: false,
   focusOnSelect: true,
   responsive: [
@@ -33,26 +33,26 @@ $('.slider-nav').slick({
         slidesToShow: 3,
         slidesToScroll: 1,
         infinite: true,
-        dots: false
-      }
+        dots: false,
+      },
     },
     {
       breakpoint: 600,
       settings: {
         slidesToShow: 3,
-        slidesToScroll: 2
-      }
+        slidesToScroll: 2,
+      },
     },
     {
       breakpoint: 480,
       settings: {
         slidesToShow: 3,
-        slidesToScroll: 1
-      }
-    }
-  ]
+        slidesToScroll: 1,
+      },
+    },
+  ],
 });
-$('.master-slider').slick({
+$(".master-slider").slick({
   dots: false,
   infinite: false,
   speed: 300,
@@ -65,78 +65,115 @@ $('.master-slider').slick({
         slidesToShow: 3,
         slidesToScroll: 1,
         infinite: true,
-        dots: true
-      }
+        dots: true,
+      },
     },
     {
       breakpoint: 600,
       settings: {
         slidesToShow: 2,
-        slidesToScroll: 2
-      }
+        slidesToScroll: 2,
+      },
     },
     {
       breakpoint: 480,
       settings: {
         slidesToShow: 1,
-        slidesToScroll: 1
-      }
-    }
-  ]
+        slidesToScroll: 1,
+      },
+    },
+  ],
 });
-$('.dashboard-slider').slick({
+$(".dashboard-slider").slick({
   dots: false,
   infinite: false,
   speed: 1000,
   slidesToShow: 1,
   slidesToScroll: 1,
-  autoplay: true
+  autoplay: true,
 });
 // Initialize the Slick Slider
-$('.testimonial-wrapper').slick({
+$(".testimonial-wrapper").slick({
   dots: true,
   infinite: true,
   speed: 1000,
   slidesToShow: 1,
   slidesToScroll: 1,
-  autoplay: true
+  autoplay: true,
 });
 
 // Gallery tabs code
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   function switchTab(containerSelector, targetPaneId) {
-      document.querySelectorAll(containerSelector + ' .tab-pane').forEach(function(tabPane) {
-          tabPane.classList.remove('active');
+    document
+      .querySelectorAll(containerSelector + " .tab-pane")
+      .forEach(function (tabPane) {
+        tabPane.classList.remove("active");
       });
-      document.getElementById(targetPaneId).classList.add('active');
-      
-      // Refresh Slick Slider if needed
-      if (containerSelector === '.privacy-testimonial') {
-          $('.testimonial-wrapper').slick('setPosition');
-      }
+    document.getElementById(targetPaneId).classList.add("active");
+
+    // Refresh Slick Slider if needed
+    if (containerSelector === ".privacy-testimonial") {
+      $(".testimonial-wrapper").slick("setPosition");
+    }
   }
 
   function setupRadioButtons(containerSelector, radioClass, tabMap) {
-      document.querySelectorAll(radioClass).forEach(function(radioButton) {
-          radioButton.addEventListener('change', function() {
-              if (this.checked) {
-                  switchTab(containerSelector, tabMap[this.id]);
-              }
-          });
+    document.querySelectorAll(radioClass).forEach(function (radioButton) {
+      radioButton.addEventListener("change", function () {
+        if (this.checked) {
+          switchTab(containerSelector, tabMap[this.id]);
+        }
       });
+    });
   }
 
   // Setup for Gallery Radios
-  setupRadioButtons('.gallery', '.gallery-radios', { 'test1': 'messages', 'test2': 'settings' });
+  setupRadioButtons(".gallery", ".gallery-radios", {
+    test1: "messages",
+    test2: "settings",
+  });
 
   // Setup for Privacy Testimonials
-  setupRadioButtons('.privacy-testimonial', '.testimony', { 'everyone': 'home', 'connections': 'profile' });
+  setupRadioButtons(".privacy-testimonial", ".testimony", {
+    everyone: "home",
+    connections: "profile",
+  });
 });
 
-var loadFile = function(event) {
-  var image = document.getElementById('profileImage');
+var loadFile = function (event) {
+  var image = document.getElementById("profileImage");
   image.src = URL.createObjectURL(event.target.files[0]);
 };
-$('.toggle').click(function(){
-  $('.user-menu').slideToggle();
-})
+$(".toggle").click(function () {
+  $(".user-menu").slideToggle();
+});
+var progressDial = document.getElementById("progressDial");
+var dataValue = progressDial.getAttribute("data-value");
+var targetValue = parseInt(dataValue) / 100;
+var bar = new ProgressBar.SemiCircle(progressDial, {
+  strokeWidth: 12,
+  color: "#e8f1ff",
+  trailColor: "#e8f1ff",
+  trailWidth: 12,
+  easing: "easeInOut",
+  duration: 1400,
+  svgStyle: null,
+  from: { color: "#003285" },
+  to: { color: "#003285" },
+  step: function (state, bar) {
+    bar.path.setAttribute("stroke", state.color);
+    var value = Math.round(bar.value() * 100);
+    var textContent;
+    if (value === 0) {
+      textContent = '<span class="completed-text">Completed</span>';
+    } else {
+      textContent =
+        '<span class="completed-text">Completed</span> ' + value + "%";
+    }
+    bar.setText(textContent);
+    bar.text.style.color = "#000";
+  },
+});
+
+bar.animate(targetValue);

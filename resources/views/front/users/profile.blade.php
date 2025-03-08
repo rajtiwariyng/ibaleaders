@@ -23,16 +23,47 @@
                     @endif
                   </div>
                   <div class="reactions d-flex align-items-center justify-content-between pt-3">
-                    <a class="d-flex align-items-center text-color">
-                      <img src="{{ asset('front-assets/icons/React.png') }}" alt="Reaction" class="pe-2">
-                      React {{$post->reactcount}}
-                    </a>
-                    <div id="postreactionmsg{{$post->id}}"></div>
-              <span onclick="postReactFun('{{$post->id}}','like')" style="cursor: pointer;"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
-              <span onclick="postReactFun('{{$post->id}}','dislike')" style="cursor: pointer;"><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>
-              <span onclick="postReactFun('{{$post->id}}','heart')" style="cursor: pointer;"><i class="fa fa-heart" aria-hidden="true"></i></span>
-              <span onclick="postReactFun('{{$post->id}}','smile')" style="cursor: pointer;"><i class="fa fa-smile-o" aria-hidden="true"></i></span>
-              <span onclick="postReactFun('{{$post->id}}','smileheart')" style="cursor: pointer;"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
+                      <div class="d-flex align-items-center text-color">
+                      <!-- <img src="{{ asset('front-assets/icons/React.png') }}" alt="Reaction" class="pe-2">
+                      React -->
+                       {{$post->reactcount}}
+                       <div class="emoji-hover">
+                    <div class="emoji-container">
+                      <picture onclick="postReactFun('{{$post->id}}','smile')">
+                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f603/512.webp" type="image/webp">
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f603/512.gif" alt="😃" width="40" height="32">
+                      </picture>
+                      <picture onclick="postReactFun('{{$post->id}}','smileheart')" >
+                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" type="image/webp">
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.gif" alt="😍" width="40" height="40">
+                      </picture>
+                      <picture onclick="postReactFun('{{$post->id}}','heart')">
+                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/2764/512.webp" type="image/webp">
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764/512.gif" alt="❤️" width="40" height="40">
+                      </picture>
+                      <picture onclick="postReactFun('{{$post->id}}','like')">
+                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d/512.webp" type="image/webp">
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d/512.gif" alt="👍" width="40" height="64">
+                      </picture>
+                      <picture onclick="postReactFun('{{$post->id}}','dislike')">
+                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44e/512.webp" type="image/webp">
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44e/512.gif" alt="👎" width="40" height="40">
+                      </picture>
+                      <div id="postreactionmsg{{$post->id}}"></div>
+                    </div>
+                    
+                  </div>
+</div>
+              <!--      <a class="d-flex align-items-center text-color">-->
+              <!--        <img src="{{ asset('front-assets/icons/React.png') }}" alt="Reaction" class="pe-2">-->
+              <!--        React {{$post->reactcount}}-->
+              <!--      </a>-->
+              <!--      <div id="postreactionmsg{{$post->id}}"></div>-->
+              <!--<span onclick="postReactFun('{{$post->id}}','like')" style="cursor: pointer;"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>-->
+              <!--<span onclick="postReactFun('{{$post->id}}','dislike')" style="cursor: pointer;"><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>-->
+              <!--<span onclick="postReactFun('{{$post->id}}','heart')" style="cursor: pointer;"><i class="fa fa-heart" aria-hidden="true"></i></span>-->
+              <!--<span onclick="postReactFun('{{$post->id}}','smile')" style="cursor: pointer;"><i class="fa fa-smile-o" aria-hidden="true"></i></span>-->
+              <!--<span onclick="postReactFun('{{$post->id}}','smileheart')" style="cursor: pointer;"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>-->
               
                     <!-- <a class="d-flex align-items-center text-color">
                       <img src="{{ asset('front-assets/icons/Comment.png') }}" alt="" class="pe-2">

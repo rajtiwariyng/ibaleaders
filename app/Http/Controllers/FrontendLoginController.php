@@ -34,6 +34,7 @@ use App\Models\Vp_report;
 use App\Models\Visitor_report;
 use App\Models\Leadership_victory_program;
 use App\Models\Knowledge_partner_report;
+use App\Models\Individuals;
 
 class FrontendLoginController extends Controller
 {
@@ -139,9 +140,10 @@ class FrontendLoginController extends Controller
         });
         // echo "<pre>";
         // print_r($posts);
+        $individuals=$user->individuals;
 
 
-        return view('front.home', compact('user', 'posts', 'referralslist', 'tyfcbreferralslist', 'receivedReferralslist', 'onereferralslists', 'tyfcbreferralstotal','visitorlist'));
+        return view('front.home', compact('user', 'posts', 'referralslist', 'tyfcbreferralslist', 'receivedReferralslist', 'onereferralslists', 'tyfcbreferralstotal','visitorlist','individuals'));
     }
     public function alliance()
     {
@@ -658,5 +660,71 @@ class FrontendLoginController extends Controller
         return response()->json(['success' => true, 'message' => 'Privacy setting saved successfully!']);
 
     }
+    public function IndividualLeaderPost(Request $request)
+    {
 
+        $request->validate([
+            'individualname' => 'required|string|max:255',
+            'individualbusiness' => 'required|string|max:15',
+            'individualachievement' => 'required|string|max:255',
+            'individualreferrals' => 'required|string|max:255',
+            'individualreferralsqty' => 'required|string|max:255',
+            'individualreferralsmrs' => 'required|string|max:255',
+            'individualreferralsmrsqty' => 'required|string|max:255',
+            'individualdirect' => 'required|string|max:255',
+            'individualdirectmrs' => 'required|string|max:255',
+            'individualbusinesstotal' => 'required|string|max:255',
+            'individualgbrmrs' => 'required|string|max:255',
+            'individualgbramount' => 'required|string|max:255',
+            'individualvisitors' => 'required|string|max:255',
+            'individualtestimonialmrs' => 'required|string|max:255',
+            'individualgivetoday' => 'required|string|max:255',
+        ]);
+        $individualdetail = Individuals::where('user_id', auth()->id())->first();  
+        if (!$individualdetail) {
+            Individuals::create([
+                'individualname' => $request->individualname,
+                'individualbusiness' => $request->individualbusiness,
+                'individualachievement' => $request->individualachievement,
+                'individualreferrals' => $request->individualreferrals,
+                'individualreferralsqty' => $request->individualreferralsqty,
+                'individualreferralsmrs' => $request->individualreferralsmrs,
+                'individualreferralsmrsqty' => $request->individualreferralsmrsqty,
+                'individualdirect' => $request->individualdirect,
+                'individualdirectmrs' => $request->individualdirectmrs,
+                'individualbusinesstotal' => $request->individualbusinesstotal,
+                'individualgbrmrs' => $request->individualgbrmrs,
+                'individualgbramount' => $request->individualgbramount,
+                'individualvisitors' => $request->individualvisitors,
+                'individualtestimonialmrs' => $request->individualtestimonialmrs,
+                'individualgivetoday' => $request->individualgivetoday,
+                'user_id' => auth()->id(), // Logged-in user's ID
+
+            ]);
+            return response()->json(['success' => true, 'message' => 'Individual Leader Added Successfully!']);
+        } else {
+            $individualdetail = Individuals::where('user_id', auth()->id())
+            ->firstOrFail();          
+
+                $updatedata= $individualdetail->update([
+                        'individualname' => $request->individualname,
+                        'individualbusiness' => $request->individualbusiness,
+                        'individualachievement' => $request->individualachievement,
+                        'individualreferrals' => $request->individualreferrals,
+                        'individualreferralsqty' => $request->individualreferralsqty,
+                        'individualreferralsmrs' => $request->individualreferralsmrs,
+                        'individualreferralsmrsqty' => $request->individualreferralsmrsqty,
+                        'individualdirect' => $request->individualdirect,
+                        'individualdirectmrs' => $request->individualdirectmrs,
+                        'individualbusinesstotal' => $request->individualbusinesstotal,
+                        'individualgbrmrs' => $request->individualgbrmrs,
+                        'individualgbramount' => $request->individualgbramount,
+                        'individualvisitors' => $request->individualvisitors,
+                        'individualtestimonialmrs' => $request->individualtestimonialmrs,
+                        'individualgivetoday' => $request->individualgivetoday]);
+                return response()->json(['success' => true, 'message' => 'Individual Leader Updated Successfully!']);
+
+        }
+        
+    }
 }

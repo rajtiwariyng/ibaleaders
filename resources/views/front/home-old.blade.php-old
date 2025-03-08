@@ -70,7 +70,7 @@
               <div class="d-flex justify-content-between align-items-center flex-wrap">
                 <h3 class="blue poppins-bold mb-0">IBAL® Innovations</h3>
                 <p class="mb-0">My Personal Participation Report</p>
-                <p class="mb-0 red-color" style="color:red;"><strong>Renewal Due Date: <?php echo date("d M Y", strtotime($user->renewal_due_date));?></strong></p>
+                <p class="mb-0"><strong>Renewal Due Date: 01/04/2025</strong></p>
               </div>
               <div class="table-responsive mt-3">
                 <table class="table table-bordered">
@@ -147,44 +147,38 @@
               @endif
             </div>
             <div class="reactions d-flex align-items-center justify-content-between pt-3">
-              <div class="d-flex align-items-center text-color">
-                <!-- <img src="{{ asset('front-assets/icons/React.png') }}" alt="" class="pe-2">
-                React -->
-                 {{$post->reactcount}}
+              <a class="d-flex align-items-center text-color">
+                <img src="{{ asset('front-assets/icons/React.png') }}" alt="" class="pe-2">
+                React {{$post->reactcount}}
                 <div class="emoji-hover">
                     <div class="emoji-container">
-                      <picture onclick="postReactFun('{{$post->id}}','smile')">
+                      <picture>
                         <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f603/512.webp" type="image/webp">
                         <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f603/512.gif" alt="😃" width="40" height="32">
                       </picture>
-                      <picture onclick="postReactFun('{{$post->id}}','smileheart')" >
-                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.webp" type="image/webp">
-                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f60d/512.gif" alt="😍" width="40" height="40">
+                      <picture>
+                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f929/512.webp" type="image/webp">
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f929/512.gif" alt="🤩" width="40" height="64">
                       </picture>
-                      <picture onclick="postReactFun('{{$post->id}}','heart')">
+                      <picture>
                         <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/2764/512.webp" type="image/webp">
                         <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2764/512.gif" alt="❤️" width="40" height="40">
                       </picture>
-                      <picture onclick="postReactFun('{{$post->id}}','like')">
+                      <picture>
                         <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d/512.webp" type="image/webp">
                         <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44d/512.gif" alt="👍" width="40" height="64">
                       </picture>
-                      <picture onclick="postReactFun('{{$post->id}}','dislike')">
-                        <source srcset="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44e/512.webp" type="image/webp">
-                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f44e/512.gif" alt="👎" width="40" height="40">
-                      </picture>
-                      <div id="postreactionmsg{{$post->id}}"></div>
+                      
                     </div>
-                    
                   </div>
-</div>
+              </a>
               
-              
-              <!-- <span onclick="postReactFun('{{$post->id}}','like')" style="cursor: pointer;"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+              <div id="postreactionmsg{{$post->id}}"></div>
+              <span onclick="postReactFun('{{$post->id}}','like')" style="cursor: pointer;"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
               <span onclick="postReactFun('{{$post->id}}','dislike')" style="cursor: pointer;"><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>
               <span onclick="postReactFun('{{$post->id}}','heart')" style="cursor: pointer;"><i class="fa fa-heart" aria-hidden="true"></i></span>
               <span onclick="postReactFun('{{$post->id}}','smile')" style="cursor: pointer;"><i class="fa fa-smile-o" aria-hidden="true"></i></span>
-              <span onclick="postReactFun('{{$post->id}}','smileheart')" style="cursor: pointer;"><i class="fa fa-heartbeat" aria-hidden="true"></i></span> -->
+              <span onclick="postReactFun('{{$post->id}}','smileheart')" style="cursor: pointer;"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
               <!-- <a class="d-flex align-items-center text-color">
                 <img src="{{ asset('front-assets/icons/Comment.png') }}" alt="" class="pe-2">
                 Comment
@@ -288,29 +282,12 @@
                 </div>
                 
               </div>
-              <div class="whiteBox bg-white p-4 mt-4 ">
-                <h6 class="blue poppins-bold pb-2 fs-6 fw-600">Individual Leader Presentation: </h6>
-                <!-- <div class="blue poppins-bold fs-6 fw-600 Revenue-number">
-                  <img src="images/ceus.png" alt=""> 
-                  <p class="blue poppins-bold fs-4">1765852</p>
-                </div> -->
-                <div class="mb-2">
-                  <button class="bg-blue btn text-white fs-8" data-bs-toggle="modal" data-bs-target="#modalIndividualLeaderPresentation" type="button">View</button>
-                  <!-- <button class="bg-blue btn text-white fs-8" type="button">Review</button> -->
-                </div>
-                
-              </div>
 
               <div class="whiteBox bg-white p-4 mt-4">
                 <h6 class="blue poppins-bold fs-6 fw-600">Profile Optimisation </h6>
                 <p class="fs-7">Complete your profile to optimize your network</p>
                 <div class="progress-data">
-                  <?php $processper=50;
-                  if($user->business_bio){
-                    $processper +=50;
-                  }
-                  ?>
-                  <div class="progress-dial" id="progressDial" data-value="{{$processper}}">
+                  <div class="progress-dial" id="progressDial" data-value="40">
                     
                   </div>
                       <span class="marks-line"></span>
@@ -973,101 +950,7 @@
     </div>
   </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="modalIndividualLeaderPresentation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title fs-5 blue" id="exampleModalLabel">Individual Leader Presentation</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="individualPostForm" class="vrForm pt-2" method="POST">
-                  @csrf
-                 @method('POST')
-          <div class="row">
-            <div class="col-md-12 form-group">
-              <p class="fs-8 mb-1">(start by introducing your business tagline)</p>
-             
-              
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualname" id="individualname" class="form-control" placeholder="Name" value="{{ (isset($individuals) && $individuals->individualname) ? $individuals->individualname:''}}">
-              <div id="error-individualname" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualbusiness" id="individualbusiness" class="form-control" placeholder="Business Of" value="{{ (isset($individuals) && $individuals->individualbusiness) ? $individuals->individualbusiness:''}}">
-              <div id="error-individualbusiness" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualachievement" id="individualachievement" class="form-control" placeholder="Achievement Of" value="{{ (isset($individuals) && $individuals->individualachievement) ? $individuals->individualachievement:''}}">
-              <div id="error-individualachievement" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualreferrals" id="individualreferrals" class="form-control" placeholder="referrals" value="{{ (isset($individuals) && $individuals->individualreferrals) ? $individuals->individualreferrals:''}}">
-              <div id="error-individualreferrals" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualreferralsqty" id="individualreferralsqty" class="form-control" placeholder="referrals qty" value="{{ (isset($individuals) && $individuals->individualreferralsqty) ? $individuals->individualreferralsqty:''}}">
-              <div id="error-individualreferralsqty" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualreferralsmrs" id="individualreferralsmrs" class="form-control" placeholder="referrals Mrs" value="{{ (isset($individuals) && $individuals->individualreferralsmrs) ? $individuals->individualreferralsmrs:''}}">
-              <div id="error-individualreferralsmrs" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualreferralsmrsqty" id="individualreferralsmrsqty" class="form-control" placeholder="referrals Mrs QTY" value="{{ (isset($individuals) && $individuals->individualreferralsmrsqty) ? $individuals->individualreferralsmrsqty:''}}">
-              <div id="error-individualreferralsmrsqty" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualdirect" id="individualdirect" class="form-control" placeholder="Direct" value="{{ (isset($individuals) && $individuals->individualdirect) ? $individuals->individualdirect:''}}">
-              <div id="error-individualdirect" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualdirectmrs" id="individualdirectmrs" class="form-control" placeholder="Direct Mrs"  value="{{ (isset($individuals) && $individuals->individualdirectmrs) ? $individuals->individualdirectmrs:''}}">
-              <div id="error-individualdirectmrs" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualbusinesstotal" id="individualbusinesstotal" class="form-control" placeholder="Business total "  value="{{ (isset($individuals) && $individuals->individualbusinesstotal) ? $individuals->individualbusinesstotal:''}}">
-              <div id="error-individualbusinesstotal" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualgbrmrs" id="individualgbrmrs" class="form-control" placeholder="GBR Mrs"  value="{{ (isset($individuals) && $individuals->individualgbrmrs) ? $individuals->individualgbrmrs:''}}">
-              <div id="error-individualgbrmrs" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualgbramount" id="individualgbramount" class="form-control" placeholder="GBR Mrs"   value="{{ (isset($individuals) && $individuals->individualgbramount) ? $individuals->individualgbramount:''}}">
-              <div id="error-individualgbramount" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualvisitors" id="individualvisitors" class="form-control" placeholder="Visitor" value="{{ (isset($individuals) && $individuals->individualvisitors) ? $individuals->individualvisitors:''}}"> 
-              <div id="error-individualvisitors" class="text-danger"></div>
-            </div>
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualtestimonialmrs" id="individualtestimonialmrs" class="form-control" placeholder="testimonial Mrs" value="{{ (isset($individuals) && $individuals->individualtestimonialmrs) ? $individuals->individualtestimonialmrs:''}}">
-              <div id="error-individualtestimonialmrs" class="text-danger"></div>
-            </div>
 
-            <div class="col-md-6 form-group">
-              <input type="text" name="individualgivetoday" id="individualgivetoday" class="form-control" placeholder="Give Today" value="{{ (isset($individuals) && $individuals->individualgivetoday) ? $individuals->individualgivetoday:''}}">
-              <div id="error-individualgivetoday" class="text-danger"></div>
-            </div>
-           
-           
-            </div> 
-          
-            <div class="mb-2 text-center">
-            <div id="individualsuccessMsgPost" class="text-success mt-3" style="display: none;"></div>
-              <button class="bg-blue btn text-white fs-6" onclick="individualSubmitForm()" type="button">Submit</button>
-              <button class="bg-blue btn text-white fs-6" type="button">Close</button>
-            </div>
-            
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 @section('customJs')
 <script src="{{ asset('front-assets/js/chart.min.js') }}"></script>
   <script>
@@ -1418,48 +1301,6 @@
                     $("#postreactionmsg"+postid).html(response.message)
                 }
             });
-    }
-    function individualSubmitForm() {
-        // Clear previous error messages
-        $('.text-danger').text('');
-        var formData = new FormData(document.getElementById("individualPostForm"));
-        $.ajax({
-            url: "{{ route('user.individualpost') }}",
-            method: "POST",
-            data: formData,
-            async: true,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                
-
-                $('#individualsuccessMsgPost').text(response.message).show();
-                $('#individualPostForm')[0].reset();
-                
-                 
-                
-                setTimeout(() => {
-                    $('#individualsuccessMsgPost').fadeOut();
-                }, 2000);
-                setTimeout(function () {
-                  location.reload();
-			              }, 3000);
-            },
-            error: function(xhr) {
-                // console.log(xhr)
-                // alert("test")
-                // $('#referralsuccessMsgPost').text(xhr.responseJSON.message).css('color', 'red').show();
-                if (xhr.responseJSON.errors) {
-                    let errors = xhr.responseJSON.errors;
-                    for (let field in errors) {
-                        console.log(field)
-                        $(`#error-${field}`).text(errors[field][0]);
-                    }
-                } else {
-                    $('#individualsuccessMsgPost').text("An error occurred. Please try again.").css('color', 'red').show();
-                }
-            }
-        });
     }
 </script>
 @endsection   

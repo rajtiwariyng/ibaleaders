@@ -2,129 +2,55 @@
 
 @section('content')
 <section class="content">
-      <div class="container-fluid">
+    <div class="container-fluid">
         <div class="row">
-          <!-- left column -->
-          <div class="col-md-12">
-            <!-- jquery validation -->
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">Import Report</small></h3>
-              </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <form action="{{ route('admin.report.import.post') }}" method="POST" enctype="multipart/form-data">
-                  @csrf
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="excel_file">Alliance Roster Reports</label>
-                      <input type="file" name="excel_file"  id="excel_file" required>
-                      <button type="submit">Import</button>
+            <!-- Full-width column -->
+            <div class="col-md-12">
+                <!-- Card container -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Import Reports</h3>
                     </div>
-                  </div>
-              </form>
-              <form action="{{ route('admin.report2.import.post') }}" method="POST" enctype="multipart/form-data">
-                  @csrf
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="excel_file2">Leadership Report</label>
-                      <input type="file" name="excel_file2"  id="excel_file2" required>
-                      <button type="submit">Import</button>
-                    </div>
-                  </div>
-              </form>
-              <form action="{{ route('admin.report3.import.post') }}" method="POST" enctype="multipart/form-data">
-                  @csrf
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="excel_file3">Event Report</label>
-                      <input type="file" name="excel_file3"  id="excel_file3" required>
-                      <button type="submit">Import</button>
-                    </div>
-                  </div>
-              </form>
-              <form action="{{ route('admin.report4.import.post') }}" method="POST" enctype="multipart/form-data">
-                  @csrf
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="excel_file4">Leadership Dues Report</label>
-                      <input type="file" name="excel_file4"  id="excel_file4" required>
-                      <button type="submit">Import</button>
-                    </div>
-                  </div>
-              </form>
-              <form action="{{ route('admin.report5.import.post') }}" method="POST" enctype="multipart/form-data">
-                  @csrf
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="excel_file5">Vacant Categories</label>
-                      <input type="file" name="excel_file5"  id="excel_file5" required>
-                      <button type="submit">Import</button>
-                    </div>
-                  </div>
-              </form>
-              <form action="{{ route('admin.report6.import.post') }}" method="POST" enctype="multipart/form-data">
-                  @csrf
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="excel_file6">Sponsor Report</label>
-                      <input type="file" name="excel_file6"  id="excel_file6" required>
-                      <button type="submit">Import</button>
-                    </div>
-                  </div>
-              </form>
-              <form action="{{ route('admin.report7.import.post') }}" method="POST" enctype="multipart/form-data">
-                  @csrf
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="excel_file7">VP Report</label>
-                      <input type="file" name="excel_file7"  id="excel_file7" required>
-                      <button type="submit">Import</button>
-                    </div>
-                  </div>
-              </form>
-              <form action="{{ route('admin.report8.import.post') }}" method="POST" enctype="multipart/form-data">
-                  @csrf
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="excel_file8">Visitor Report</label>
-                      <input type="file" name="excel_file8"  id="excel_file8" required>
-                      <button type="submit">Import</button>
-                    </div>
-                  </div>
-              </form>
-              <form action="{{ route('admin.report9.import.post') }}" method="POST" enctype="multipart/form-data">
-                  @csrf
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="excel_file9">Leadership Victory Program</label>
-                      <input type="file" name="excel_file9"  id="excel_file9" required>
-                      <button type="submit">Import</button>
-                    </div>
-                  </div>
-              </form>
-              <form action="{{ route('admin.report10.import.post') }}" method="POST" enctype="multipart/form-data">
-                  @csrf
-                  <div class="card-body">
-                    <div class="form-group">
-                      <label for="excel_file10">Knowledge Partner Report</label>
-                      <input type="file" name="excel_file10"  id="excel_file10" required>
-                      <button type="submit">Import</button>
-                    </div>
-                  </div>
-              </form>
-             
-            </div>
-            <!-- /.card -->
-            </div>
-          <!--/.col (left) -->
-          <!-- right column -->
-          <div class="col-md-6">
+                    <!-- /.card-header -->
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="row">
+                            @php
+                                $reports = [
+                                    ['name' => 'Alliance Roster Reports', 'route' => 'admin.report.import.post', 'file' => 'AllianceRosterReports.csv'],
+                                    ['name' => 'Leadership Report', 'route' => 'admin.report2.import.post', 'file' => 'LeadershipReport.csv'],
+                                    ['name' => 'Event Report', 'route' => 'admin.report3.import.post', 'file' => 'EventReport.csv'],
+                                    ['name' => 'Leadership Dues Report', 'route' => 'admin.report4.import.post', 'file' => 'LeadershipDuesReport.csv'],
+                                    ['name' => 'Vacant Categories', 'route' => 'admin.report5.import.post', 'file' => 'VacantCategories.csv'],
+                                    ['name' => 'Sponsor Report', 'route' => 'admin.report6.import.post', 'file' => 'SponsorReport.csv'],
+                                    ['name' => 'VP Report', 'route' => 'admin.report7.import.post', 'file' => 'VPReport.csv'],
+                                    ['name' => 'Visitor Report', 'route' => 'admin.report8.import.post', 'file' => 'VisitorReport.csv'],
+                                    ['name' => 'Leadership Victory Program', 'route' => 'admin.report9.import.post', 'file' => 'LeadershipVictoryProgram.csv'],
+                                    ['name' => 'Knowledge Partner Report', 'route' => 'admin.report10.import.post', 'file' => 'KnowledgePartnerReport.csv']
+                                ];
+                            @endphp
 
-          </div>
-          <!--/.col (right) -->
+                            @foreach($reports as $key => $report)
+                                <div class="col-md-6 mb-4">
+                                    <form action="{{ route($report['route']) }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="excel_file{{ $key + 1 }}">{{ $report['name'] }}</label>
+                                            <input type="file" name="excel_file{{ $key + 1 }}" id="excel_file{{ $key + 1 }}" class="form-control" required>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <button type="submit" class="btn btn-primary">Import</button>
+                                            <a href="{{ asset('admin-assets/dist/img/'.$report['file']) }}" download class="btn btn-secondary btn-sm">Download Sample</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+            </div>
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </section>
-	@endsection
+    </div>
+</section>
+@endsection

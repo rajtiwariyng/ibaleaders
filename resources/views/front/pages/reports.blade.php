@@ -26,7 +26,7 @@
                 <p class="mb-0"><strong>Renewal Due Date: 01/04/2025</strong></p>
               </div>
               <div class="table-responsive mt-3">
-                <table class="table">
+                <table class="table table-bordered">
                   <thead>
                     <tr>
                       <th></th>
@@ -117,7 +117,7 @@
                     </form>
                   </div>
                   <div class="table-responsive-md">
-                    <table class="table table-hover">
+                    <table class="table table-hover table-bordered  reports-table">
                       <thead class="table-dark">
                         <tr>
                           <th scope="col">Date</th>
@@ -136,7 +136,7 @@
                       <tbody id="alliancerosterreport">
                       @forelse($alliance_roster_report as $alliance_roster_reportlist) 
                       <tr>
-                        <th scope="row"><?php echo date("d M Y", strtotime($alliance_roster_reportlist->start_date));?></th>
+                        <td><?php echo date("d M Y", strtotime($alliance_roster_reportlist->start_date));?></td>
                         <td>{{$alliance_roster_reportlist->leader_name}}</td>
                         <td>{{$alliance_roster_reportlist->category}}</td>                        
                         <td>{{$alliance_roster_reportlist->company_name}}</td>
@@ -172,7 +172,7 @@
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-                    <table class="table table-hover">
+                    <table class="table table-hover table-bordered  reports-table">
                       <thead class="table-dark">
                         <tr>
                           <th scope="col">Date</th>
@@ -195,7 +195,7 @@
                       </thead>
                       @forelse($leadership_report as $leadership_reportlist) 
                       <tr>
-                        <th scope="row"><?php echo date("d M Y", strtotime($leadership_reportlist->start_date));?></th>
+                        <td><?php echo date("d M Y", strtotime($leadership_reportlist->start_date));?></td>
                         <td>{{$leadership_reportlist->p}}</td>
                         <td>{{$leadership_reportlist->a}}</td>
                         <td>{{$leadership_reportlist->l}}</td>
@@ -234,7 +234,7 @@
                 <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-                      <table class="table table-hover">
+                      <table class="table table-hover table-bordered  reports-table">
                         <thead class="table-dark">
                           <tr>
                             <th scope="col">Date</th>
@@ -247,7 +247,7 @@
                         </thead>
                         @forelse($event_report as $event_reportlist) 
                         <tr>
-                          <th scope="row"><?php echo date("d M Y", strtotime($event_reportlist->start_date));?></th>
+                          <td><?php echo date("d M Y", strtotime($event_reportlist->start_date));?></td>
                           <td>{{$event_reportlist->leader_name}}</td>
                           <td>{{$event_reportlist->date_of_event}}</td>
                           <td>{{$event_reportlist->event_name}}</td>
@@ -276,7 +276,7 @@
                 <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-                      <table class="table table-hover">
+                      <table class="table table-hover table-bordered  reports-table">
                         <thead class="table-dark">
                           <tr>
                             <th scope="col">Date</th>
@@ -318,7 +318,7 @@
                 <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-                      <table class="table table-hover">
+                      <table class="table table-hover table-bordered  reports-table">
                         <thead class="table-dark">
                           <tr>
                             <th scope="col">Date</th>
@@ -332,7 +332,7 @@
                         </thead>
                         @forelse($leadership_dues_report as $leadership_dues_reportlist) 
                         <tr>
-                          <th scope="row"><?php echo date("d M Y", strtotime($leadership_dues_reportlist->start_date));?></th>
+                          <td><?php echo date("d M Y", strtotime($leadership_dues_reportlist->start_date));?></td>
                           <td>{{$leadership_dues_reportlist->leader_name}}</td>
                           <td>{{$leadership_dues_reportlist->category}}</td>
                           <td>{{$leadership_dues_reportlist->role}}</td>
@@ -363,7 +363,7 @@
                 <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-                      <table class="table table-hover">
+                      <table class="table table-hover table-bordered  reports-table">
                         <thead class="table-dark">
                           <tr>
                             <th scope="col">Date</th>
@@ -373,7 +373,7 @@
                         </thead>
                         @forelse($vacant_category as $vacant_categorylist) 
                         <tr>
-                          <th scope="row"><?php echo date("d M Y", strtotime($vacant_categorylist->start_date));?></th>
+                          <td><?php echo date("d M Y", strtotime($vacant_categorylist->start_date));?></td>
                           <td>{{$vacant_categorylist->category}}</td>
                           <td>{{$vacant_categorylist->status==1?'Inside':'Outside'}}</td>
                         </tr>                       
@@ -400,7 +400,7 @@
                 <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-                      <table class="table table-hover">
+                      <table class="table table-hover table-bordered  reports-table">
                         <thead class="table-dark">
                           <tr>
                             <th scope="col">Date</th>
@@ -414,7 +414,7 @@
                         </thead>
                         @forelse($sponsor_report as $sponsor_reportlist) 
                         <tr>
-                          <th scope="row"><?php echo date("d M Y", strtotime($sponsor_reportlist->start_date));?></th>
+                          <td><?php echo date("d M Y", strtotime($sponsor_reportlist->start_date));?></td>
                           <td>{{$sponsor_reportlist->sponsor_leader_name}}</td>
                           <td>{{$sponsor_reportlist->total_leaders_created}}</td>
                           <td>{{$sponsor_reportlist->new_leader_name}}</td>
@@ -445,7 +445,7 @@
                 <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-                      <table class="table table-hover">
+                      <table class="table table-hover table-bordered  reports-table">
                         <thead class="table-dark">
                           <tr>
                             <th scope="col">Date</th>
@@ -463,7 +463,7 @@
                         </thead>
                         @forelse($vp_report as $vp_reportlist) 
                         <tr>
-                          <th scope="row"><?php echo date("d M Y", strtotime($vp_reportlist->start_date));?></th>
+                          <td><?php echo date("d M Y", strtotime($vp_reportlist->start_date));?></td>
                           <td>{{$vp_reportlist->leader_name}}</td>
                           <td>{{$vp_reportlist->renewal_date}}</td>
                           <td>{{$vp_reportlist->rg}}</td>
@@ -499,7 +499,7 @@
                 <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-                      <table class="table table-hover">
+                      <table class="table table-hover table-bordered  reports-table">
                         <thead class="table-dark">
                           <tr>
                             <th scope="col">Date</th>
@@ -513,7 +513,7 @@
                         </thead>
                         @forelse($visitor_report as $visitor_reportlist) 
                         <tr>
-                          <th scope="row"><?php echo date("d M Y", strtotime($visitor_reportlist->start_date));?></th>
+                          <td><?php echo date("d M Y", strtotime($visitor_reportlist->start_date));?></td>
                           <td>{{$visitor_reportlist->visitor_name}}</td>
                           <td>{{$visitor_reportlist->company_name}}</td>
                           <td>{{$visitor_reportlist->category}}</td>
@@ -544,7 +544,7 @@
                 <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-                      <table class="table table-hover">
+                      <table class="table table-hover table-bordered  reports-table">
                         <thead class="table-dark">
                           <tr>
                             <th scope="col">Date</th>
@@ -563,7 +563,7 @@
                         </thead>
                         @forelse($leadership_victory_program as $leadership_victory_programlist) 
                         <tr>
-                          <th scope="row"><?php echo date("d M Y", strtotime($leadership_victory_programlist->start_date));?></th>
+                          <td><?php echo date("d M Y", strtotime($leadership_victory_programlist->start_date));?></td>
                           <td>{{$leadership_victory_programlist->company_name}}</td>
                           <td>{{$leadership_victory_programlist->category}}</td>
                           <td>{{$leadership_victory_programlist->avg_referrals}}</td>
@@ -599,7 +599,7 @@
                 <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#reportAccordion">
                   <div class="accordion-body">
                   <div class="table-responsive-md">
-                      <table class="table table-hover">
+                      <table class="table table-hover table-bordered  reports-table">
                         <thead class="table-dark">
                           <tr>
                             <th scope="col">Date</th>
@@ -611,7 +611,7 @@
                         </thead>
                         @forelse($knowledge_partner_report as $knowledge_partner_reportlist) 
                         <tr>
-                          <th scope="row"><?php echo date("d M Y", strtotime($knowledge_partner_reportlist->start_date));?></th>
+                          <td><?php echo date("d M Y", strtotime($knowledge_partner_reportlist->start_date));?></td>
                           <td>{{$knowledge_partner_reportlist->meeting_date}}</td>
                           <td>{{$knowledge_partner_reportlist->knowledge_partner_name}}</td>
                           <td>{{$knowledge_partner_reportlist->meeting_agenda}}</td>

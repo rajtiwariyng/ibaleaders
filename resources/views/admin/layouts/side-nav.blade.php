@@ -128,6 +128,12 @@
               <p>Categories list</p>
             </a>
           </li>
+           <li class="nav-item">
+            <a href="{{ route('admin.report.import') }}" class="nav-link {{ Request::is('admin/report/import') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Import Report</p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

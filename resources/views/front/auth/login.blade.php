@@ -20,7 +20,7 @@
     <div class="login-wrapper">
       <div class="login-form">
         <div>
-          <img src="{{ asset('front-assets/images/logo.png') }}" alt="">
+          <img src="{{ asset('front-assets/images/logo.jpg') }}" alt="">
         </div>
         <h5 class="blue poppins-bold py-3">Sign-in to IBA Leader</h5>
         <form action="{{ route('front.login.submit') }}" method="POST">

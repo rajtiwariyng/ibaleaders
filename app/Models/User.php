@@ -184,4 +184,8 @@ class User extends Authenticatable
     {
         return $query->where('comments', $comment);
     }
+    public function individuals()
+    {
+        return $this->hasOne(Individuals::class, 'user_id', 'id');
+    }
 }
